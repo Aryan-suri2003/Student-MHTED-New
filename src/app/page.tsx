@@ -61,7 +61,7 @@ export default function Home() {
 
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
-              <AdmissionDashboard />
+              <AdmissionDashboard globalFilters={globalFilters} />
             ) : activeTab === "fra" ? (
               <FRADashboard />
             ) : activeTab === "scholarship" ? (
@@ -87,8 +87,8 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="border-t border-borderLight pt-6 text-center text-xs text-textMuted mt-auto flex-shrink-0">
-              <p>© 2026 Higher and Technical Education Department, Maharashtra. All rights reserved.</p>
-              <p className="mt-1 text-[10px] text-textMuted">Designated for student portal administration mockups.</p>
+              <p>© 2026 Department of Higher Education, Government of West Bengal (Banglar Uchchashiksha). All rights reserved.</p>
+              <p className="mt-1 text-[10px] text-textMuted">West Bengal State Higher Education Institutions Portal & MIS Dashboard.</p>
             </footer>
           </div>
 

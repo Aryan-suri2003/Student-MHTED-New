@@ -22,6 +22,13 @@ export default function FRADashboard() {
     y: number;
   } | null>(null);
 
+  const [hoveredDonut, setHoveredDonut] = useState<string | null>(null);
+
+  const [selectedFeeRange, setSelectedFeeRange] = useState<{ course: string; type: string; value: number; x: number; y: number } | null>(null);
+  const [selectedYoY, setSelectedYoY] = useState<{ program: string; year: string; value: number; x: number; y: number } | null>(null);
+  const [selectedYoYCourseWise, setSelectedYoYCourseWise] = useState<{ program: string; year: string } | null>(null);
+  const [selectedFeeDiff, setSelectedFeeDiff] = useState<string | null>(null);
+
   // Year on Year Average Fee Data
   const yoyData = [
     {
@@ -72,9 +79,110 @@ export default function FRADashboard() {
         { year: "2025-26", value: 95179 },
       ],
     },
+    {
+      program: "Bachelor in Fine Art",
+      years: [
+        { year: "2023-24", value: 75731 },
+        { year: "2024-25", value: 84491 },
+        { year: "2025-26", value: 87942 },
+      ],
+    },
+    {
+      program: "Doctor of Pharmacy (Pharm D)",
+      years: [
+        { year: "2023-24", value: 75372 },
+        { year: "2024-25", value: 84007 },
+        { year: "2025-26", value: 87570 },
+      ],
+    },
+    {
+      program: "Bachelor of Pharmacy",
+      years: [
+        { year: "2023-24", value: 75995 },
+        { year: "2024-25", value: 79654 },
+        { year: "2025-26", value: 81613 },
+      ],
+    },
+    {
+      program: "Master of Computer Application",
+      years: [
+        { year: "2023-24", value: 72660 },
+        { year: "2024-25", value: 78359 },
+        { year: "2025-26", value: 81514 },
+      ],
+    },
+    {
+      program: "Master of Engineering/Masters of Technology",
+      years: [
+        { year: "2023-24", value: 65195 },
+        { year: "2024-25", value: 66204 },
+        { year: "2025-26", value: 68266 },
+      ],
+    },
+    {
+      program: "Master of Business Administration-Part Time",
+      years: [
+        { year: "2023-24", value: 49486 },
+        { year: "2024-25", value: 49902 },
+        { year: "2025-26", value: 56870 },
+      ],
+    },
+    {
+      program: "Dual Degree in Master of Computer Application",
+      years: [
+        { year: "2023-24", value: 46140 },
+        { year: "2024-25", value: 46140 },
+        { year: "2025-26", value: 46140 },
+      ],
+    },
+    {
+      program: "Master of Hotel Management and Catering Technology",
+      years: [
+        { year: "2023-24", value: 25000 },
+        { year: "2024-25", value: 45046 },
+        { year: "2025-26", value: 48889 },
+      ],
+    },
+    {
+      program: "Bachelor of Laws (3 Years)",
+      years: [
+        { year: "2023-24", value: 19000 },
+        { year: "2024-25", value: 22000 },
+        { year: "2025-26", value: 24000 },
+      ],
+    },
+    {
+      program: "Bachelor of Laws (5 Years)",
+      years: [
+        { year: "2023-24", value: 15000 },
+        { year: "2024-25", value: 17000 },
+        { year: "2025-26", value: 19000 },
+      ],
+    },
+    {
+      program: "Bachelor of Engineering/Bachelor of Technology",
+      years: [
+        { year: "2023-24", value: 82000 },
+        { year: "2024-25", value: 86000 },
+        { year: "2025-26", value: 89423 },
+      ],
+    },
+    {
+      program: "Bachelor of Hotel Management",
+      years: [
+        { year: "2023-24", value: 78000 },
+        { year: "2024-25", value: 82000 },
+        { year: "2025-26", value: 85000 },
+      ],
+    },
   ];
 
-  const yoyBarColors = ["#0c3b6e", "#0284c7", "#60a5fa"];
+  const yoyBarColors = ["#60a5fa", "#0284c7", "#0c3b6e"];
+  const yoyGradients = [
+    "linear-gradient(to top, #3b82f6, #93c5fd)",
+    "linear-gradient(to top, #0284c7, #38bdf8)",
+    "linear-gradient(to top, #0c3b6e, #1e40af)",
+  ];
   const yoyMaxValue = 120000;
 
   // Stacked Chart Data - all courses
@@ -108,7 +216,14 @@ export default function FRADashboard() {
   return (
     <div className="flex flex-col gap-8 w-full animate-fadeIn pb-8">
       {/* PRIMARY CARD: Course-wise Stacked Fee Range Chart */}
-      <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden min-h-[480px]">
+      <div
+        onClick={() => setSelectedFeeRange(null)}
+        className={`rounded-3xl shadow-soft transition-all duration-300 p-6 flex flex-col gap-6 w-full relative overflow-hidden min-h-[480px] ${
+          selectedFeeRange !== null
+            ? "bg-[#e9f2fc] border border-blue-200/60"
+            : "bg-slate-50/40 hover:bg-[#e9f2fc] border border-slate-100 hover:border-blue-200/60"
+        }`}
+      >
         
         {/* Header & Disclaimer */}
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
@@ -142,16 +257,37 @@ export default function FRADashboard() {
               const avgHeight = (item.avg / globalMaxStack) * 100;
               const maxHeight = (item.max / globalMaxStack) * 100;
 
+              const isAnySelected = selectedFeeRange !== null;
+              const isMaxSelected = selectedFeeRange?.course === item.course && selectedFeeRange?.type === "Maximum Fee";
+              const isAvgSelected = selectedFeeRange?.course === item.course && selectedFeeRange?.type === "Average Fee";
+              const isMinSelected = selectedFeeRange?.course === item.course && selectedFeeRange?.type === "Minimum Fee";
+              const isBarSelected = selectedFeeRange?.course === item.course;
+
               return (
                 <div key={item.course} className="flex flex-col items-center relative" style={{ width: "150px", flexShrink: 0 }}>
                   
                   {/* Stack Container */}
-                  <div className="w-36 flex flex-col justify-end rounded-lg overflow-hidden border border-slate-200/20 shadow-sm" style={{ height: "260px" }}>
+                  <div
+                    style={{
+                      height: "260px",
+                      transform: isBarSelected ? "scale(1.03)" : "none",
+                      boxShadow: isBarSelected ? "0 0 12px rgba(2, 132, 199, 0.4)" : "none"
+                    }}
+                    className="w-36 flex flex-col justify-end rounded-lg overflow-hidden border border-slate-200/20 shadow-sm transition-all duration-300"
+                  >
                     
                     {/* Maximum Fee (Dark Teal Blue) */}
                     <div
-                      style={{ height: `${maxHeight}%` }}
-                      className="bg-[#0077b6] hover:bg-[#006da6] transition-colors duration-200 cursor-pointer flex items-center justify-center text-[13px] font-black text-white px-1 select-none text-center"
+                      style={{
+                        height: `${maxHeight}%`,
+                        opacity: isAnySelected ? (isMaxSelected ? 1 : 0.25) : 1,
+                        filter: isAnySelected && !isMaxSelected ? "grayscale(40%)" : "none"
+                      }}
+                      className="bg-gradient-to-t from-[#005f96] to-[#0088cc] hover:brightness-105 transition-all cursor-pointer flex items-center justify-center text-[13px] font-black text-white px-1 select-none text-center rounded-t-[7px]"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFeeRange(isMaxSelected ? null : { course: item.course, type: "Maximum Fee", value: item.max, x: e.clientX, y: e.clientY });
+                      }}
                       onMouseEnter={(e) => {
                         setHoveredSegment({
                           course: item.course,
@@ -177,8 +313,16 @@ export default function FRADashboard() {
 
                     {/* Average Fee (Sky Blue) */}
                     <div
-                      style={{ height: `${avgHeight}%` }}
-                      className="bg-[#90caf9] hover:bg-[#7dbef0] transition-colors duration-200 cursor-pointer flex items-center justify-center text-[13px] font-black text-[#0c3b6e] px-1 select-none text-center"
+                      style={{
+                        height: `${avgHeight}%`,
+                        opacity: isAnySelected ? (isAvgSelected ? 1 : 0.25) : 1,
+                        filter: isAnySelected && !isAvgSelected ? "grayscale(40%)" : "none"
+                      }}
+                      className={`bg-gradient-to-t from-[#7bb4f3] to-[#b3d7ff] hover:brightness-105 transition-all cursor-pointer flex items-center justify-center text-[13px] font-black text-[#0c3b6e] px-1 select-none text-center ${item.min === 0 ? "rounded-b-[7px]" : ""}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setSelectedFeeRange(isAvgSelected ? null : { course: item.course, type: "Average Fee", value: item.avg, x: e.clientX, y: e.clientY });
+                      }}
                       onMouseEnter={(e) => {
                         setHoveredSegment({
                           course: item.course,
@@ -205,8 +349,16 @@ export default function FRADashboard() {
                     {/* Minimum Fee (Gray) */}
                     {item.min > 0 && (
                       <div
-                        style={{ height: `${minHeight}%` }}
-                        className="bg-[#9e9e9e] hover:bg-[#8e8e8e] transition-colors duration-200 cursor-pointer flex items-center justify-center text-[13px] font-black text-white px-1 select-none text-center"
+                        style={{
+                          height: `${minHeight}%`,
+                          opacity: isAnySelected ? (isMinSelected ? 1 : 0.25) : 1,
+                          filter: isAnySelected && !isMinSelected ? "grayscale(40%)" : "none"
+                        }}
+                        className="bg-gradient-to-t from-[#828282] to-[#b8b8b8] hover:brightness-105 transition-all cursor-pointer flex items-center justify-center text-[13px] font-black text-white px-1 select-none text-center rounded-b-[7px]"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedFeeRange(isMinSelected ? null : { course: item.course, type: "Minimum Fee", value: item.min, x: e.clientX, y: e.clientY });
+                        }}
                         onMouseEnter={(e) => {
                           setHoveredSegment({
                             course: item.course,
@@ -246,26 +398,30 @@ export default function FRADashboard() {
         </div>
 
         {/* Dynamic Tooltip Overlay */}
-        {hoveredSegment && (
-          <div 
-            className="fixed bg-blue-50/95 border border-blue-200/80 p-3 rounded-xl shadow-lg z-50 pointer-events-none backdrop-blur-sm transition-all duration-75 text-[13px] font-extrabold max-w-[300px]"
-            style={{ 
-              left: `${hoveredSegment.x + 15}px`, 
-              top: `${hoveredSegment.y - 10}px` 
-            }}
-          >
-            <div className="flex flex-col gap-1">
-              <div className="flex gap-2">
-                <span className="text-slate-400 font-bold w-14">Course</span>
-                <span className="text-brand-950 flex-1">{hoveredSegment.course}</span>
-              </div>
-              <div className="flex gap-2 border-t border-blue-200/40 pt-1 mt-1">
-                <span className="text-slate-400 font-bold w-14">{hoveredSegment.type}</span>
-                <span className="text-brand-900">{formatCurrency(hoveredSegment.value)}</span>
+        {(selectedFeeRange || hoveredSegment) && (() => {
+          const activeSegment = selectedFeeRange || hoveredSegment;
+          if (!activeSegment) return null;
+          return (
+            <div 
+              className="fixed bg-blue-50/95 border border-blue-200/80 p-3 rounded-xl shadow-lg z-50 pointer-events-none backdrop-blur-sm transition-all duration-75 text-[13px] font-extrabold max-w-[300px]"
+              style={{ 
+                left: `${activeSegment.x + 15}px`, 
+                top: `${activeSegment.y - 10}px` 
+              }}
+            >
+              <div className="flex flex-col gap-1">
+                <div className="flex gap-2">
+                  <span className="text-slate-400 font-bold w-14">Course</span>
+                  <span className="text-brand-950 flex-1">{activeSegment.course}</span>
+                </div>
+                <div className="flex gap-2 border-t border-blue-200/40 pt-1 mt-1">
+                  <span className="text-slate-400 font-bold w-14">{activeSegment.type}</span>
+                  <span className="text-brand-900">{formatCurrency(activeSegment.value)}</span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Legend */}
         <div className="flex justify-center items-center gap-8 text-sm font-bold text-slate-700 mt-2 border-t border-slate-100/50 pt-4 select-none">
@@ -286,7 +442,14 @@ export default function FRADashboard() {
       </div>
 
       {/* SECONDARY CARD: Year on Year Average Fee by Program */}
-      <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden min-h-[440px]">
+      <div
+        onClick={() => setSelectedYoY(null)}
+        className={`rounded-3xl shadow-soft transition-all duration-300 p-6 flex flex-col gap-6 w-full relative overflow-hidden min-h-[440px] ${
+          selectedYoY !== null
+            ? "bg-[#e9f2fc] border border-blue-200/60"
+            : "bg-slate-50/40 hover:bg-[#e9f2fc] border border-slate-100 hover:border-blue-200/60"
+        }`}
+      >
 
         {/* Header Row with Filters */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4 border-b border-slate-100 pb-4">
@@ -324,7 +487,7 @@ export default function FRADashboard() {
 
         {/* Grouped Bar Chart */}
         <div className="w-full overflow-x-auto scrollbar-thin pb-4 relative">
-          <div className="relative min-w-[1100px] h-[320px] flex items-end justify-around px-4 mt-2 select-none pb-14 pt-6">
+          <div className="relative h-[320px] flex items-end justify-start gap-10 px-6 mt-2 select-none pb-14 pt-6" style={{ width: `${yoyData.length * 190}px` }}>
 
             {/* Gridlines */}
             <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-14 pt-6 pr-4">
@@ -336,20 +499,31 @@ export default function FRADashboard() {
             </div>
 
             {/* Bar Groups */}
-            <div className="w-full h-full flex items-end justify-around z-10">
               {yoyData.map((item) => (
-                <div key={item.program} className="flex flex-col items-center w-full max-w-[200px] relative">
+                <div key={item.program} className="flex flex-col items-center relative" style={{ width: "140px", flexShrink: 0 }}>
                   {/* Bars row */}
                   <div className="flex items-end gap-1 h-52">
                     {item.years.map((yr, idx) => {
                       const barHeight = (yr.value / yoyMaxValue) * 100;
+                      const isSelected = selectedYoY?.program === item.program && selectedYoY?.year === yr.year;
+                      const isAnySelected = selectedYoY !== null;
+
                       return (
                         <div
                           key={yr.year}
                           className="w-8 rounded-t-md cursor-pointer transition-all duration-200 hover:brightness-110 relative group flex items-end justify-center"
                           style={{
                             height: `${barHeight}%`,
-                            backgroundColor: yoyBarColors[idx],
+                            background: yoyGradients[idx],
+                            opacity: isAnySelected ? (isSelected ? 1 : 0.25) : 1,
+                            filter: isAnySelected && !isSelected ? "grayscale(40%)" : "none",
+                            transform: isSelected ? "scale(1.08)" : "none",
+                            boxShadow: isSelected ? "0 0 10px rgba(96, 165, 250, 0.6)" : "none",
+                            zIndex: isSelected ? 30 : 10
+                          }}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            setSelectedYoY(isSelected ? null : { program: item.program, year: yr.year, value: yr.value, x: e.clientX, y: e.clientY });
                           }}
                           onMouseEnter={(e) => {
                             setHoveredYoY({
@@ -378,7 +552,7 @@ export default function FRADashboard() {
                               writingMode: "vertical-rl",
                               transform: "rotate(180deg)",
                               bottom: "6px",
-                              color: idx === 2 ? "#0c3b6e" : "#fff",
+                              color: "#fff",
                             }}
                           >
                             {yr.value.toLocaleString("en-IN")}
@@ -394,31 +568,34 @@ export default function FRADashboard() {
                   </div>
                 </div>
               ))}
-            </div>
           </div>
         </div>
 
         {/* YoY Tooltip */}
-        {hoveredYoY && (
-          <div
-            className="fixed bg-blue-50/95 border border-blue-200/80 p-3 rounded-xl shadow-lg z-50 pointer-events-none backdrop-blur-sm transition-all duration-75 text-[12px] font-extrabold max-w-[280px]"
-            style={{
-              left: `${hoveredYoY.x + 15}px`,
-              top: `${hoveredYoY.y - 10}px`,
-            }}
-          >
-            <div className="flex flex-col gap-1">
-              <div className="flex gap-2">
-                <span className="text-slate-400 font-bold w-14">Program</span>
-                <span className="text-brand-950 flex-1">{hoveredYoY.program}</span>
-              </div>
-              <div className="flex gap-2 border-t border-blue-200/40 pt-1 mt-1">
-                <span className="text-slate-400 font-bold w-14">{hoveredYoY.year}</span>
-                <span className="text-brand-900">₹ {hoveredYoY.value.toLocaleString("en-IN")}</span>
+        {(selectedYoY || hoveredYoY) && (() => {
+          const active = selectedYoY || hoveredYoY;
+          if (!active) return null;
+          return (
+            <div
+              className="fixed bg-blue-50/95 border border-blue-200/80 p-3 rounded-xl shadow-lg z-50 pointer-events-none backdrop-blur-sm transition-all duration-75 text-[12px] font-extrabold max-w-[280px]"
+              style={{
+                left: `${active.x + 15}px`,
+                top: `${active.y - 10}px`,
+              }}
+            >
+              <div className="flex flex-col gap-1">
+                <div className="flex gap-2">
+                  <span className="text-slate-400 font-bold w-14">Program</span>
+                  <span className="text-brand-950 flex-1">{active.program}</span>
+                </div>
+                <div className="flex gap-2 border-t border-blue-200/40 pt-1 mt-1">
+                  <span className="text-slate-400 font-bold w-14">{active.year}</span>
+                  <span className="text-brand-900">₹ {active.value.toLocaleString("en-IN")}</span>
+                </div>
               </div>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* Legend */}
         <div className="flex justify-center items-center gap-8 text-sm font-bold text-slate-700 mt-2 border-t border-slate-100/50 pt-4 select-none">
@@ -439,7 +616,7 @@ export default function FRADashboard() {
       <div className="flex flex-col lg:flex-row gap-8 w-full">
 
         {/* LEFT CARD: Course-wise Institution Donut Chart */}
-        <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-4 flex-1 relative overflow-hidden min-h-[420px]">
+        <div className="bg-slate-50/40 hover:bg-[#e9f2fc] rounded-3xl border border-slate-100 hover:border-blue-200/60 shadow-soft transition-all duration-300 p-6 flex flex-col gap-4 flex-1 relative overflow-hidden min-h-[420px]">
           <h3 className="text-base font-extrabold text-brand-900 tracking-tight border-b border-slate-100 pb-3">
             Course-wise Institution : FRA (Unaided Private Colleges)
           </h3>
@@ -501,16 +678,34 @@ export default function FRADashboard() {
                     const lx = cx + labelR * Math.cos(midAngle);
                     const ly = cy + labelR * Math.sin(midAngle);
 
+                    const isHovered = hoveredDonut === seg.label;
+                    const someActive = hoveredDonut !== null;
+                    const opacity = someActive ? (isHovered ? 1 : 0.3) : 1;
+                    const filter = someActive && !isHovered ? "grayscale(45%)" : "none";
+
                     return (
                       <g key={seg.label}>
-                        <path d={d} fill={seg.color} stroke="white" strokeWidth="2" className="hover:opacity-80 transition-opacity cursor-pointer" />
+                        <path
+                          d={d}
+                          fill={seg.color}
+                          stroke="white"
+                          strokeWidth={isHovered ? "3.5" : "2"}
+                          className="transition-all duration-300 cursor-pointer"
+                          style={{
+                            opacity,
+                            filter,
+                          }}
+                          onMouseEnter={() => setHoveredDonut(seg.label)}
+                          onMouseLeave={() => setHoveredDonut(null)}
+                        />
                         {seg.value > 50 && (
                           <text
                             x={lx}
                             y={ly}
                             textAnchor="middle"
                             dominantBaseline="central"
-                            className="text-[9px] font-black fill-slate-700 select-none pointer-events-none"
+                            className="text-[9px] font-black fill-slate-700 select-none pointer-events-none transition-opacity duration-300"
+                            style={{ opacity: someActive && !isHovered ? 0.2 : 1 }}
                           >
                             {seg.value} ({seg.pct})
                           </text>
@@ -521,14 +716,32 @@ export default function FRADashboard() {
                 </svg>
 
                 {/* Legend */}
-                <div className="flex flex-col gap-1.5 text-[11px] font-bold text-slate-700">
-                  {donutData.map((seg) => (
-                    <span key={seg.label} className="flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 rounded-full flex-shrink-0" style={{ backgroundColor: seg.color }} />
-                      <span className="truncate max-w-[160px]">{seg.label}</span>
-                      <span className="text-slate-400 ml-auto">{seg.value}</span>
-                    </span>
-                  ))}
+                <div className="flex flex-col gap-1.5 text-[11px] font-bold text-slate-700 select-none">
+                  {donutData.map((seg) => {
+                    const isSelected = hoveredDonut === seg.label;
+                    const someActive = hoveredDonut !== null;
+                    return (
+                      <span
+                        key={seg.label}
+                        className={`flex items-center gap-2 cursor-pointer transition-all duration-350 p-1 rounded-lg ${
+                          isSelected ? "bg-brand-50 font-black text-brand-900 scale-[1.03]" : (someActive ? "opacity-30" : "hover:bg-slate-50")
+                        }`}
+                        onMouseEnter={() => setHoveredDonut(seg.label)}
+                        onMouseLeave={() => setHoveredDonut(null)}
+                      >
+                        <span
+                          className="w-2.5 h-2.5 rounded-full flex-shrink-0 border border-white/20 transition-all duration-350"
+                          style={{
+                            backgroundColor: seg.color,
+                            boxShadow: isSelected ? `0 2px 8px ${seg.color}cc` : `0 1px 4px ${seg.color}60`,
+                            transform: isSelected ? "scale(1.15)" : "none"
+                          }}
+                        />
+                        <span className="truncate max-w-[160px]">{seg.label}</span>
+                        <span className="text-slate-400 ml-auto pl-2">{seg.value}</span>
+                      </span>
+                    );
+                  })}
                 </div>
               </div>
             );
@@ -536,7 +749,14 @@ export default function FRADashboard() {
         </div>
 
         {/* RIGHT CARD: Year on Year Course wise Institutes - Horizontal Bar Chart */}
-        <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-4 flex-1 relative overflow-hidden min-h-[420px]">
+        <div
+          onClick={() => setSelectedYoYCourseWise(null)}
+          className={`rounded-3xl shadow-soft transition-all duration-300 p-6 flex flex-col gap-4 flex-1 relative overflow-hidden min-h-[420px] ${
+            selectedYoYCourseWise !== null
+              ? "bg-[#e9f2fc] border border-blue-200/60"
+              : "bg-slate-50/40 hover:bg-[#e9f2fc] border border-slate-100 hover:border-blue-200/60"
+          }`}
+        >
           <h3 className="text-base font-extrabold text-brand-900 tracking-tight border-b border-slate-100 pb-3">
             Year on Year Course wise Institutes (FRA - Unaided Private)
           </h3>
@@ -579,37 +799,113 @@ export default function FRADashboard() {
                   { year: "2025-26", value: 153 },
                 ],
               },
+              {
+                program: "Bachelor of Architecture",
+                short: "Bachelor of Ar...",
+                years: [
+                  { year: "2023-24", value: 125 },
+                  { year: "2024-25", value: 129 },
+                  { year: "2025-26", value: 135 },
+                ],
+              },
+              {
+                program: "Master of Computer Application",
+                short: "Master of Comp...",
+                years: [
+                  { year: "2023-24", value: 98 },
+                  { year: "2024-25", value: 104 },
+                  { year: "2025-26", value: 110 },
+                ],
+              },
+              {
+                program: "Bachelor of Hotel Mgmt",
+                short: "Bachelor of Ho...",
+                years: [
+                  { year: "2023-24", value: 95 },
+                  { year: "2024-25", value: 99 },
+                  { year: "2025-26", value: 105 },
+                ],
+              },
+              {
+                program: "Master of Pharmacy",
+                short: "Master of Phar...",
+                years: [
+                  { year: "2023-24", value: 90 },
+                  { year: "2024-25", value: 96 },
+                  { year: "2025-26", value: 103 },
+                ],
+              },
+              {
+                program: "Bachelor of Design",
+                short: "Bachelor of De...",
+                years: [
+                  { year: "2023-24", value: 48 },
+                  { year: "2024-25", value: 52 },
+                  { year: "2025-26", value: 57 },
+                ],
+              },
+              {
+                program: "Others",
+                short: "Others",
+                years: [
+                  { year: "2023-24", value: 5 },
+                  { year: "2024-25", value: 6 },
+                  { year: "2025-26", value: 7 },
+                ],
+              },
             ];
             const hBarColors = ["#60a5fa", "#0284c7", "#0c3b6e"];
             const hBarMax = 450;
+            const isAnySelected = selectedYoYCourseWise !== null;
 
             return (
-              <div className="flex flex-col gap-6 flex-1 justify-center">
-                {hBarData.map((item) => (
-                  <div key={item.program} className="flex items-center gap-3">
-                    {/* Label */}
-                    <div className="w-[130px] flex-shrink-0 text-xs font-black text-brand-900 text-right truncate" title={item.program}>
-                      {item.short}
-                    </div>
-                    {/* Bars */}
-                    <div className="flex flex-col gap-1 flex-1">
-                      {item.years.map((yr, idx) => (
-                        <div key={yr.year} className="flex items-center gap-2">
-                          <div
-                            className="h-5 rounded-r-md transition-all duration-300 hover:brightness-110 cursor-pointer"
-                            style={{
-                              width: `${(yr.value / hBarMax) * 100}%`,
-                              backgroundColor: hBarColors[idx],
-                            }}
-                          />
-                          <span className="text-[11px] font-black text-brand-900 whitespace-nowrap">
-                            {yr.value.toLocaleString("en-IN")}
-                          </span>
+              <div className="flex-1 flex flex-col justify-between overflow-hidden">
+                <div className="flex-1 overflow-y-auto overflow-x-auto scrollbar-thin flex flex-col gap-5 pr-2 max-h-[290px] mb-4">
+                  <div className="min-w-[360px] flex flex-col gap-4.5">
+                    {hBarData.map((item) => (
+                      <div key={item.program} className="flex items-center gap-3">
+                        {/* Label */}
+                        <div className="w-[120px] flex-shrink-0 text-[11px] font-black text-brand-900 text-right truncate" title={item.program}>
+                          {item.short}
                         </div>
-                      ))}
-                    </div>
+                        {/* Bars */}
+                        <div className="flex flex-col gap-1 flex-1">
+                          {item.years.map((yr, idx) => {
+                            const isSelected = selectedYoYCourseWise?.program === item.program && selectedYoYCourseWise?.year === yr.year;
+                            return (
+                              <div
+                                key={yr.year}
+                                className="flex items-center gap-2 cursor-pointer"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  setSelectedYoYCourseWise(isSelected ? null : { program: item.program, year: yr.year });
+                                }}
+                                style={{
+                                  opacity: isAnySelected ? (isSelected ? 1 : 0.25) : 1,
+                                  filter: isAnySelected && !isSelected ? "grayscale(40%)" : "none",
+                                  transform: isSelected ? "scale(1.02)" : "none",
+                                  transition: "all 0.3s ease"
+                                }}
+                              >
+                                <div
+                                  className="h-4.5 rounded-r-md transition-all duration-300 hover:brightness-110"
+                                  style={{
+                                    width: `${(yr.value / hBarMax) * 100}%`,
+                                    backgroundColor: hBarColors[idx],
+                                    boxShadow: isSelected ? `0 0 8px ${hBarColors[idx]}` : "none"
+                                  }}
+                                />
+                                <span className="text-[10px] font-black text-brand-900 whitespace-nowrap">
+                                  {yr.value.toLocaleString("en-IN")}
+                                </span>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    ))}
                   </div>
-                ))}
+                </div>
 
                 {/* Legend */}
                 <div className="flex justify-center items-center gap-6 text-xs font-bold text-slate-700 mt-2 border-t border-slate-100/50 pt-3 select-none">
@@ -631,7 +927,14 @@ export default function FRADashboard() {
       </div>
 
       {/* CARD: Course-wise Maximum Fee Difference */}
-      <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden min-h-[380px]">
+      <div
+        onClick={() => setSelectedFeeDiff(null)}
+        className={`rounded-3xl shadow-soft transition-all duration-300 p-6 flex flex-col gap-6 w-full relative overflow-hidden min-h-[380px] ${
+          selectedFeeDiff !== null
+            ? "bg-[#e9f2fc] border border-blue-200/60"
+            : "bg-slate-50/40 hover:bg-[#e9f2fc] border border-slate-100 hover:border-blue-200/60"
+        }`}
+      >
 
         {/* Header */}
         <div className="text-center border-b border-slate-100 pb-4">
@@ -653,28 +956,45 @@ export default function FRADashboard() {
             { course: "Bachelor of Engineering/Technology", short: "Bachelor of\nEngineering/...\nof Technology", value: 22000 },
           ];
           const maxVal = 55000;
+          const isAnySelected = selectedFeeDiff !== null;
 
           return (
             <div className="w-full overflow-x-auto scrollbar-thin pb-2">
               <div className="min-w-[900px] flex items-end justify-around px-4 pt-8 pb-2 select-none" style={{ height: "280px" }}>
                 {feeDiffData.map((item) => {
                   const barHeight = (item.value / maxVal) * 100;
+                  const isSelected = selectedFeeDiff === item.course;
                   return (
-                    <div key={item.course} className="flex flex-col items-center w-full max-w-[120px]">
+                    <div
+                      key={item.course}
+                      className="flex flex-col items-center w-full max-w-[120px]"
+                      style={{
+                        opacity: isAnySelected ? (isSelected ? 1 : 0.25) : 1,
+                        filter: isAnySelected && !isSelected ? "grayscale(40%)" : "none",
+                        transition: "all 0.3s ease"
+                      }}
+                    >
                       {/* Value label */}
-                      <span className="text-xs font-black text-brand-900 mb-1.5">
+                      <span className="text-xs font-black text-brand-900 mb-1.5" style={{ opacity: isAnySelected && !isSelected ? 0.3 : 1 }}>
                         {item.value.toLocaleString("en-IN")}
                       </span>
                       {/* Bar */}
                       <div
-                        className="w-16 rounded-t-md transition-all duration-300 hover:brightness-95 cursor-pointer"
+                        className="w-16 rounded-t-md transition-all duration-300 hover:brightness-105 cursor-pointer"
                         style={{
                           height: `${barHeight}%`,
-                          backgroundColor: "#a8b4d4",
+                          background: "linear-gradient(to top, #91a0cc, #c3cded)",
+                          transform: isSelected ? "scale(1.05)" : "none",
+                          boxShadow: isSelected ? "0 0 10px rgba(145, 160, 204, 0.8)" : "none",
+                          zIndex: isSelected ? 30 : 10
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setSelectedFeeDiff(isSelected ? null : item.course);
                         }}
                       />
                       {/* X label */}
-                      <div className="text-[11px] font-black text-brand-800 mt-2.5 text-center leading-tight h-14 flex items-start justify-center select-none px-1">
+                      <div className="text-[11px] font-black text-brand-800 mt-2.5 text-center leading-tight h-14 flex items-start justify-center select-none px-1" style={{ opacity: isAnySelected && !isSelected ? 0.3 : 1 }}>
                         <span className="whitespace-pre-line text-center line-clamp-3">
                           {item.short}
                         </span>
@@ -690,7 +1010,7 @@ export default function FRADashboard() {
       </div>
 
       {/* CARD: Course-wise Fees Inflation Table */}
-      <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
+      <div className="bg-slate-50/40 hover:bg-[#e9f2fc] rounded-3xl border border-slate-100 hover:border-blue-200/60 shadow-soft transition-all duration-300 p-6 flex flex-col gap-6 w-full relative overflow-hidden">
 
         {/* Header Row with Filters */}
         <div className="flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">

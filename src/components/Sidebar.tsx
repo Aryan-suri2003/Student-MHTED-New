@@ -24,11 +24,11 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       {/* Decorative Branding Section (Desktop only) */}
       <div className="hidden lg:flex items-center gap-3 pb-6 mb-2 border-b border-white/10">
         <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white font-extrabold text-sm tracking-wider shadow-inner border border-white/5">
-          MHT
+          WB
         </div>
         <div>
           <h3 className="text-xs font-black text-white tracking-widest uppercase">Student Portal</h3>
-          <p className="text-[9px] text-white/40 font-semibold uppercase tracking-wider mt-0.5">Government of MH</p>
+          <p className="text-[9px] text-white/60 font-semibold uppercase tracking-wider mt-0.5">Higher Education WB</p>
         </div>
       </div>
 
