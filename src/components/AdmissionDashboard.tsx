@@ -25,9 +25,9 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
   let cumulativePercentage = 0;
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
+    <div className="flex flex-row items-center justify-between gap-4 w-full h-full">
       {/* Chart Wrapper */}
-      <div className="relative w-48 h-48 select-none">
+      <div className="relative w-36 h-36 select-none flex-shrink-0">
         <svg viewBox="0 0 120 120" className="w-full h-full">
           {slices.map((slice, index) => {
             const percentage = slice.value;
@@ -63,37 +63,37 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
         </svg>
 
         {/* Center Text Display */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 pointer-events-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
           {hoveredSlice ? (
             <>
-              <span className="text-[10px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[85px]">
+              <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[70px]">
                 {hoveredSlice.label}
               </span>
-              <span className="text-base font-extrabold text-brand-900 mt-0.5 truncate max-w-[85px]">
+              <span className="text-sm font-extrabold text-brand-900 mt-0.5 truncate max-w-[70px]">
                 {hoveredSlice.raw}
               </span>
-              <span className="text-xs font-bold text-brand-600 mt-0.5">
+              <span className="text-[11px] font-bold text-brand-600 mt-0.5">
                 {hoveredSlice.value}%
               </span>
             </>
           ) : activeLegendIndex !== null ? (
             <>
-              <span className="text-[10px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[85px]">
+              <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[70px]">
                 {slices[activeLegendIndex].label}
               </span>
-              <span className="text-base font-extrabold text-brand-900 mt-0.5 truncate max-w-[85px]">
+              <span className="text-sm font-extrabold text-brand-900 mt-0.5 truncate max-w-[70px]">
                 {slices[activeLegendIndex].raw}
               </span>
-              <span className="text-xs font-bold text-brand-600 mt-0.5">
+              <span className="text-[11px] font-bold text-brand-600 mt-0.5">
                 {slices[activeLegendIndex].value}%
               </span>
             </>
           ) : (
             <>
-              <span className="text-[10px] uppercase font-bold text-slate-450 tracking-wider">
+              <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider">
                 {totalLabel}
               </span>
-              <span className="text-base font-extrabold text-brand-950 mt-0.5">
+              <span className="text-sm font-extrabold text-brand-950 mt-0.5">
                 {totalValue}
               </span>
             </>
@@ -101,8 +101,8 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
         </div>
       </div>
 
-      {/* Legend Container - Enlarged font to text-sm and dots to w-3.5 h-3.5 */}
-      <div className="w-full grid grid-cols-2 gap-2 text-sm">
+      {/* Legend Container */}
+      <div className="flex-1 flex flex-col justify-center gap-1 text-xs">
         {slices.map((slice, index) => {
           const isSelected = activeLegendIndex === index || hoveredSlice?.label === slice.label;
           return (
@@ -111,15 +111,15 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
               onClick={() => setActiveLegendIndex(activeLegendIndex === index ? null : index)}
               onMouseEnter={() => setHoveredSlice(slice)}
               onMouseLeave={() => setHoveredSlice(null)}
-              className={`flex items-center gap-2.5 p-2 rounded-xl text-left transition-all duration-200 cursor-pointer ${
+              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer w-full ${
                 isSelected ? "bg-brand-50 font-bold text-brand-900 scale-[1.02]" : "hover:bg-slate-50 text-slate-600"
               }`}
             >
               <span
-                className="w-3.5 h-3.5 rounded-full flex-shrink-0 border border-white/10"
+                className="w-2.5 h-2.5 rounded-full flex-shrink-0 border border-white/10"
                 style={{ backgroundColor: slice.color }}
               />
-              <span className="truncate max-w-[110px] font-semibold">{slice.label}</span>
+              <span className="truncate max-w-[120px] font-semibold">{slice.label}</span>
             </button>
           );
         })}
