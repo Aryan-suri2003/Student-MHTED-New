@@ -117,7 +117,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
             >
               <span
                 className="w-3.5 h-3.5 rounded-full flex-shrink-0 border border-white/10"
-                style={{ backgroundColor: slice.color }}
+                style={{ backgroundColor: slice.color, boxShadow: `0 2px 8px ${slice.color}80` }}
               />
               <span className="truncate max-w-[130px] font-semibold">{slice.label}</span>
             </button>
@@ -133,8 +133,8 @@ export default function AdmissionDashboard() {
 
   // Card 1: Fresh Admissions Data
   const freshAdmissionsSlices: Slice[] = [
-    { label: "Generated", value: 99.28, raw: "15.29L", color: "#2563eb" },
-    { label: "Pending", value: 0.72, raw: "11,089", color: "#ef4444" },
+    { label: "Generated", value: 92.5, raw: "14,24,688", color: "#2563eb" },
+    { label: "Pending", value: 7.5, raw: "1,15,515", color: "#ff60b5" },
   ];
 
   // Card 2: Courses Data
@@ -161,52 +161,56 @@ export default function AdmissionDashboard() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         
         {/* Card 1: Total Enrolled */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+        <div className="bg-gradient-to-br from-[#dbeafe] via-slate-50 to-[#d0e5ff] rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Total Enrolled</h4>
-            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-inner">
+            <h4 className="text-xs font-black text-brand-700/80 uppercase tracking-widest">Total Enrolled</h4>
+            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-inner border border-brand-100/50">
               <Users size={20} className="stroke-[2]" />
             </div>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-brand-900 tracking-tight">30,78,792</p>
-            <p className="text-sm text-brand-600 font-semibold mt-2">100% Enrolled</p>
+            <p className="text-3xl font-black text-brand-900 tracking-tight">30,78,792</p>
+            <p className="text-sm text-brand-650 font-bold mt-2">100% Enrolled</p>
           </div>
         </div>
 
         {/* Card 2: Male Students */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+        <div className="bg-gradient-to-br from-[#dbeafe] via-slate-50 to-[#d0e5ff] rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Male Enrolled</h4>
-            <span className="text-xs font-bold bg-brand-50 text-brand-700 px-2 py-1 rounded-lg">52.5%</span>
+            <h4 className="text-xs font-black text-brand-700/80 uppercase tracking-wider">Male Enrolled</h4>
+            <span className="text-xs font-black bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg border border-blue-100/50">52.5%</span>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-brand-900 tracking-tight">16,16,936</p>
-            <p className="text-sm text-brand-600 font-semibold mt-2">52.52% Share</p>
+            <p className="text-3xl font-black text-brand-900 tracking-tight">16,16,936</p>
+            <p className="text-sm text-blue-600 font-bold mt-2">52.52% Share</p>
           </div>
         </div>
 
         {/* Card 3: Female Students */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+        <div className="bg-gradient-to-br from-[#fce7f3] via-slate-50 to-[#fbcfe8] rounded-3xl border border-pink-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-pink-300 transition-all duration-300 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Female Enrolled</h4>
-            <span className="text-xs font-bold bg-pink-50 text-pink-700 px-2 py-1 rounded-lg">47.5%</span>
+            <h4 className="text-xs font-black text-pink-700/80 uppercase tracking-wider">Female Enrolled</h4>
+            <span className="text-xs font-black bg-pink-50 text-pink-700 px-2.5 py-1 rounded-lg border border-pink-100/50">47.5%</span>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-brand-900 tracking-tight">14,61,274</p>
-            <p className="text-sm text-pink-600 font-semibold mt-2">47.46% Share</p>
+            <p className="text-3xl font-black text-brand-900 tracking-tight">14,61,274</p>
+            <p className="text-sm text-pink-600 font-bold mt-2">47.46% Share</p>
           </div>
         </div>
 
         {/* Card 4: Transgender */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-shadow duration-300">
+        <div className="bg-gradient-to-br from-[#f3e8ff] via-slate-50 to-[#e9d5ff] rounded-3xl border border-purple-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-purple-300 transition-all duration-300 relative overflow-hidden">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Transgender</h4>
-            <span className="text-xs font-bold bg-violet-50 text-avatar px-2 py-1 rounded-lg">0.003%</span>
+            <h4 className="text-xs font-black text-purple-700/80 uppercase tracking-wider">Transgender</h4>
+            <span className="text-xs font-black bg-purple-50 text-purple-700 px-2.5 py-1 rounded-lg border border-purple-100/50">0.003%</span>
           </div>
           <div>
-            <p className="text-3xl font-extrabold text-brand-900 tracking-tight">117</p>
-            <p className="text-sm text-avatar font-semibold mt-2">0.003% Share</p>
+            <p className="text-3xl font-black text-brand-900 tracking-tight">117</p>
+            <p className="text-sm text-purple-650 font-bold mt-2">0.003% Share</p>
           </div>
         </div>
 
@@ -216,7 +220,7 @@ export default function AdmissionDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {/* Card 1: Fresh Admissions */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md hover:border-blue-200/50 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-brand-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
           
           <div>
@@ -242,7 +246,7 @@ export default function AdmissionDashboard() {
         </div>
 
         {/* Card 2: Courses */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#faf5ff] via-white to-[#f5ebff] rounded-3xl border border-violet-100/50 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md hover:border-violet-200/50 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-violet-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
           
           <div>
@@ -268,7 +272,7 @@ export default function AdmissionDashboard() {
         </div>
 
         {/* Card 3: Colleges & Polytechnics */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
+        <div className="bg-gradient-to-br from-[#f0fdf4] via-white to-[#ecfdf5] rounded-3xl border border-emerald-100/50 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md hover:border-emerald-200/50 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
           
           <div>
@@ -409,7 +413,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
   ];
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
+    <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
       
       {/* Expand/Collapse Float Button */}
       <button
@@ -594,15 +598,15 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
       {/* Legend Container */}
       <div className="flex justify-center items-center gap-6 text-sm font-bold text-slate-700 mt-2">
         <span className="flex items-center gap-2">
-          <span className="w-3.5 h-3.5 rounded-full bg-[#ff60b5]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#ff60b5]" style={{ boxShadow: '0 2px 8px #ff60b580' }} />
           Female
         </span>
         <span className="flex items-center gap-2">
-          <span className="w-3.5 h-3.5 rounded-full bg-[#3b82f6]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#3b82f6]" style={{ boxShadow: '0 2px 8px #3b82f680' }} />
           Male
         </span>
         <span className="flex items-center gap-2">
-          <span className="w-3.5 h-3.5 rounded-full bg-[#8b5cf6]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#8b5cf6]" style={{ boxShadow: '0 2px 8px #8b5cf680' }} />
           Transgender
         </span>
       </div>
@@ -674,7 +678,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
   const pathD = points.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
+    <div className="bg-gradient-to-br from-[#f5f3ff] via-white to-[#ecfeff] rounded-3xl border border-indigo-100/40 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
       
       {/* Expand/Collapse Float Button */}
       <button
@@ -988,7 +992,7 @@ function UniversityCoverageChart() {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
+    <div className="bg-gradient-to-br from-[#f0fdfa] via-white to-[#f0f9ff] rounded-3xl border border-teal-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
       {/* Top Header */}
       <div className="text-center border-b border-slate-100 pb-4">
         <h3 className="text-lg font-extrabold text-brand-900 tracking-tight">
@@ -1212,7 +1216,7 @@ function GenderProgramUniversityChart() {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden h-[540px]">
+    <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#fdf2f8] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden h-[540px]">
       {/* Title */}
       <div className="text-center border-b border-slate-100 pb-4">
         <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
@@ -1395,7 +1399,7 @@ function CategoryGenderChart() {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden h-[540px]">
+    <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#fdf2f8] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden h-[540px]">
       
       {/* Header and Controls */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
@@ -1551,15 +1555,15 @@ function CategoryGenderChart() {
       {/* Legend Container */}
       <div className="mt-auto border-t border-slate-100 pt-4 flex justify-center items-center gap-6 text-xs font-bold text-slate-700">
         <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#ff60b5]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#ff60b5]" style={{ boxShadow: '0 2px 8px #ff60b580' }} />
           Female
         </span>
         <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#3b82f6]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#3b82f6]" style={{ boxShadow: '0 2px 8px #3b82f680' }} />
           Male
         </span>
         <span className="flex items-center gap-2">
-          <span className="w-3 h-3 rounded-full bg-[#8b5cf6]" />
+          <span className="w-3.5 h-3.5 rounded-full bg-[#8b5cf6]" style={{ boxShadow: '0 2px 8px #8b5cf680' }} />
           Transgender
         </span>
       </div>
@@ -1667,7 +1671,7 @@ function CategoryUniversityDistributionChart() {
   };
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden mt-6">
+    <div className="bg-gradient-to-br from-[#f0fdfa] via-white to-[#f0f9ff] rounded-3xl border border-teal-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden mt-6">
       {/* Title */}
       <div className="text-center border-b border-slate-100 pb-4">
         <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
@@ -1802,7 +1806,7 @@ function CategoryUniversityDistributionChart() {
       <div className="flex justify-center items-center flex-wrap gap-x-6 gap-y-2 text-xs font-bold text-slate-700 mt-2 border-t border-slate-100 pt-4">
         {categories.map(cat => (
           <span key={cat} className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: categoryColors[cat] }} />
+            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: categoryColors[cat], boxShadow: `0 2px 8px ${categoryColors[cat]}80` }} />
             {cat}
           </span>
         ))}
@@ -1896,7 +1900,7 @@ function AdmissionTopProgramsChart() {
   const types = ["PhD", "PG", "PG Diploma", "UG", "Diploma", "Certificate", "Other"];
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative mt-6">
+    <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative mt-6">
       {/* Header & Title */}
       <div className="text-center border-b border-slate-100 pb-4">
         <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
@@ -1949,10 +1953,10 @@ function AdmissionTopProgramsChart() {
                     <span>{item.name}</span>
                     <span className="text-slate-600 font-bold">{formatNumber(item.value)}</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-5 overflow-hidden relative shadow-inner">
+                  <div className="w-full bg-slate-100 rounded-lg h-7 overflow-hidden relative shadow-inner">
                     <div
                       style={{ width: `${pct}%` }}
-                      className="bg-[#ff60b5] hover:bg-[#ec4899] transition-all duration-500 h-full rounded-full"
+                      className="bg-[#ff60b5] hover:bg-[#ec4899] transition-all duration-500 h-full rounded-lg"
                     />
                   </div>
                 </div>
@@ -1980,10 +1984,10 @@ function AdmissionTopProgramsChart() {
                     <span>{item.name}</span>
                     <span className="text-slate-600 font-bold">{formatNumber(item.value)}</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-5 overflow-hidden relative shadow-inner">
+                  <div className="w-full bg-slate-100 rounded-lg h-7 overflow-hidden relative shadow-inner">
                     <div
                       style={{ width: `${pct}%` }}
-                      className="bg-[#3b82f6] hover:bg-[#2563eb] transition-all duration-500 h-full rounded-full"
+                      className="bg-[#3b82f6] hover:bg-[#2563eb] transition-all duration-500 h-full rounded-lg"
                     />
                   </div>
                 </div>
@@ -2021,7 +2025,7 @@ function AdmittedStudentsMapCard() {
   ];
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-4 w-full relative">
+    <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-4 w-full relative">
       <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
         <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
           Admitted Students from Other States
@@ -2091,7 +2095,7 @@ function FeeWaiverImpactChartCard() {
   const getEwsPoints = () => "60,207.96 193.33,207.36 326.67,207.94 460,209.70";
 
   return (
-    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-4 w-full relative">
+    <div className="bg-gradient-to-br from-[#fdf2f8] via-white to-[#f0fdfa] rounded-3xl border border-pink-100/40 shadow-soft p-6 flex flex-col gap-4 w-full relative">
       <div className="border-b border-slate-100 pb-3 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
         <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
           Impact of Fee Waiver in Professional Courses for Females
