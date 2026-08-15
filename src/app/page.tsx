@@ -5,6 +5,7 @@ import Filters from "@/components/Filters";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
+import FRADashboard from "@/components/FRADashboard";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
@@ -55,6 +56,8 @@ export default function Home() {
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
               <AdmissionDashboard />
+            ) : activeTab === "fra" ? (
+              <FRADashboard />
             ) : (
               <div className="bg-background rounded-2xl md:rounded-3xl border border-borderLight p-12 text-center min-h-[350px] flex flex-col items-center justify-center flex-1">
                 <div className="space-y-3">
