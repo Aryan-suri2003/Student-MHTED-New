@@ -29,7 +29,7 @@
 
 :root {
   --color-surface: #ffffff;
-  --color-background: #f8fafc;
+  --color-background: #f0f6fc;
   --color-text-main: #1e3a8a;
   --color-text-muted: #64748b;
   --color-border-light: #e2e8f0;
@@ -71,4 +71,26 @@ body {
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: #94a3b8 #f1f5f9;
+}
+
+/* Custom scrollbar utility for full-width horizontal scroll charts */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 8px;
+  width: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 8px;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 8px;
+  border: 2px solid #f1f5f9;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+.scrollbar-thin {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f1f5f9;
 }

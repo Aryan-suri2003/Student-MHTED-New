@@ -7,6 +7,7 @@ import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
 import ExaminationDashboard from "@/components/ExaminationDashboard";
 import ScholarshipDashboard from "@/components/ScholarshipDashboard";
+import FRADashboard from "@/components/FRADashboard";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
@@ -39,8 +40,8 @@ export default function Home() {
   const pageData = getPageData();
 
   return (
-    <div className="w-screen h-screen bg-background text-textMain antialiased font-sans flex items-center justify-center p-4 lg:p-0">
-      <div className="w-[90%] h-[90vh] bg-surface rounded-3xl border border-borderLight shadow-glow flex flex-col overflow-hidden relative">
+    <div className="w-screen h-screen bg-background text-textMain antialiased font-sans flex flex-col overflow-hidden">
+      <div className="w-full h-full bg-surface flex flex-col overflow-hidden relative">
         {/* Top Banner Accent */}
         <div className="w-full h-2 bg-brand-800 flex-shrink-0" />
 
@@ -51,7 +52,7 @@ export default function Home() {
           <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
 
           {/* Right Column: Content Area */}
-          <div className="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 gap-6">
+          <div className="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 gap-6 bg-background">
             {/* Filters Section */}
             <Filters filters={globalFilters} onFilterChange={setGlobalFilters} />
 
@@ -75,6 +76,8 @@ export default function Home() {
                   setGlobalFilters((prev) => ({ ...prev, university: uni }))
                 }
               />
+            ) : activeTab === "fra" ? (
+              <FRADashboard />
             ) : (
               <div className="bg-background rounded-2xl md:rounded-3xl border border-borderLight p-12 text-center min-h-[350px] flex flex-col items-center justify-center flex-1">
                 <div className="space-y-3">

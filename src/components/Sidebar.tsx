@@ -19,7 +19,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   ] as const;
 
   return (
-    <aside className="w-full lg:w-64 bg-brand-900 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-brand-800 flex flex-row lg:flex-col overflow-x-auto no-scrollbar gap-2 lg:gap-3.5 h-fit lg:h-full scroll-smooth flex-shrink-0">
+    <aside className="w-full lg:w-[320px] bg-brand-900 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-brand-800 flex flex-row lg:flex-col overflow-x-auto no-scrollbar gap-2 lg:gap-3.5 h-fit lg:h-full scroll-smooth flex-shrink-0">
       
       {/* Decorative Branding Section (Desktop only) */}
       <div className="hidden lg:flex items-center gap-3 pb-6 mb-2 border-b border-white/10">
