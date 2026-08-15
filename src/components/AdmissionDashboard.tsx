@@ -662,7 +662,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
 
   // Calculate coordinates for SVG elements
   const centers = [70, 202, 334, 466, 598, 730];
-  const barWidth = 24;
+  const barWidth = 32;
 
   const points = data.map((item, i) => {
     const x = centers[i];
@@ -778,8 +778,8 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
               const admittedY = 240 - admittedHeight;
               const generatedY = 240 - generatedHeight;
 
-              const admittedX = cx - 28;
-              const generatedX = cx + 4;
+              const admittedX = cx - 35;
+              const generatedX = cx + 3;
 
               return (
                 <g key={item.name} className="group">
@@ -801,7 +801,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                   {admittedHeight > 30 && (
                     <g>
                       <rect
-                        x={admittedX - 6}
+                        x={admittedX - 2}
                         y={213}
                         width={36}
                         height={18}
@@ -810,7 +810,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                         className="opacity-95 shadow-sm"
                       />
                       <text
-                        x={admittedX + 12}
+                        x={admittedX + 16}
                         y={226}
                         textAnchor="middle"
                         fontSize="11"
@@ -839,7 +839,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                   {generatedHeight > 30 && (
                     <g>
                       <rect
-                        x={generatedX - 6}
+                        x={generatedX - 2}
                         y={213}
                         width={36}
                         height={18}
@@ -848,7 +848,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                         className="opacity-95 shadow-sm"
                       />
                       <text
-                        x={generatedX + 12}
+                        x={generatedX + 16}
                         y={226}
                         textAnchor="middle"
                         fontSize="11"
