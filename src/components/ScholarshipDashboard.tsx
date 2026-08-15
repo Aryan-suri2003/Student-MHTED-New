@@ -176,12 +176,12 @@ export default function ScholarshipDashboard({
   // Application Status
   const applicationStatusData: ApplicationStatusItem[] = useMemo(() => {
     return [
-      { status: "Fund Transfer Disbursed", count: Math.round(971495 * multiplier), color: "#0d9488" },
-      { status: "Under DDO Forwarding", count: Math.round(738885 * multiplier), color: "#1e3a8a" },
-      { status: "Application Cancelled / Rejected", count: Math.round(222523 * multiplier), color: "#ef4444" },
-      { status: "Under DDO Scrutiny", count: Math.round(183799 * multiplier), color: "#3b82f6" },
-      { status: "Bill Amount Credited", count: Math.round(171357 * multiplier), color: "#10b981" },
-      { status: "Desk Scrutiny Completed", count: Math.round(112450 * multiplier), color: "#6366f1" },
+      { status: "Fund Transfer Disbursed", count: Math.round(971495 * multiplier), color: "#2d8a6e" },
+      { status: "Under DDO Forwarding", count: Math.round(738885 * multiplier), color: "#4a7fb5" },
+      { status: "Application Cancelled / Rejected", count: Math.round(222523 * multiplier), color: "#c0392b" },
+      { status: "Under DDO Scrutiny", count: Math.round(183799 * multiplier), color: "#b8860b" },
+      { status: "Bill Amount Credited", count: Math.round(171357 * multiplier), color: "#1a6b54" },
+      { status: "Desk Scrutiny Completed", count: Math.round(112450 * multiplier), color: "#5b6b7d" },
     ];
   }, [multiplier]);
 
@@ -279,7 +279,7 @@ export default function ScholarshipDashboard({
           </p>
           <button
             onClick={handleReset}
-            className="text-xs font-bold text-slate-600 hover:text-brand-900 bg-slate-100 hover:bg-slate-200 px-3.5 py-1.5 rounded-xl transition-colors cursor-pointer shadow-2xs"
+            className="text-xs font-bold text-blue-700 hover:text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-100 px-3.5 py-1.5 rounded-xl transition-all cursor-pointer shadow-2xs"
           >
             Reset All
           </button>
@@ -289,51 +289,51 @@ export default function ScholarshipDashboard({
           
           {/* Card 1: Applicants */}
           <div className="flex items-center gap-5 px-4 first:pl-0">
-            <div className="w-18 h-18 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center text-blue-700 flex-shrink-0 shadow-sm">
+            <div className="w-18 h-18 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-500/20">
               <BookOpen size={36} className="stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-3xl lg:text-4xl font-black text-blue-900 tracking-tight">
-                {summary.applicants.toLocaleString("en-IN")}
-              </h3>
-              <p className="text-xs font-extrabold text-blue-600 uppercase tracking-wider mt-1">
+              <p className="text-xs font-extrabold text-blue-600 uppercase tracking-wider">
                 Applicants
               </p>
-              <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Total Registered</p>
+              <h3 className="text-3xl lg:text-4xl font-black text-blue-950 mt-0.5 tracking-tight">
+                {summary.applicants.toLocaleString("en-IN")}
+              </h3>
+              <p className="text-[11px] text-slate-400 font-semibold mt-1">Total Registered Applications</p>
             </div>
           </div>
 
           {/* Card 2: Beneficiaries */}
           <div className="flex items-center gap-5 px-4 pt-4 md:pt-0">
-            <div className="w-18 h-18 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 flex-shrink-0 shadow-sm">
+            <div className="w-18 h-18 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-500/20">
               <GraduationCap size={36} className="stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-3xl lg:text-4xl font-black text-rose-600 tracking-tight">
-                {summary.beneficiaries.toLocaleString("en-IN")}
-              </h3>
-              <p className="text-xs font-extrabold text-rose-500 uppercase tracking-wider mt-1">
+              <p className="text-xs font-extrabold text-sky-600 uppercase tracking-wider">
                 Beneficiaries
               </p>
-              <p className="text-[11px] text-slate-400 font-semibold mt-0.5">
-                {((summary.beneficiaries / summary.applicants) * 100).toFixed(1)}% Conversion Rate
+              <h3 className="text-3xl lg:text-4xl font-black text-sky-800 mt-0.5 tracking-tight">
+                {summary.beneficiaries.toLocaleString("en-IN")}
+              </h3>
+              <p className="text-[11px] text-slate-500 font-semibold mt-1">
+                <span className="text-blue-700 font-extrabold">{((summary.beneficiaries / summary.applicants) * 100).toFixed(1)}%</span> Conversion Rate
               </p>
             </div>
           </div>
 
           {/* Card 3: Disbursed Amount */}
           <div className="flex items-center gap-5 px-4 pt-4 md:pt-0 last:pr-0">
-            <div className="w-18 h-18 rounded-2xl bg-teal-50 border border-teal-100 flex items-center justify-center text-teal-700 flex-shrink-0 shadow-sm">
+            <div className="w-18 h-18 rounded-2xl bg-gradient-to-tr from-indigo-700 to-slate-900 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-500/20">
               <IndianRupee size={36} className="stroke-[2.2]" />
             </div>
             <div>
-              <h3 className="text-3xl lg:text-4xl font-black text-rose-500 tracking-tight">
-                ₹ {summary.disbursedCr.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
-              </h3>
-              <p className="text-xs font-extrabold text-rose-400 uppercase tracking-wider mt-1">
-                Disbursed Amount (in Cr)
+              <p className="text-xs font-extrabold text-indigo-700 uppercase tracking-wider">
+                Disbursed Amount
               </p>
-              <p className="text-[11px] text-slate-400 font-semibold mt-0.5">Direct Benefit Transfer</p>
+              <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 mt-0.5 tracking-tight">
+                ₹ {summary.disbursedCr.toLocaleString("en-IN", { minimumFractionDigits: 2 })} <span className="text-lg font-bold text-slate-500">Cr</span>
+              </h3>
+              <p className="text-[11px] text-slate-400 font-semibold mt-1">Direct Benefit Transfer (DBT)</p>
             </div>
           </div>
 
@@ -356,11 +356,11 @@ export default function ScholarshipDashboard({
                 <p className="text-xs text-slate-400 font-semibold">F.Y. 2024-2025</p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Applicants
+                <span className="flex items-center gap-1.5 text-blue-900">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-blue-800 to-blue-600"></span> Applicants
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Beneficiaries
+                <span className="flex items-center gap-1.5 text-teal-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-teal-600 to-teal-400"></span> Beneficiaries
                 </span>
               </div>
             </div>
@@ -379,17 +379,17 @@ export default function ScholarshipDashboard({
                     </div>
                     {/* Applicants bar */}
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${appPct}%` }} className="bg-slate-800 rounded-md transition-all duration-300" />
+                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${appPct}%` }} className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-md transition-all duration-300 shadow-xs" />
                       </div>
-                      <span className="w-20 text-right text-xs font-extrabold text-slate-800">
+                      <span className="w-20 text-right text-xs font-extrabold text-blue-900">
                         {g.applicants.toLocaleString("en-IN")}
                       </span>
                     </div>
                     {/* Beneficiaries bar */}
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${benPct}%` }} className="bg-teal-400 rounded-md transition-all duration-300" />
+                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${benPct}%` }} className="bg-gradient-to-r from-teal-600 to-teal-400 rounded-md transition-all duration-300 shadow-xs" />
                       </div>
                       <span className="w-20 text-right text-xs font-extrabold text-teal-700">
                         {g.beneficiaries.toLocaleString("en-IN")}
@@ -411,18 +411,18 @@ export default function ScholarshipDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     Category-wise Applicants vs Beneficiaries
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {categoryData.length} Categories
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 font-semibold">F.Y. 2024-2025 (Scrollable)</p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Applicants
+                <span className="flex items-center gap-1.5 text-indigo-900">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-indigo-700 to-indigo-500"></span> Applicants
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Beneficiaries
+                <span className="flex items-center gap-1.5 text-sky-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-sky-500 to-sky-400"></span> Beneficiaries
                 </span>
               </div>
             </div>
@@ -438,18 +438,18 @@ export default function ScholarshipDashboard({
                   <div key={cat.name} className="space-y-1.5">
                     <span className="text-xs font-bold text-slate-700 block truncate">{cat.name}</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${appPct}%` }} className="bg-slate-800 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${appPct}%` }} className="bg-gradient-to-r from-indigo-700 to-indigo-500 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-18 text-right text-xs font-bold text-slate-800">
+                      <span className="w-18 text-right text-xs font-bold text-indigo-900">
                         {cat.applicants.toLocaleString("en-IN")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${benPct}%` }} className="bg-teal-400 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${benPct}%` }} className="bg-gradient-to-r from-sky-500 to-sky-400 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-18 text-right text-xs font-bold text-teal-700">
+                      <span className="w-18 text-right text-xs font-bold text-sky-700">
                         {cat.beneficiaries.toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -469,7 +469,7 @@ export default function ScholarshipDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     Stream-wise Applicants vs Beneficiaries
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {streamData.length} Streams
                   </span>
                 </div>
@@ -477,10 +477,10 @@ export default function ScholarshipDashboard({
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
                 <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Applicants
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-slate-600 to-slate-400"></span> Applicants
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Beneficiaries
+                <span className="flex items-center gap-1.5 text-blue-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-blue-500 to-blue-400"></span> Beneficiaries
                 </span>
               </div>
             </div>
@@ -496,18 +496,18 @@ export default function ScholarshipDashboard({
                   <div key={st.name} className="space-y-1.5">
                     <span className="text-xs font-bold text-slate-700 block">{st.name}</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${appPct}%` }} className="bg-slate-800 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${appPct}%` }} className="bg-gradient-to-r from-slate-600 to-slate-400 rounded-md transition-all shadow-xs" />
                       </div>
                       <span className="w-18 text-right text-xs font-bold text-slate-800">
                         {st.applicants.toLocaleString("en-IN")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${benPct}%` }} className="bg-teal-400 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${benPct}%` }} className="bg-gradient-to-r from-blue-500 to-blue-400 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-18 text-right text-xs font-bold text-teal-700">
+                      <span className="w-18 text-right text-xs font-bold text-blue-700">
                         {st.beneficiaries.toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -529,11 +529,11 @@ export default function ScholarshipDashboard({
                 <p className="text-xs text-slate-400 font-semibold">F.Y. 2024-2025</p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Applicants
+                <span className="flex items-center gap-1.5 text-blue-900">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-blue-700 to-blue-500"></span> Applicants
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Beneficiaries
+                <span className="flex items-center gap-1.5 text-teal-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-teal-500 to-teal-400"></span> Beneficiaries
                 </span>
               </div>
             </div>
@@ -548,16 +548,16 @@ export default function ScholarshipDashboard({
                   <div key={adm.name} className="space-y-1.5">
                     <span className="text-xs font-bold text-slate-700 block">{adm.name}</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${appPct}%` }} className="bg-slate-800 rounded-md transition-all" />
+                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${appPct}%` }} className="bg-gradient-to-r from-blue-700 to-blue-500 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-20 text-right text-xs font-extrabold text-slate-800">
+                      <span className="w-20 text-right text-xs font-extrabold text-blue-900">
                         {adm.applicants.toLocaleString("en-IN")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${benPct}%` }} className="bg-teal-400 rounded-md transition-all" />
+                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${benPct}%` }} className="bg-gradient-to-r from-teal-500 to-teal-400 rounded-md transition-all shadow-xs" />
                       </div>
                       <span className="w-20 text-right text-xs font-extrabold text-teal-700">
                         {adm.beneficiaries.toLocaleString("en-IN")}
@@ -586,7 +586,7 @@ export default function ScholarshipDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     Department-wise Applicants vs Beneficiaries
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {departmentData.length} Depts
                   </span>
                 </div>
@@ -594,10 +594,10 @@ export default function ScholarshipDashboard({
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
                 <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Applicants
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-slate-700 to-slate-500"></span> Applicants
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Beneficiaries
+                <span className="flex items-center gap-1.5 text-sky-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-sky-500 to-sky-400"></span> Beneficiaries
                 </span>
               </div>
             </div>
@@ -612,18 +612,18 @@ export default function ScholarshipDashboard({
                   <div key={dep.name} className="space-y-1.5">
                     <span className="text-xs font-bold text-slate-700 block truncate">{dep.name}</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${appPct}%` }} className="bg-slate-800 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${appPct}%` }} className="bg-gradient-to-r from-slate-700 to-slate-500 rounded-md transition-all shadow-xs" />
                       </div>
                       <span className="w-20 text-right text-xs font-bold text-slate-800">
                         {dep.applicants.toLocaleString("en-IN")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${benPct}%` }} className="bg-teal-400 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${benPct}%` }} className="bg-gradient-to-r from-sky-500 to-sky-400 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-20 text-right text-xs font-bold text-teal-700">
+                      <span className="w-20 text-right text-xs font-bold text-sky-700">
                         {dep.beneficiaries.toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -643,18 +643,18 @@ export default function ScholarshipDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     Scheme-wise Scholarship - Allotted vs Disbursed (₹ Cr)
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {schemeData.length} Schemes
                   </span>
                 </div>
                 <p className="text-xs text-slate-400 font-semibold">F.Y. 2024-2025 (Scrollable)</p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Total Allotted (₹ Cr)
+                <span className="flex items-center gap-1.5 text-blue-900">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-blue-800 to-blue-600"></span> Total Allotted (₹ Cr)
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Total Disbursed (₹ Cr)
+                <span className="flex items-center gap-1.5 text-teal-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-teal-600 to-teal-400"></span> Total Disbursed (₹ Cr)
                 </span>
               </div>
             </div>
@@ -669,16 +669,16 @@ export default function ScholarshipDashboard({
                   <div key={sc.name} className="space-y-1.5">
                     <span className="text-xs font-bold text-slate-700 block truncate">{sc.name}</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${allotPct}%` }} className="bg-slate-800 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${allotPct}%` }} className="bg-gradient-to-r from-blue-800 to-blue-600 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-22 text-right text-xs font-bold text-slate-800">
+                      <span className="w-22 text-right text-xs font-bold text-blue-900">
                         ₹ {sc.allotted.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${disbPct}%` }} className="bg-teal-400 rounded-md transition-all" />
+                      <div className="flex-1 h-4.5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${disbPct}%` }} className="bg-gradient-to-r from-teal-600 to-teal-400 rounded-md transition-all shadow-xs" />
                       </div>
                       <span className="w-22 text-right text-xs font-bold text-teal-700">
                         ₹ {sc.disbursed.toLocaleString("en-IN", { minimumFractionDigits: 2 })}
@@ -707,7 +707,7 @@ export default function ScholarshipDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     Application Status
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {applicationStatusData.length} Stages
                   </span>
                 </div>
@@ -724,12 +724,12 @@ export default function ScholarshipDashboard({
                   <div key={st.status} className="space-y-1">
                     <div className="flex justify-between text-xs font-bold text-slate-700">
                       <span>{st.status}</span>
-                      <span className="text-slate-900 font-extrabold">{st.count.toLocaleString("en-IN")}</span>
+                      <span className="text-blue-950 font-extrabold">{st.count.toLocaleString("en-IN")}</span>
                     </div>
-                    <div className="w-full h-5 bg-slate-100 rounded-md overflow-hidden flex">
+                    <div className="w-full h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
                       <div
                         style={{ width: `${pct}%`, backgroundColor: st.color || "#1e3a8a" }}
-                        className="rounded-md transition-all shadow-2xs"
+                        className="rounded-md transition-all shadow-xs"
                       />
                     </div>
                   </div>
@@ -750,11 +750,11 @@ export default function ScholarshipDashboard({
                 <p className="text-xs text-slate-400 font-semibold">F.Y. 2024-2025</p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-slate-800">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-800"></span> Applicants
+                <span className="flex items-center gap-1.5 text-indigo-900">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-indigo-600 to-indigo-400"></span> Applicants
                 </span>
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Beneficiaries
+                <span className="flex items-center gap-1.5 text-sky-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-gradient-to-r from-sky-500 to-sky-300"></span> Beneficiaries
                 </span>
               </div>
             </div>
@@ -769,18 +769,18 @@ export default function ScholarshipDashboard({
                   <div key={q.name} className="space-y-1.5">
                     <span className="text-xs font-bold text-slate-700 block">{q.name}</span>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${appPct}%` }} className="bg-slate-800 rounded-md transition-all" />
+                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${appPct}%` }} className="bg-gradient-to-r from-indigo-600 to-indigo-400 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-20 text-right text-xs font-extrabold text-slate-800">
+                      <span className="w-20 text-right text-xs font-extrabold text-indigo-900">
                         {q.applicants.toLocaleString("en-IN")}
                       </span>
                     </div>
                     <div className="flex items-center gap-2">
-                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex">
-                        <div style={{ width: `${benPct}%` }} className="bg-teal-400 rounded-md transition-all" />
+                      <div className="flex-1 h-5 bg-slate-100 rounded-md overflow-hidden flex shadow-inner">
+                        <div style={{ width: `${benPct}%` }} className="bg-gradient-to-r from-sky-500 to-sky-300 rounded-md transition-all shadow-xs" />
                       </div>
-                      <span className="w-20 text-right text-xs font-extrabold text-teal-700">
+                      <span className="w-20 text-right text-xs font-extrabold text-sky-700">
                         {q.beneficiaries.toLocaleString("en-IN")}
                       </span>
                     </div>
@@ -808,25 +808,25 @@ export default function ScholarshipDashboard({
                 </h3>
                 <p className="text-xs text-slate-400 font-semibold">Total Funds Disbursed (₹ Cr)</p>
               </div>
-              <TrendingUp size={20} className="text-teal-600" />
+              <TrendingUp size={20} className="text-blue-600" />
             </div>
 
             {/* Visual SVG Area & Line Chart */}
             <div className="h-52 relative flex flex-col justify-end pt-4 pb-6">
               <svg viewBox="0 0 100 100" preserveAspectRatio="none" className="absolute inset-x-2 top-4 bottom-8 w-[calc(100%-16px)] h-36 overflow-visible pointer-events-none">
                 <defs>
-                  <linearGradient id="disbursedGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#0d9488" stopOpacity="0.3" />
-                    <stop offset="100%" stopColor="#0d9488" stopOpacity="0.0" />
+                  <linearGradient id="disbursedBlueGrad" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#2563eb" stopOpacity="0.28" />
+                    <stop offset="100%" stopColor="#2563eb" stopOpacity="0.0" />
                   </linearGradient>
                 </defs>
                 <polygon
-                  fill="url(#disbursedGrad)"
+                  fill="url(#disbursedBlueGrad)"
                   points={`0,100 ${yoyDisbursedData.map((d, i) => `${(i / (yoyDisbursedData.length - 1)) * 100},${100 - ((d.amount - 3000) / 2500) * 100}`).join(" ")} 100,100`}
                 />
                 <polyline
                   fill="none"
-                  stroke="#0d9488"
+                  stroke="#1d4ed8"
                   strokeWidth="3"
                   vectorEffect="non-scaling-stroke"
                   strokeLinecap="round"
@@ -842,11 +842,11 @@ export default function ScholarshipDashboard({
                     <div key={d.year} className="flex flex-col items-center h-full justify-end relative">
                       <div
                         style={{ top: `${y}%`, transform: "translateY(-50%)" }}
-                        className="absolute w-3 h-3 rounded-full bg-teal-600 border-2 border-white shadow-sm"
+                        className="absolute w-3.5 h-3.5 rounded-full bg-blue-600 border-2 border-white shadow-md shadow-blue-500/30"
                       />
                       <span
                         style={{ top: `calc(${y}% - 22px)` }}
-                        className="absolute text-[10px] font-black text-teal-900 bg-white/90 px-1 rounded shadow-2xs whitespace-nowrap"
+                        className="absolute text-[10px] font-black text-blue-950 bg-white/95 border border-slate-100 px-1.5 py-0.5 rounded shadow-2xs whitespace-nowrap"
                       >
                         ₹ {d.amount.toFixed(0)}
                       </span>
@@ -858,7 +858,7 @@ export default function ScholarshipDashboard({
             </div>
           </div>
 
-          <p className="text-[11px] font-semibold text-teal-800 bg-teal-50 p-2.5 rounded-xl text-center">
+          <p className="text-[11px] font-extrabold text-blue-900 bg-blue-50/90 border border-blue-100 p-2.5 rounded-xl text-center">
             +39.2% 4-Year Growth in Scholarship Outlay
           </p>
         </div>
@@ -888,9 +888,9 @@ export default function ScholarshipDashboard({
             </div>
 
             {/* Table */}
-            <div className="max-h-64 overflow-y-auto custom-scrollbar border border-slate-100 rounded-2xl">
+            <div className="max-h-64 overflow-y-auto custom-scrollbar border border-slate-100 rounded-2xl shadow-inner">
               <table className="w-full text-left text-xs">
-                <thead className="bg-slate-50 border-b border-slate-100 text-slate-500 font-bold sticky top-0">
+                <thead className="bg-slate-50/90 border-b border-slate-100 text-slate-600 font-extrabold sticky top-0">
                   <tr>
                     <th className="p-3 pl-4">District</th>
                     <th className="p-3 text-right">Applicants</th>
@@ -901,16 +901,16 @@ export default function ScholarshipDashboard({
                 </thead>
                 <tbody className="divide-y divide-slate-100 text-slate-700 font-semibold">
                   {districtData.map((d) => (
-                    <tr key={d.district} className="hover:bg-slate-50/80 transition-colors">
+                    <tr key={d.district} className="hover:bg-blue-50/40 transition-colors">
                       <td className="p-2.5 pl-4 font-bold text-slate-900 flex items-center gap-1.5">
-                        <Building2 size={13} className="text-slate-400" />
+                        <Building2 size={13} className="text-blue-500" />
                         {d.district}
                       </td>
-                      <td className="p-2.5 text-right">{d.applicants.toLocaleString("en-IN")}</td>
-                      <td className="p-2.5 text-right text-teal-700 font-bold">{d.beneficiaries.toLocaleString("en-IN")}</td>
+                      <td className="p-2.5 text-right font-bold text-slate-900">{d.applicants.toLocaleString("en-IN")}</td>
+                      <td className="p-2.5 text-right text-blue-700 font-extrabold">{d.beneficiaries.toLocaleString("en-IN")}</td>
                       <td className="p-2.5 text-right font-bold">₹ {d.disbursedCr.toFixed(1)}</td>
                       <td className="p-2.5 text-right pr-4">
-                        <span className="bg-teal-50 text-teal-800 font-extrabold px-2 py-0.5 rounded-md text-[11px]">
+                        <span className="bg-blue-50 text-blue-800 border border-blue-100 font-extrabold px-2 py-0.5 rounded-lg text-[11px]">
                           {d.rate}%
                         </span>
                       </td>

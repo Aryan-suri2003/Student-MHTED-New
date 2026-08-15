@@ -521,11 +521,13 @@ export default function ExaminationDashboard({
 
   // Determine active effective university (either selected in top global filter or clicked in chart)
   const effectiveUniCode = useMemo(() => {
-    if (clickedUniversity) return clickedUniversity;
     if (globalFilters?.university && globalFilters.university !== "All") {
       return globalFilters.university;
     }
-    return null;
+    if (globalFilters?.university === "All") {
+      return null;
+    }
+    return clickedUniversity;
   }, [clickedUniversity, globalFilters?.university]);
 
   // Current active data record
@@ -536,10 +538,13 @@ export default function ExaminationDashboard({
     return TOTAL_AGGREGATE;
   }, [effectiveUniCode]);
 
-  // Click handler for bar chart cross-filtering
+  // Click handler for bar chart cross-filtering (toggle on/off)
   const handleBarClick = (uniName: string) => {
-    if (clickedUniversity === uniName) {
+    if (effectiveUniCode === uniName || clickedUniversity === uniName) {
       setClickedUniversity(null);
+      if (onUniversityChange) {
+        onUniversityChange("All");
+      }
     } else {
       setClickedUniversity(uniName);
       if (onUniversityChange) {
@@ -565,25 +570,25 @@ export default function ExaminationDashboard({
         label: "Pass",
         value: Math.round((currentData.results.pass / total) * 100),
         raw: currentData.results.pass.toLocaleString("en-IN"),
-        color: "#0ea5e9",
+        color: "#2d8a6e",
       },
       {
         label: "Fail",
         value: Math.round((currentData.results.fail / total) * 100),
         raw: currentData.results.fail.toLocaleString("en-IN"),
-        color: "#1e3a8a",
+        color: "#c0392b",
       },
       {
         label: "ATKT",
         value: Math.round((currentData.results.atkt / total) * 100),
         raw: currentData.results.atkt.toLocaleString("en-IN"),
-        color: "#ea580c",
+        color: "#b8860b",
       },
       {
         label: "Absent",
         value: Math.round((currentData.results.absent / total) * 100),
         raw: currentData.results.absent.toLocaleString("en-IN"),
-        color: "#701a75",
+        color: "#7c8a99",
       },
     ];
   }, [currentData]);
@@ -603,11 +608,11 @@ export default function ExaminationDashboard({
 
   // Program Type passing rate
   const programPassingRateData = [
-    { type: "Certificate", rate: 89, color: "#0d9488" },
-    { type: "Diploma", rate: 73, color: "#14b8a6" },
-    { type: "PG", rate: 69, color: "#2dd4bf" },
-    { type: "UG", rate: 58, color: "#5eead4" },
-    { type: "PG Diploma", rate: 48, color: "#99f6e4" },
+    { type: "Certificate", rate: 89, color: "#1a6b54" },
+    { type: "Diploma", rate: 73, color: "#2980b9" },
+    { type: "PG", rate: 69, color: "#4a7fb5" },
+    { type: "UG", rate: 58, color: "#6a9bc3" },
+    { type: "PG Diploma", rate: 48, color: "#8bb4d0" },
   ];
 
   // Tree nodes data
@@ -648,8 +653,8 @@ export default function ExaminationDashboard({
   ];
 
   const resultStatusTree = [
-    { name: "Fail", count: 32, max: 56, color: "#ef4444" },
-    { name: "Pass", count: 24, max: 56, color: "#10b981" },
+    { name: "Fail", count: 32, max: 56, color: "#c0392b" },
+    { name: "Pass", count: 24, max: 56, color: "#2d8a6e" },
   ];
 
   // Medium of Appearance items (English, Marathi, Sanskrit)
@@ -711,16 +716,16 @@ export default function ExaminationDashboard({
           
           {/* Card 1: Total Students */}
           <div className="flex items-center gap-5 px-4 first:pl-0">
-            <div className="w-16 h-16 rounded-2xl bg-brand-50 border border-brand-100 flex items-center justify-center text-brand-600 flex-shrink-0 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-500/20">
               <Users size={32} className="stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">No. of Students</p>
-              <h3 className="text-3xl lg:text-4xl font-black text-brand-950 mt-1 tracking-tight">
+              <p className="text-xs font-extrabold text-blue-600 uppercase tracking-wider">No. of Students</p>
+              <h3 className="text-3xl lg:text-4xl font-black text-blue-950 mt-1 tracking-tight">
                 {currentData.students.toLocaleString("en-IN")}
               </h3>
-              <p className="text-xs font-semibold text-slate-500 mt-1 flex items-center gap-1">
-                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block"></span>{" "}
+              <p className="text-xs font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block animate-pulse"></span>{" "}
                 {effectiveUniCode ? `${effectiveUniCode} Registered` : "Total Registered"}
               </p>
             </div>
@@ -728,12 +733,12 @@ export default function ExaminationDashboard({
 
           {/* Card 2: Fresher Percentage */}
           <div className="flex items-center gap-5 px-4 pt-4 md:pt-0">
-            <div className="w-16 h-16 rounded-2xl bg-cyan-50 border border-cyan-100 flex items-center justify-center text-cyan-600 flex-shrink-0 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-500/20">
               <GraduationCap size={32} className="stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Fresher</p>
-              <h3 className="text-3xl lg:text-4xl font-black text-cyan-700 mt-1 tracking-tight">
+              <p className="text-xs font-extrabold text-sky-600 uppercase tracking-wider">Fresher</p>
+              <h3 className="text-3xl lg:text-4xl font-black text-sky-800 mt-1 tracking-tight">
                 {currentData.fresherPct}%
               </h3>
               <p className="text-xs font-semibold text-slate-500 mt-1">
@@ -744,12 +749,12 @@ export default function ExaminationDashboard({
 
           {/* Card 3: Repeater Percentage */}
           <div className="flex items-center gap-5 px-4 pt-4 md:pt-0 last:pr-0">
-            <div className="w-16 h-16 rounded-2xl bg-rose-50 border border-rose-100 flex items-center justify-center text-rose-600 flex-shrink-0 shadow-sm">
+            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-700 to-slate-900 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-500/20">
               <RotateCcw size={30} className="stroke-[2.2]" />
             </div>
             <div>
-              <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">Repeater</p>
-              <h3 className="text-3xl lg:text-4xl font-black text-rose-700 mt-1 tracking-tight">
+              <p className="text-xs font-extrabold text-indigo-700 uppercase tracking-wider">Repeater</p>
+              <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 mt-1 tracking-tight">
                 {currentData.repeaterPct}%
               </h3>
               <p className="text-xs font-semibold text-slate-500 mt-1">
@@ -778,23 +783,23 @@ export default function ExaminationDashboard({
               <h3 className="text-lg md:text-xl font-extrabold text-brand-900 tracking-tight">
                 No. of Exams by Subjects Conducted by Universities
               </h3>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
                 <MoveHorizontal size={12} /> {filteredUniversityExamsList.length} Universities (Scrollable)
               </span>
             </div>
             <p className="text-xs text-slate-400 font-semibold mt-0.5">
-              Click any university bar to highlight and cross-filter all dashboard charts
+              Click any university bar to highlight and cross-filter all dashboard charts (click again to deselect)
             </p>
           </div>
 
           <div className="flex items-center gap-3">
             {/* Legend Indicator */}
             <div className="flex items-center gap-4 text-xs font-semibold mr-2">
-              <span className="flex items-center gap-1.5 text-purple-700">
-                <span className="w-3 h-3 rounded-sm bg-purple-400"></span> Total Papers
+              <span className="flex items-center gap-1.5 text-blue-700">
+                <span className="w-3 h-3 rounded-sm bg-gradient-to-t from-blue-600 to-sky-400"></span> Total Papers
               </span>
-              <span className="flex items-center gap-1.5 text-blue-900">
-                <span className="w-3 h-3 rounded-full bg-blue-900"></span> Total Students
+              <span className="flex items-center gap-1.5 text-indigo-900">
+                <span className="w-3 h-3 rounded-full bg-indigo-800"></span> Total Students
               </span>
             </div>
 
@@ -843,15 +848,30 @@ export default function ExaminationDashboard({
               </div>
             </div>
 
-            {/* SVG Connecting Line for Total Students */}
+            {/* SVG Connecting Area & Line for Total Students */}
             <svg
               viewBox="0 0 100 100"
               preserveAspectRatio="none"
               className="absolute inset-x-4 top-8 bottom-12 w-[calc(100%-32px)] h-48 overflow-visible pointer-events-none"
             >
+              <defs>
+                <linearGradient id="examStudentGradArea" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0%" stopColor="#3b82f6" stopOpacity="0.22" />
+                  <stop offset="100%" stopColor="#3b82f6" stopOpacity="0.0" />
+                </linearGradient>
+              </defs>
+              <polygon
+                fill="url(#examStudentGradArea)"
+                points={`0,100 ${filteredUniversityExamsList.map((d, i) => {
+                  const x = ((i + 0.5) / filteredUniversityExamsList.length) * 100;
+                  const maxStudents = 650000;
+                  const y = 100 - (d.students / maxStudents) * 100;
+                  return `${x},${y}`;
+                }).join(" ")} 100,100`}
+              />
               <polyline
                 fill="none"
-                stroke="#1e3a8a"
+                stroke="#1d4ed8"
                 strokeWidth="2.5"
                 vectorEffect="non-scaling-stroke"
                 strokeLinecap="round"
@@ -889,48 +909,52 @@ export default function ExaminationDashboard({
                   >
                     {/* Floating student dot */}
                     <div
-                      className={`absolute rounded-full border-2 border-white shadow-sm transition-all z-20 ${
-                        isSelected ? "w-4 h-4 bg-brand-500 scale-125 ring-2 ring-brand-300" : "w-2.5 h-2.5 bg-blue-900 group-hover:scale-150"
+                      className={`absolute rounded-full border-2 border-white shadow-md transition-all z-20 ${
+                        isSelected ? "w-4 h-4 bg-blue-600 scale-125 ring-2 ring-blue-300 shadow-blue-500/40" : "w-2.5 h-2.5 bg-indigo-800 group-hover:scale-150"
                       }`}
                       style={{ top: `${studentTopPct}%`, transform: "translateY(-50%)" }}
                     />
 
                     {/* Student count label over line */}
                     <span
-                      className={`absolute text-[9px] font-black transition-all z-20 whitespace-nowrap px-1 rounded shadow-xs ${
-                        isSelected ? "bg-brand-900 text-white font-extrabold scale-110" : "bg-white/90 text-blue-950 opacity-90 group-hover:opacity-100"
+                      className={`absolute text-[9px] font-black transition-all z-20 whitespace-nowrap px-1.5 py-0.5 rounded shadow-xs ${
+                        isSelected ? "bg-blue-900 text-white font-extrabold scale-110 shadow-md" : "bg-white/95 text-blue-950 border border-slate-100 opacity-90 group-hover:opacity-100"
                       }`}
-                      style={{ top: `calc(${studentTopPct}% - 18px)` }}
+                      style={{ top: `calc(${studentTopPct}% - 20px)` }}
                     >
                       {uni.students.toLocaleString("en-IN")}
                     </span>
 
                     {/* Bar Value (Papers) */}
-                    <span className={`text-[10px] font-extrabold mb-1 ${isSelected ? "text-purple-950 scale-110" : "text-purple-900"}`}>
+                    <span className={`text-[10px] font-extrabold mb-1 ${isSelected ? "text-blue-950 scale-110" : "text-blue-900"}`}>
                       {uni.papers.toLocaleString("en-IN")}
                     </span>
 
-                    {/* Purple Bar */}
+                    {/* Blue Gradient Bar */}
                     <div
                       style={{ height: `${barHeight}%` }}
                       className={`w-full max-w-[36px] rounded-t-md transition-all duration-300 shadow-sm ${
-                        isSelected ? "bg-purple-600 ring-2 ring-purple-300" : "bg-purple-300 group-hover:bg-purple-400"
+                        isSelected
+                          ? "bg-gradient-to-t from-indigo-700 via-blue-600 to-sky-300 ring-2 ring-blue-400 shadow-md shadow-blue-500/30 scale-105"
+                          : "bg-gradient-to-t from-blue-600 via-blue-500 to-sky-400 group-hover:from-blue-700 group-hover:to-sky-300"
                       }`}
                     />
 
-                    {/* University Name Axis */}
-                    <span className={`text-[10px] font-bold mt-2 text-center transition-colors truncate max-w-[70px] ${
-                      isSelected ? "text-brand-900 font-extrabold" : "text-slate-600"
-                    }`}>
+                    {/* University Name Label */}
+                    <span
+                      className={`text-xs mt-2 text-center transition-all truncate max-w-[70px] ${
+                        isSelected ? "font-black text-blue-900 scale-110" : "font-semibold text-slate-700 group-hover:text-blue-900"
+                      }`}
+                    >
                       {uni.name}
                     </span>
 
                     {/* Hover Tooltip */}
-                    <div className="absolute bottom-full mb-8 hidden group-hover:flex flex-col bg-slate-900 text-white text-xs p-2.5 rounded-xl shadow-xl z-30 pointer-events-none w-44 text-center">
+                    <div className="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/95 text-white text-[11px] px-2.5 py-1.5 rounded-xl shadow-xl pointer-events-none whitespace-nowrap z-30 flex flex-col items-center">
                       <span className="font-bold text-slate-100 border-b border-slate-700 pb-1 mb-1">{uni.name}</span>
-                      <span className="text-purple-300">Papers: <b>{uni.papers.toLocaleString("en-IN")}</b></span>
+                      <span className="text-sky-300">Papers: <b>{uni.papers.toLocaleString("en-IN")}</b></span>
                       <span className="text-blue-300">Students: <b>{uni.students.toLocaleString("en-IN")}</b></span>
-                      <span className="text-[10px] text-teal-300 mt-1">Click to filter dashboard</span>
+                      <span className="text-[10px] text-teal-300 mt-1">Click to toggle filter</span>
                     </div>
                   </div>
                 );
@@ -955,7 +979,7 @@ export default function ExaminationDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     University-wise Fresher vs Repeater
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {FRESHER_REPEATER_LIST.length} Universities
                   </span>
                 </div>
@@ -964,11 +988,11 @@ export default function ExaminationDashboard({
                 </p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-cyan-600">
-                  <span className="w-2.5 h-2.5 rounded-full bg-cyan-400"></span> Fresher %
+                <span className="flex items-center gap-1.5 text-teal-800">
+                  <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-teal-600 to-teal-400"></span> Fresher %
                 </span>
-                <span className="flex items-center gap-1.5 text-indigo-900">
-                  <span className="w-2.5 h-2.5 rounded-full bg-indigo-700"></span> Repeater %
+                <span className="flex items-center gap-1.5 text-slate-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-slate-600 to-slate-400"></span> Repeater %
                 </span>
               </div>
             </div>
@@ -985,13 +1009,13 @@ export default function ExaminationDashboard({
                     onClick={() => handleBarClick(uni.name)}
                     className={`flex items-center gap-3 text-xs p-1.5 rounded-xl transition-all duration-300 cursor-pointer ${
                       isSelected
-                        ? "bg-brand-50/90 ring-2 ring-brand-500 scale-[1.01] shadow-sm"
+                        ? "bg-blue-50/90 ring-2 ring-blue-500 scale-[1.01] shadow-sm"
                         : isDimmed
                         ? "opacity-30 grayscale-[50%]"
                         : "hover:bg-slate-50 opacity-100"
                     }`}
                   >
-                    <span className={`w-18 font-bold text-right truncate ${isSelected ? "text-brand-900 font-black" : "text-slate-700"}`}>
+                    <span className={`w-18 font-bold text-right truncate ${isSelected ? "text-blue-900 font-black" : "text-slate-700"}`}>
                       {uni.name}
                     </span>
                     <div className="flex-1 h-6 bg-slate-100 rounded-lg overflow-hidden flex relative shadow-inner">
@@ -999,7 +1023,7 @@ export default function ExaminationDashboard({
                       <div
                         style={{ width: `${uni.fresher}%` }}
                         className={`transition-all flex items-center justify-center text-[10px] font-extrabold ${
-                          isSelected ? "bg-cyan-500 text-white" : "bg-cyan-400 text-cyan-950"
+                          isSelected ? "bg-gradient-to-r from-teal-700 to-teal-500 text-white shadow-xs" : "bg-gradient-to-r from-teal-600 to-teal-400 text-white"
                         }`}
                       >
                         {uni.fresher}%
@@ -1008,7 +1032,7 @@ export default function ExaminationDashboard({
                       <div
                         style={{ width: `${uni.repeater}%` }}
                         className={`transition-all flex items-center justify-center text-[10px] font-extrabold ${
-                          isSelected ? "bg-indigo-900 text-white" : "bg-indigo-700 text-white"
+                          isSelected ? "bg-gradient-to-r from-slate-700 to-slate-500 text-white shadow-xs" : "bg-gradient-to-r from-slate-600 to-slate-400 text-white"
                         }`}
                       >
                         {uni.repeater}%
@@ -1038,11 +1062,11 @@ export default function ExaminationDashboard({
                 </p>
               </div>
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-pink-600">
-                  <span className="w-2.5 h-2.5 rounded-full bg-pink-400"></span> Female
+                <span className="flex items-center gap-1.5 text-indigo-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-t from-indigo-500 to-indigo-300"></span> Female
                 </span>
-                <span className="flex items-center gap-1.5 text-blue-600">
-                  <span className="w-2.5 h-2.5 rounded-full bg-blue-500"></span> Male
+                <span className="flex items-center gap-1.5 text-steel-700">
+                  <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-t from-slate-500 to-slate-300"></span> Male
                 </span>
               </div>
             </div>
@@ -1064,11 +1088,11 @@ export default function ExaminationDashboard({
 
                 return (
                   <div key={item.medium} className="flex flex-col items-center h-full justify-end">
-                    <div className="flex items-end justify-center gap-2 w-full h-48">
+                    <div className="flex items-end justify-center gap-2.5 w-full h-48">
                       
                       {/* Female Bar Container */}
                       <div className="flex flex-col items-center flex-1 max-w-[48px] h-full justify-end group relative">
-                        <span className="text-[9px] font-bold text-pink-800 mb-1 truncate max-w-[52px]">
+                        <span className="text-[9px] font-bold text-indigo-900 mb-1 truncate max-w-[52px]">
                           {isCrossFiltered ? item.activeFemale.toLocaleString("en-IN") : item.totalFemale.toLocaleString("en-IN")}
                         </span>
                         
@@ -1076,19 +1100,19 @@ export default function ExaminationDashboard({
                         <div
                           style={{ height: `${totalFemaleHeightPct}%` }}
                           className={`w-full rounded-t-lg transition-all duration-300 shadow-sm relative overflow-hidden flex flex-col justify-end ${
-                            isCrossFiltered ? "bg-pink-100" : "bg-pink-400 group-hover:bg-pink-500"
+                            isCrossFiltered ? "bg-indigo-100" : "bg-gradient-to-t from-indigo-500 to-indigo-300 group-hover:from-indigo-600 group-hover:to-indigo-200"
                           }`}
                         >
                           {/* Inner Highlighted Fraction for Selected University */}
                           {isCrossFiltered && (
                             <div
                               style={{ height: `${activeFemaleShare}%` }}
-                              className="w-full bg-pink-500 transition-all duration-500 shadow-xs"
+                              className="w-full bg-gradient-to-t from-indigo-600 to-indigo-300 transition-all duration-500 shadow-xs"
                             />
                           )}
                         </div>
                         {isCrossFiltered && (
-                          <span className="text-[8px] font-black text-pink-900 mt-0.5">
+                          <span className="text-[8px] font-black text-indigo-900 mt-0.5">
                             {activeFemaleShare.toFixed(1)}%
                           </span>
                         )}
@@ -1096,7 +1120,7 @@ export default function ExaminationDashboard({
 
                       {/* Male Bar Container */}
                       <div className="flex flex-col items-center flex-1 max-w-[48px] h-full justify-end group relative">
-                        <span className="text-[9px] font-bold text-blue-800 mb-1 truncate max-w-[52px]">
+                        <span className="text-[9px] font-bold text-slate-800 mb-1 truncate max-w-[52px]">
                           {isCrossFiltered ? item.activeMale.toLocaleString("en-IN") : item.totalMale.toLocaleString("en-IN")}
                         </span>
                         
@@ -1104,19 +1128,19 @@ export default function ExaminationDashboard({
                         <div
                           style={{ height: `${totalMaleHeightPct}%` }}
                           className={`w-full rounded-t-lg transition-all duration-300 shadow-sm relative overflow-hidden flex flex-col justify-end ${
-                            isCrossFiltered ? "bg-blue-100" : "bg-blue-500 group-hover:bg-blue-600"
+                            isCrossFiltered ? "bg-slate-200" : "bg-gradient-to-t from-slate-500 to-slate-300 group-hover:from-slate-600 group-hover:to-slate-200"
                           }`}
                         >
                           {/* Inner Highlighted Fraction for Selected University */}
                           {isCrossFiltered && (
                             <div
                               style={{ height: `${activeMaleShare}%` }}
-                              className="w-full bg-blue-600 transition-all duration-500 shadow-xs"
+                              className="w-full bg-gradient-to-t from-slate-600 to-slate-300 transition-all duration-500 shadow-xs"
                             />
                           )}
                         </div>
                         {isCrossFiltered && (
-                          <span className="text-[8px] font-black text-blue-900 mt-0.5">
+                          <span className="text-[8px] font-black text-slate-800 mt-0.5">
                             {activeMaleShare.toFixed(1)}%
                           </span>
                         )}
@@ -1138,18 +1162,18 @@ export default function ExaminationDashboard({
       </div>
 
       {/* ========================================================================= */}
-      {/* 4. RESULT SECTION (TEAL ACCENT BANNER + FILTERS) */}
+      {/* 4. RESULT SECTION (ROYAL BLUE ACCENT BANNER + FILTERS) */}
       {/* ========================================================================= */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gradient-to-r from-emerald-600 to-teal-700 p-4 lg:p-5 rounded-2xl md:rounded-3xl shadow-lg text-white">
+      <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gradient-to-r from-blue-950 via-brand-900 to-indigo-950 p-4 lg:p-5 rounded-2xl md:rounded-3xl shadow-xl text-white border border-blue-800/40">
         
         {/* Session Dropdown */}
         <div className="flex items-center gap-2 w-full md:w-auto">
-          <span className="text-xs font-bold uppercase tracking-wider text-teal-100">Session:</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-200">Session:</span>
           <div className="relative flex-1 md:flex-initial">
             <select
               value={session}
               onChange={(e) => setSession(e.target.value)}
-              className="w-full md:w-36 bg-white/20 hover:bg-white/25 text-white font-bold py-1.5 pl-3 pr-8 rounded-xl border border-white/20 text-xs focus:outline-none cursor-pointer appearance-none"
+              className="w-full md:w-36 bg-white/15 hover:bg-white/20 text-white font-bold py-1.5 pl-3 pr-8 rounded-xl border border-white/20 text-xs focus:outline-none cursor-pointer appearance-none"
             >
               <option className="text-slate-900" value="2025-26">2025-26</option>
               <option className="text-slate-900" value="2024-25">2024-25</option>
@@ -1167,12 +1191,12 @@ export default function ExaminationDashboard({
 
         {/* Season Dropdown */}
         <div className="flex items-center gap-2 w-full md:w-auto justify-end">
-          <span className="text-xs font-bold uppercase tracking-wider text-teal-100">Season:</span>
+          <span className="text-xs font-bold uppercase tracking-wider text-blue-200">Season:</span>
           <div className="relative flex-1 md:flex-initial">
             <select
               value={season}
               onChange={(e) => setSeason(e.target.value)}
-              className="w-full md:w-36 bg-white/20 hover:bg-white/25 text-white font-bold py-1.5 pl-3 pr-8 rounded-xl border border-white/20 text-xs focus:outline-none cursor-pointer appearance-none"
+              className="w-full md:w-36 bg-white/15 hover:bg-white/20 text-white font-bold py-1.5 pl-3 pr-8 rounded-xl border border-white/20 text-xs focus:outline-none cursor-pointer appearance-none"
             >
               <option className="text-slate-900" value="Winter">Winter</option>
               <option className="text-slate-900" value="Summer">Summer</option>
@@ -1189,66 +1213,66 @@ export default function ExaminationDashboard({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         
         {/* Pass Students */}
-        <div className="bg-gradient-to-br from-emerald-50 to-emerald-100/50 rounded-3xl border border-emerald-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div className="bg-gradient-to-br from-teal-50/70 via-white to-white rounded-3xl border border-teal-200/60 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-extrabold text-emerald-800 uppercase tracking-wider">Pass Students</span>
-            <div className="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-sm">
+            <span className="text-xs font-extrabold text-teal-800 uppercase tracking-wider">Pass Students</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-600/15">
               <CheckCircle2 size={20} />
             </div>
           </div>
           <div>
-            <p className="text-3xl lg:text-4xl font-black text-emerald-700 tracking-tight">
+            <p className="text-3xl lg:text-4xl font-black text-teal-900 tracking-tight">
               {currentData.results.pass.toLocaleString("en-IN")}
             </p>
-            <p className="text-xs text-emerald-800 font-bold mt-1">Cleared All Examinations</p>
+            <p className="text-xs text-teal-700 font-bold mt-1">Cleared All Examinations</p>
           </div>
         </div>
 
         {/* Students Not Cleared */}
-        <div className="bg-gradient-to-br from-amber-50 to-amber-100/50 rounded-3xl border border-amber-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div className="bg-gradient-to-br from-red-50/50 via-white to-white rounded-3xl border border-red-200/50 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-extrabold text-amber-800 uppercase tracking-wider">Students Not Cleared</span>
-            <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-sm">
+            <span className="text-xs font-extrabold text-red-800 uppercase tracking-wider">Students Not Cleared</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-700 to-red-500 text-white flex items-center justify-center shadow-md shadow-red-600/15">
               <XCircle size={20} />
             </div>
           </div>
           <div>
-            <p className="text-3xl lg:text-4xl font-black text-amber-700 tracking-tight">
+            <p className="text-3xl lg:text-4xl font-black text-red-900 tracking-tight">
               {currentData.results.fail.toLocaleString("en-IN")}
             </p>
-            <p className="text-xs text-amber-800 font-bold mt-1">Failed / Require Re-exam</p>
+            <p className="text-xs text-red-700 font-bold mt-1">Failed / Require Re-exam</p>
           </div>
         </div>
 
         {/* Absent Students */}
-        <div className="bg-gradient-to-br from-rose-50 to-rose-100/50 rounded-3xl border border-rose-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div className="bg-gradient-to-br from-amber-50/50 via-white to-white rounded-3xl border border-amber-200/50 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-extrabold text-rose-800 uppercase tracking-wider">Absent Students</span>
-            <div className="w-9 h-9 rounded-xl bg-rose-500 text-white flex items-center justify-center shadow-sm">
+            <span className="text-xs font-extrabold text-amber-800 uppercase tracking-wider">Absent Students</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-700 to-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-600/15">
               <UserX size={20} />
             </div>
           </div>
           <div>
-            <p className="text-3xl lg:text-4xl font-black text-rose-700 tracking-tight">
+            <p className="text-3xl lg:text-4xl font-black text-amber-900 tracking-tight">
               {currentData.results.absent.toLocaleString("en-IN")}
             </p>
-            <p className="text-xs text-rose-800 font-bold mt-1">Did Not Attend Exam</p>
+            <p className="text-xs text-amber-700 font-bold mt-1">Did Not Attend Exam</p>
           </div>
         </div>
 
         {/* Backlog Students */}
-        <div className="bg-gradient-to-br from-orange-50 to-orange-100/50 rounded-3xl border border-orange-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div className="bg-gradient-to-br from-slate-50/70 via-white to-white rounded-3xl border border-slate-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
           <div className="flex items-center justify-between mb-3">
-            <span className="text-xs font-extrabold text-orange-900 uppercase tracking-wider">Backlog Students</span>
-            <div className="w-9 h-9 rounded-xl bg-orange-600 text-white flex items-center justify-center shadow-sm">
+            <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Backlog Students</span>
+            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-700 to-slate-500 text-white flex items-center justify-center shadow-md shadow-slate-600/15">
               <RotateCcw size={20} />
             </div>
           </div>
           <div>
-            <p className="text-3xl lg:text-4xl font-black text-orange-800 tracking-tight">
-              {currentData.results.backlog.toLocaleString("en-IN")}
+            <p className="text-3xl lg:text-4xl font-black text-slate-800 tracking-tight">
+              {currentData.results.atkt.toLocaleString("en-IN")}
             </p>
-            <p className="text-xs text-orange-900 font-bold mt-1">Pending Semester Backlogs</p>
+            <p className="text-xs text-slate-600 font-bold mt-1">Pending Semester Backlogs</p>
           </div>
         </div>
 
@@ -1307,7 +1331,7 @@ export default function ExaminationDashboard({
                   <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                     Region-wise Result Analysis
                   </h3>
-                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-slate-500 bg-slate-100 px-2 py-0.5 rounded-full">
+                  <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2 py-0.5 rounded-full">
                     <MoveVertical size={11} /> {regionResultData.length} Regions
                   </span>
                 </div>
@@ -1315,11 +1339,11 @@ export default function ExaminationDashboard({
               </div>
 
               <div className="flex items-center gap-3 text-xs font-semibold">
-                <span className="flex items-center gap-1.5 text-teal-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-400"></span> Pass
+                <span className="flex items-center gap-1.5 text-teal-700">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-teal-600"></span> Pass
                 </span>
-                <span className="flex items-center gap-1.5 text-rose-600">
-                  <span className="w-2.5 h-2.5 rounded-sm bg-rose-400"></span> Fail
+                <span className="flex items-center gap-1.5 text-slate-600">
+                  <span className="w-2.5 h-2.5 rounded-sm bg-slate-400"></span> Fail
                 </span>
                 <span className="flex items-center gap-1.5 text-blue-700">
                   <span className="w-2.5 h-2.5 rounded-full bg-blue-600"></span> Pass %
@@ -1328,26 +1352,19 @@ export default function ExaminationDashboard({
             </div>
 
             {/* Region List with Custom Vertical Scroll */}
-            <div className="max-h-80 overflow-y-auto custom-scrollbar pr-2 space-y-2.5 mt-2">
+            <div className="max-h-80 overflow-y-auto custom-scrollbar pr-2 space-y-3.5 mt-2">
               {regionResultData.map((reg) => (
-                <div key={reg.name} className="flex flex-col gap-1 p-2 rounded-xl hover:bg-slate-50 transition-colors">
-                  <div className="flex items-center justify-between text-xs">
-                    <span className="font-bold text-slate-800">{reg.name}</span>
-                    <div className="flex items-center gap-4">
-                      <span className="text-slate-500 font-medium">
-                        Pass: <b className="text-teal-700">{reg.pass.toLocaleString("en-IN")}</b> | Fail: <b className="text-rose-700">{reg.fail.toLocaleString("en-IN")}</b>
-                      </span>
-                      <span className="font-black text-blue-900 bg-blue-50 px-2 py-0.5 rounded-md">
-                        {reg.percentage}%
-                      </span>
-                    </div>
+                <div key={reg.name} className="space-y-1.5">
+                  <div className="flex justify-between items-center text-xs">
+                    <span className="font-extrabold text-slate-900">{reg.name}</span>
+                    <span className="text-slate-500 font-semibold text-[11px]">
+                      Pass: <b className="text-teal-700">{reg.pass.toLocaleString("en-IN")}</b> | Fail: <b className="text-slate-700">{reg.fail.toLocaleString("en-IN")}</b> | Pass: <b className="text-blue-700 font-extrabold">{reg.percentage}%</b>
+                    </span>
                   </div>
-                  
-                  {/* Visual Bar */}
-                  <div className="w-full h-2.5 bg-slate-100 rounded-full overflow-hidden flex">
+                  <div className="w-full bg-slate-100 rounded-full h-3.5 overflow-hidden flex shadow-inner">
                     <div
                       style={{ width: `${reg.percentage}%` }}
-                      className="bg-gradient-to-r from-teal-400 to-blue-500 rounded-full"
+                      className="bg-gradient-to-r from-teal-600 to-teal-400 rounded-full transition-all shadow-xs"
                     />
                   </div>
                 </div>
@@ -1368,7 +1385,7 @@ export default function ExaminationDashboard({
               <h3 className="text-lg md:text-xl font-extrabold text-brand-900 tracking-tight">
                 Results Breakup
               </h3>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
                 <MoveHorizontal size={12} /> {RESULTS_BREAKUP_LIST.length} Universities (Scrollable)
               </span>
             </div>
@@ -1378,10 +1395,10 @@ export default function ExaminationDashboard({
           <div className="flex flex-wrap items-center gap-3">
             <div className="flex items-center gap-3 text-xs font-semibold mr-2">
               <span className="flex items-center gap-1.5 text-teal-700">
-                <span className="w-3 h-3 rounded-sm bg-teal-400"></span> Pass Students
+                <span className="w-3 h-3 rounded-sm bg-gradient-to-t from-teal-700 to-teal-400"></span> Pass Students
               </span>
-              <span className="flex items-center gap-1.5 text-rose-700">
-                <span className="w-3 h-3 rounded-sm bg-rose-400"></span> Fail Students
+              <span className="flex items-center gap-1.5 text-slate-600">
+                <span className="w-3 h-3 rounded-sm bg-gradient-to-t from-slate-500 to-slate-300"></span> Fail Students
               </span>
               <span className="flex items-center gap-1.5 text-blue-900">
                 <span className="w-3 h-3 rounded-full bg-blue-600"></span> Pass Percentage
@@ -1475,13 +1492,13 @@ export default function ExaminationDashboard({
                     {/* Pass % dot & label */}
                     <div
                       className={`absolute rounded-full border-2 border-white shadow-sm transition-transform z-20 ${
-                        isSelected ? "w-4 h-4 bg-brand-600 scale-125 ring-2 ring-brand-300" : "w-3 h-3 bg-blue-600 group-hover:scale-150"
+                        isSelected ? "w-4 h-4 bg-blue-600 scale-125 ring-2 ring-blue-300" : "w-3 h-3 bg-blue-600 group-hover:scale-150"
                       }`}
                       style={{ top: `${pctTop}%`, transform: "translateY(-50%)" }}
                     />
                     <span
                       className={`absolute text-[10px] font-black px-1.5 py-0.5 rounded shadow-xs z-20 ${
-                        isSelected ? "bg-brand-900 text-white font-extrabold" : "bg-white/95 text-blue-700"
+                        isSelected ? "bg-blue-900 text-white font-extrabold" : "bg-white/95 text-blue-700 border border-slate-100"
                       }`}
                       style={{ top: `calc(${pctTop}% - 22px)` }}
                     >
@@ -1492,27 +1509,27 @@ export default function ExaminationDashboard({
                     <div className="flex items-end justify-center gap-1.5 w-full h-40">
                       {/* Pass Bar */}
                       <div className="flex flex-col items-center flex-1 max-w-[34px] h-full justify-end">
-                        <span className="text-[9px] font-bold text-teal-800 mb-1 truncate max-w-[36px]">
+                        <span className="text-[9px] font-bold text-teal-900 mb-1 truncate max-w-[36px]">
                           {d.pass.toLocaleString("en-IN")}
                         </span>
                         <div
                           style={{ height: `${passHeight}%` }}
-                          className="w-full bg-teal-400 group-hover:bg-teal-500 rounded-t-md transition-all duration-300 shadow-sm"
+                          className="w-full bg-gradient-to-t from-teal-700 via-teal-500 to-teal-400 group-hover:from-teal-800 group-hover:to-teal-300 rounded-t-md transition-all duration-300 shadow-sm"
                         />
                       </div>
                       {/* Fail Bar */}
                       <div className="flex flex-col items-center flex-1 max-w-[34px] h-full justify-end">
-                        <span className="text-[9px] font-bold text-rose-800 mb-1 truncate max-w-[36px]">
+                        <span className="text-[9px] font-bold text-slate-600 mb-1 truncate max-w-[36px]">
                           {d.fail.toLocaleString("en-IN")}
                         </span>
                         <div
                           style={{ height: `${failHeight}%` }}
-                          className="w-full bg-rose-400 group-hover:bg-rose-500 rounded-t-md transition-all duration-300 shadow-sm"
+                          className="w-full bg-gradient-to-t from-slate-500 to-slate-300 group-hover:from-slate-600 group-hover:to-slate-200 rounded-t-md transition-all duration-300 shadow-sm"
                         />
                       </div>
                     </div>
 
-                    <span className={`text-xs font-bold mt-2 text-center truncate max-w-[70px] ${isSelected ? "text-brand-900 font-extrabold" : "text-slate-700"}`}>
+                    <span className={`text-xs mt-2 text-center truncate max-w-[70px] ${isSelected ? "font-black text-blue-900 scale-110" : "font-semibold text-slate-700 group-hover:text-blue-900"}`}>
                       {d.name}
                     </span>
                   </div>
@@ -1565,19 +1582,19 @@ export default function ExaminationDashboard({
           </div>
         </div>
 
-        {/* Big Teal Bars */}
+        {/* Big Blue & Sky Gradient Bars */}
         <div className="w-full overflow-x-auto custom-scrollbar pb-2">
           <div className="min-w-[600px] grid grid-cols-5 gap-4 h-64 items-end pt-4 pb-2">
             {programPassingRateData.map((item) => (
               <div key={item.type} className="flex flex-col items-center h-full justify-end group cursor-pointer">
-                <span className="text-base font-extrabold text-teal-900 mb-2">
+                <span className="text-base font-black text-blue-900 mb-2 group-hover:scale-110 transition-transform">
                   {item.rate}%
                 </span>
                 <div
-                  style={{ height: `${item.rate}%`, backgroundColor: item.color }}
-                  className="w-full max-w-[85px] rounded-t-2xl shadow-sm transition-all duration-300 group-hover:scale-y-[1.03] group-hover:shadow-md"
+                  style={{ height: `${item.rate}%` }}
+                  className="w-full max-w-[85px] rounded-t-2xl shadow-sm transition-all duration-300 group-hover:scale-y-[1.03] group-hover:shadow-md bg-gradient-to-t from-blue-700 via-blue-500 to-sky-400 group-hover:from-blue-800 group-hover:to-sky-300"
                 />
-                <span className="text-xs font-bold text-slate-700 mt-3 text-center truncate w-full">
+                <span className="text-xs font-bold text-slate-700 mt-3 text-center truncate w-full group-hover:text-blue-900">
                   {item.type}
                 </span>
               </div>
@@ -1594,9 +1611,9 @@ export default function ExaminationDashboard({
           <div>
             <div className="flex items-center gap-2.5">
               <h3 className="text-lg md:text-xl font-extrabold text-brand-900 tracking-tight flex items-center gap-2">
-                <Layers className="text-teal-600" size={22} /> Result Analysis (Decomposition Tree)
+                <Layers className="text-blue-600" size={22} /> Result Analysis (Decomposition Tree)
               </h3>
-              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-slate-500 bg-slate-100 px-2.5 py-0.5 rounded-full">
+              <span className="hidden sm:inline-flex items-center gap-1 text-[11px] font-bold text-blue-700 bg-blue-50 border border-blue-100 px-2.5 py-0.5 rounded-full">
                 <MoveHorizontal size={12} /> Drill-down tree (Scrollable)
               </span>
             </div>
@@ -1622,15 +1639,15 @@ export default function ExaminationDashboard({
         {/* Tree Breadcrumb Controls */}
         <div className="flex items-center gap-2 text-xs font-semibold text-slate-500 overflow-x-auto custom-scrollbar pb-3 mb-4">
           <span className="text-slate-400 flex-shrink-0">Path:</span>
-          <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg flex-shrink-0">Season: <b>{selectedSeason}</b></span>
+          <span className="bg-blue-50 text-blue-900 border border-blue-100 px-2.5 py-1 rounded-lg flex-shrink-0">Season: <b>{selectedSeason}</b></span>
           <ChevronRight size={14} className="text-slate-300 flex-shrink-0" />
-          <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg flex-shrink-0">University: <b>{selectedUniversity}</b></span>
+          <span className="bg-blue-50 text-blue-900 border border-blue-100 px-2.5 py-1 rounded-lg flex-shrink-0">University: <b>{selectedUniversity}</b></span>
           <ChevronRight size={14} className="text-slate-300 flex-shrink-0" />
-          <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg flex-shrink-0">Course: <b>{selectedCourse}</b></span>
+          <span className="bg-blue-50 text-blue-900 border border-blue-100 px-2.5 py-1 rounded-lg flex-shrink-0">Course: <b>{selectedCourse}</b></span>
           <ChevronRight size={14} className="text-slate-300 flex-shrink-0" />
-          <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg flex-shrink-0">Type: <b>{selectedExamType}</b></span>
+          <span className="bg-blue-50 text-blue-900 border border-blue-100 px-2.5 py-1 rounded-lg flex-shrink-0">Type: <b>{selectedExamType}</b></span>
           <ChevronRight size={14} className="text-slate-300 flex-shrink-0" />
-          <span className="bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg flex-shrink-0">Sem: <b>{selectedSemester}</b></span>
+          <span className="bg-blue-50 text-blue-900 border border-blue-100 px-2.5 py-1 rounded-lg flex-shrink-0">Sem: <b>{selectedSemester}</b></span>
         </div>
 
         {/* Interactive Decomposition Tree Visualization (Horizontal Scroll Container) */}
@@ -1640,10 +1657,10 @@ export default function ExaminationDashboard({
             {/* Level 0: Total Records */}
             <div className="flex flex-col items-center justify-center w-36 flex-shrink-0">
               <span className="text-[11px] font-extrabold uppercase text-slate-400 mb-2">Total Records</span>
-              <div className="w-full bg-slate-50 border-2 border-brand-800 rounded-xl p-3 shadow-sm text-center">
-                <span className="text-xs font-bold text-brand-900 block">Total Records</span>
-                <span className="text-base font-black text-brand-950">202,368</span>
-                <div className="w-full h-1.5 bg-teal-500 rounded-full mt-2" />
+              <div className="w-full bg-slate-50/90 border-2 border-blue-900 rounded-2xl p-3 shadow-sm text-center">
+                <span className="text-xs font-bold text-blue-900 block">Total Records</span>
+                <span className="text-base font-black text-blue-950">202,368</span>
+                <div className="w-full h-1.5 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full mt-2" />
               </div>
             </div>
 
@@ -1652,11 +1669,11 @@ export default function ExaminationDashboard({
               <span className="text-[11px] font-extrabold uppercase text-slate-400 mb-2">Season</span>
               <div
                 onClick={() => setSelectedSeason("Winter")}
-                className="w-full bg-teal-50 border-2 border-teal-600 rounded-xl p-3 shadow-sm text-center cursor-pointer transition-all hover:scale-105"
+                className="w-full bg-gradient-to-br from-blue-50 to-indigo-50/60 border-2 border-blue-600 rounded-2xl p-3 shadow-sm text-center cursor-pointer transition-all hover:scale-105"
               >
-                <span className="text-xs font-bold text-teal-900 block">Winter</span>
-                <span className="text-base font-black text-teal-950">202,368</span>
-                <div className="w-full h-1.5 bg-teal-500 rounded-full mt-2" />
+                <span className="text-xs font-bold text-blue-900 block">Winter</span>
+                <span className="text-base font-black text-blue-950">202,368</span>
+                <div className="w-full h-1.5 bg-gradient-to-r from-blue-600 to-sky-400 rounded-full mt-2" />
               </div>
             </div>
 
@@ -1674,18 +1691,18 @@ export default function ExaminationDashboard({
                     <div
                       key={u.name}
                       onClick={() => setSelectedUniversity(u.name)}
-                      className={`rounded-xl p-2.5 border transition-all cursor-pointer ${
+                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-brand-50 border-brand-600 shadow-sm scale-102"
+                          ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
                           : "bg-white border-slate-200 hover:bg-slate-50"
                       }`}
                     >
                       <div className="flex justify-between text-xs">
-                        <span className={`font-bold ${isSelected ? "text-brand-900" : "text-slate-800"}`}>{u.name}</span>
+                        <span className={`font-bold ${isSelected ? "text-blue-900 font-black" : "text-slate-800"}`}>{u.name}</span>
                         <span className="font-extrabold text-slate-600">{u.count}</span>
                       </div>
-                      <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
-                        <div style={{ width: `${fillPct}%` }} className="h-full bg-teal-400 rounded-full" />
+                      <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden shadow-inner">
+                        <div style={{ width: `${fillPct}%` }} className="h-full bg-gradient-to-r from-blue-600 to-sky-400 rounded-full" />
                       </div>
                     </div>
                   );
@@ -1707,20 +1724,20 @@ export default function ExaminationDashboard({
                     <div
                       key={c.name}
                       onClick={() => setSelectedCourse(c.name)}
-                      className={`rounded-xl p-2.5 border transition-all cursor-pointer ${
+                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-brand-50 border-brand-600 shadow-sm scale-102"
+                          ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
                           : "bg-white border-slate-200 hover:bg-slate-50"
                       }`}
                     >
                       <div className="flex justify-between text-xs">
-                        <span className={`font-bold truncate max-w-[95px] ${isSelected ? "text-brand-900" : "text-slate-800"}`}>
+                        <span className={`font-bold truncate max-w-[95px] ${isSelected ? "text-blue-900 font-black" : "text-slate-800"}`}>
                           {c.name}
                         </span>
                         <span className="font-extrabold text-slate-600">{c.count}</span>
                       </div>
-                      <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
-                        <div style={{ width: `${fillPct}%` }} className="h-full bg-teal-400 rounded-full" />
+                      <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden shadow-inner">
+                        <div style={{ width: `${fillPct}%` }} className="h-full bg-gradient-to-r from-blue-600 to-sky-400 rounded-full" />
                       </div>
                     </div>
                   );
@@ -1733,18 +1750,18 @@ export default function ExaminationDashboard({
               <span className="text-[11px] font-extrabold uppercase text-slate-400 mb-1 text-center">Exam Type</span>
               <div
                 onClick={() => setSelectedExamType("Repeater")}
-                className={`rounded-xl p-2.5 border transition-all cursor-pointer ${
+                className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                   selectedExamType === "Repeater"
-                    ? "bg-brand-50 border-brand-600 shadow-sm"
+                    ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm ring-1 ring-blue-400"
                     : "bg-white border-slate-200"
                 }`}
               >
                 <div className="flex justify-between text-xs">
-                  <span className="font-bold text-brand-900">Repeater</span>
+                  <span className="font-bold text-blue-900">Repeater</span>
                   <span className="font-extrabold text-slate-600">504</span>
                 </div>
-                <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
-                  <div style={{ width: "100%" }} className="h-full bg-teal-400 rounded-full" />
+                <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden shadow-inner">
+                  <div style={{ width: "100%" }} className="h-full bg-gradient-to-r from-blue-600 to-sky-400 rounded-full" />
                 </div>
               </div>
             </div>
@@ -1763,18 +1780,18 @@ export default function ExaminationDashboard({
                     <div
                       key={s.name}
                       onClick={() => setSelectedSemester(s.name)}
-                      className={`rounded-xl p-2.5 border transition-all cursor-pointer ${
+                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                         isSelected
-                          ? "bg-brand-50 border-brand-600 shadow-sm scale-102"
+                          ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
                           : "bg-white border-slate-200 hover:bg-slate-50"
                       }`}
                     >
                       <div className="flex justify-between text-xs">
-                        <span className={`font-bold ${isSelected ? "text-brand-900" : "text-slate-800"}`}>{s.name}</span>
+                        <span className={`font-bold ${isSelected ? "text-blue-900 font-black" : "text-slate-800"}`}>{s.name}</span>
                         <span className="font-extrabold text-slate-600">{s.count}</span>
                       </div>
-                      <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
-                        <div style={{ width: `${fillPct}%` }} className="h-full bg-teal-400 rounded-full" />
+                      <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden shadow-inner">
+                        <div style={{ width: `${fillPct}%` }} className="h-full bg-gradient-to-r from-blue-600 to-sky-400 rounded-full" />
                       </div>
                     </div>
                   );
@@ -1790,13 +1807,13 @@ export default function ExaminationDashboard({
                 return (
                   <div
                     key={r.name}
-                    className="rounded-xl p-2.5 border bg-white border-slate-200 shadow-xs"
+                    className="rounded-2xl p-2.5 border bg-white border-slate-200 shadow-xs"
                   >
                     <div className="flex justify-between text-xs">
                       <span className="font-bold text-slate-800">{r.name}</span>
                       <span className="font-extrabold text-slate-700">{r.count}</span>
                     </div>
-                    <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden">
+                    <div className="w-full h-1.5 bg-slate-100 rounded-full mt-1.5 overflow-hidden shadow-inner">
                       <div
                         style={{ width: `${fillPct}%`, backgroundColor: r.color }}
                         className="h-full rounded-full"
