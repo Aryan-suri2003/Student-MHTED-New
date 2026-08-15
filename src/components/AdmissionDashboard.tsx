@@ -25,9 +25,9 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
   let cumulativePercentage = 0;
 
   return (
-    <div className="flex flex-row items-center justify-between gap-4 w-full h-full">
+    <div className="flex flex-row items-center justify-between gap-6 w-full h-full mt-auto">
       {/* Chart Wrapper */}
-      <div className="relative w-36 h-36 select-none flex-shrink-0">
+      <div className="relative w-40 h-40 select-none flex-shrink-0">
         <svg viewBox="0 0 120 120" className="w-full h-full">
           {slices.map((slice, index) => {
             const percentage = slice.value;
@@ -66,34 +66,34 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
         <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
           {hoveredSlice ? (
             <>
-              <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[70px]">
+              <span className="text-[10px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[80px]">
                 {hoveredSlice.label}
               </span>
-              <span className="text-sm font-extrabold text-brand-900 mt-0.5 truncate max-w-[70px]">
+              <span className="text-base font-extrabold text-brand-900 mt-0.5 truncate max-w-[80px]">
                 {hoveredSlice.raw}
               </span>
-              <span className="text-[11px] font-bold text-brand-600 mt-0.5">
+              <span className="text-xs font-bold text-brand-600 mt-0.5">
                 {hoveredSlice.value}%
               </span>
             </>
           ) : activeLegendIndex !== null ? (
             <>
-              <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[70px]">
+              <span className="text-[10px] uppercase font-bold text-slate-450 tracking-wider truncate max-w-[80px]">
                 {slices[activeLegendIndex].label}
               </span>
-              <span className="text-sm font-extrabold text-brand-900 mt-0.5 truncate max-w-[70px]">
+              <span className="text-base font-extrabold text-brand-900 mt-0.5 truncate max-w-[80px]">
                 {slices[activeLegendIndex].raw}
               </span>
-              <span className="text-[11px] font-bold text-brand-600 mt-0.5">
+              <span className="text-xs font-bold text-brand-600 mt-0.5">
                 {slices[activeLegendIndex].value}%
               </span>
             </>
           ) : (
             <>
-              <span className="text-[9px] uppercase font-bold text-slate-450 tracking-wider">
+              <span className="text-[10px] uppercase font-bold text-slate-450 tracking-wider">
                 {totalLabel}
               </span>
-              <span className="text-sm font-extrabold text-brand-950 mt-0.5">
+              <span className="text-base font-extrabold text-brand-955 mt-0.5">
                 {totalValue}
               </span>
             </>
@@ -102,7 +102,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
       </div>
 
       {/* Legend Container */}
-      <div className="flex-1 flex flex-col justify-center gap-1 text-xs">
+      <div className="flex-1 flex flex-col justify-center gap-1.5 text-xs">
         {slices.map((slice, index) => {
           const isSelected = activeLegendIndex === index || hoveredSlice?.label === slice.label;
           return (
@@ -111,15 +111,15 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
               onClick={() => setActiveLegendIndex(activeLegendIndex === index ? null : index)}
               onMouseEnter={() => setHoveredSlice(slice)}
               onMouseLeave={() => setHoveredSlice(null)}
-              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer w-full ${
-                isSelected ? "bg-brand-50 font-bold text-brand-900 scale-[1.02]" : "hover:bg-slate-50 text-slate-600"
+              className={`flex items-center gap-2.5 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer w-full ${
+                isSelected ? "bg-brand-50 font-black text-brand-900 scale-[1.02]" : "hover:bg-slate-50 text-slate-650 font-bold"
               }`}
             >
               <span
-                className="w-2.5 h-2.5 rounded-full flex-shrink-0 border border-white/10"
+                className="w-3.5 h-3.5 rounded-full flex-shrink-0 border border-white/10"
                 style={{ backgroundColor: slice.color }}
               />
-              <span className="truncate max-w-[120px] font-semibold">{slice.label}</span>
+              <span className="truncate max-w-[130px] font-semibold">{slice.label}</span>
             </button>
           );
         })}
@@ -216,7 +216,7 @@ export default function AdmissionDashboard() {
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         
         {/* Card 1: Fresh Admissions */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
+        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-brand-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
           
           <div>
@@ -242,7 +242,7 @@ export default function AdmissionDashboard() {
         </div>
 
         {/* Card 2: Courses */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
+        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-violet-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
           
           <div>
@@ -268,7 +268,7 @@ export default function AdmissionDashboard() {
         </div>
 
         {/* Card 3: Colleges & Polytechnics */}
-        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
+        <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-shadow duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
           
           <div>
