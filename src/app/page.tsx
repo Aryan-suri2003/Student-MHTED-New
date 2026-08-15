@@ -5,8 +5,6 @@ import Filters from "@/components/Filters";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
-import ExaminationDashboard from "@/components/ExaminationDashboard";
-import ScholarshipDashboard from "@/components/ScholarshipDashboard";
 import FRADashboard from "@/components/FRADashboard";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
@@ -62,20 +60,6 @@ export default function Home() {
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
               <AdmissionDashboard />
-            ) : activeTab === "examination" ? (
-              <ExaminationDashboard
-                globalFilters={globalFilters}
-                onUniversityChange={(uni) =>
-                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
-                }
-              />
-            ) : activeTab === "scholarship" ? (
-              <ScholarshipDashboard
-                globalFilters={globalFilters}
-                onUniversityChange={(uni) =>
-                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
-                }
-              />
             ) : activeTab === "fra" ? (
               <FRADashboard />
             ) : (
