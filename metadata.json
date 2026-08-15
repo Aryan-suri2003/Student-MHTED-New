@@ -1,0 +1,6 @@
+{
+  "name": "Higher Education Department Analytics Portal",
+  "description": "Comprehensive administrative intelligence and governance dashboard for higher education institutions, affiliations, research, infrastructure, and NAAC accreditation.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
