@@ -270,10 +270,10 @@ export default function ScholarshipDashboard({
       )}
 
       {/* ========================================================================= */}
-      {/* 1. TOP SUMMARY KPI CARDS */}
+      {/* 1. TOP SUMMARY KPI CARDS (SEPARATE BOXES WITH SHADES & SHADOWS) */}
       {/* ========================================================================= */}
-      <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 lg:p-7 relative">
-        <div className="flex items-center justify-between mb-4">
+      <div className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
           <p className="text-xs font-bold text-slate-400 italic">
             *Disclaimer: Data updated as on 14-Aug-2026
           </p>
@@ -285,55 +285,86 @@ export default function ScholarshipDashboard({
           </button>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-100">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           
           {/* Card 1: Applicants */}
-          <div className="flex items-center gap-5 px-4 first:pl-0">
-            <div className="w-18 h-18 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-500/20">
-              <BookOpen size={36} className="stroke-[2.2]" />
+          <div className="bg-gradient-to-br from-[#dbeafe]/70 via-slate-50 to-[#d0e5ff]/50 rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-600/20">
+                  <BookOpen size={24} className="stroke-[2.2]" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black text-blue-900 uppercase tracking-wider">Applicants</h4>
+                  <p className="text-[11px] text-slate-500 font-semibold mt-0.5">Total Registrations</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-black bg-blue-100/70 text-blue-800 px-2.5 py-1 rounded-lg border border-blue-200/50">
+                100%
+              </span>
             </div>
-            <div>
-              <p className="text-xs font-extrabold text-blue-600 uppercase tracking-wider">
-                Applicants
-              </p>
-              <h3 className="text-3xl lg:text-4xl font-black text-blue-950 mt-0.5 tracking-tight">
+            <div className="mt-2">
+              <h3 className="text-3xl lg:text-4xl font-black text-brand-900 tracking-tight">
                 {summary.applicants.toLocaleString("en-IN")}
               </h3>
-              <p className="text-[11px] text-slate-400 font-semibold mt-1">Total Registered Applications</p>
+              <p className="text-xs text-blue-700 font-bold mt-1.5">
+                Total Registered Applications
+              </p>
             </div>
           </div>
 
           {/* Card 2: Beneficiaries */}
-          <div className="flex items-center gap-5 px-4 pt-4 md:pt-0">
-            <div className="w-18 h-18 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-500/20">
-              <GraduationCap size={36} className="stroke-[2.2]" />
+          <div className="bg-gradient-to-br from-[#ccfbf1]/60 via-slate-50 to-[#99f6e4]/30 rounded-3xl border border-teal-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition-all duration-300 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-teal-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-teal-600/20">
+                  <GraduationCap size={24} className="stroke-[2.2]" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black text-teal-950 uppercase tracking-wider">Beneficiaries</h4>
+                  <p className="text-[11px] text-slate-500 font-semibold mt-0.5">Sanctioned Students</p>
+                </div>
+              </div>
+              <span className="text-xs font-black bg-teal-100/70 text-teal-900 px-2.5 py-1 rounded-lg border border-teal-200/50">
+                {((summary.beneficiaries / summary.applicants) * 100).toFixed(1)}%
+              </span>
             </div>
-            <div>
-              <p className="text-xs font-extrabold text-sky-600 uppercase tracking-wider">
-                Beneficiaries
-              </p>
-              <h3 className="text-3xl lg:text-4xl font-black text-sky-800 mt-0.5 tracking-tight">
+            <div className="mt-2">
+              <h3 className="text-3xl lg:text-4xl font-black text-teal-950 tracking-tight">
                 {summary.beneficiaries.toLocaleString("en-IN")}
               </h3>
-              <p className="text-[11px] text-slate-500 font-semibold mt-1">
-                <span className="text-blue-700 font-extrabold">{((summary.beneficiaries / summary.applicants) * 100).toFixed(1)}%</span> Conversion Rate
+              <p className="text-xs text-teal-800 font-bold mt-1.5">
+                {((summary.beneficiaries / summary.applicants) * 100).toFixed(1)}% Conversion Rate
               </p>
             </div>
           </div>
 
           {/* Card 3: Disbursed Amount */}
-          <div className="flex items-center gap-5 px-4 pt-4 md:pt-0 last:pr-0">
-            <div className="w-18 h-18 rounded-2xl bg-gradient-to-tr from-indigo-700 to-slate-900 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-500/20">
-              <IndianRupee size={36} className="stroke-[2.2]" />
+          <div className="bg-gradient-to-br from-[#e0e7ff]/60 via-slate-50 to-[#c7d2fe]/40 rounded-3xl border border-indigo-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-indigo-300 transition-all duration-300 relative overflow-hidden group">
+            <div className="absolute top-0 right-0 w-24 h-24 bg-indigo-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
+            <div className="flex items-center justify-between mb-4">
+              <div className="flex items-center gap-3">
+                <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-800 to-slate-800 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-600/20">
+                  <IndianRupee size={24} className="stroke-[2.2]" />
+                </div>
+                <div>
+                  <h4 className="text-xs font-black text-indigo-950 uppercase tracking-wider">Disbursed Amount</h4>
+                  <p className="text-[11px] text-slate-500 font-semibold mt-0.5">Direct Benefit Transfer</p>
+                </div>
+              </div>
+              <span className="text-[10px] font-black bg-indigo-100/70 text-indigo-900 px-2.5 py-1 rounded-lg border border-indigo-200/50">
+                DBT
+              </span>
             </div>
-            <div>
-              <p className="text-xs font-extrabold text-indigo-700 uppercase tracking-wider">
-                Disbursed Amount
-              </p>
-              <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 mt-0.5 tracking-tight">
+            <div className="mt-2">
+              <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 tracking-tight">
                 ₹ {summary.disbursedCr.toLocaleString("en-IN", { minimumFractionDigits: 2 })} <span className="text-lg font-bold text-slate-500">Cr</span>
               </h3>
-              <p className="text-[11px] text-slate-400 font-semibold mt-1">Direct Benefit Transfer (DBT)</p>
+              <p className="text-xs text-indigo-800 font-bold mt-1.5">
+                Total DBT Outlay Disbursed
+              </p>
             </div>
           </div>
 

@@ -111,9 +111,8 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
               onClick={() => setActiveLegendIndex(activeLegendIndex === index ? null : index)}
               onMouseEnter={() => setHoveredSlice(slice)}
               onMouseLeave={() => setHoveredSlice(null)}
-              className={`flex items-center gap-2.5 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer w-full ${
-                isSelected ? "bg-brand-50 font-black text-brand-900 scale-[1.02]" : "hover:bg-slate-50 text-slate-650 font-bold"
-              }`}
+              className={`flex items-center gap-2.5 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer w-full ${isSelected ? "bg-brand-50 font-black text-brand-900 scale-[1.02]" : "hover:bg-slate-50 text-slate-650 font-bold"
+                }`}
             >
               <span
                 className="w-3.5 h-3.5 rounded-full flex-shrink-0 border border-white/10"
@@ -156,10 +155,10 @@ export default function AdmissionDashboard() {
 
   return (
     <div className="flex flex-col gap-8 w-full animate-fadeIn pb-8">
-      
+
       {/* 1. TOP GENERAL ENROLLMENT STATS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-        
+
         {/* Card 1: Total Enrolled */}
         <div className="bg-gradient-to-br from-[#dbeafe] via-slate-50 to-[#d0e5ff] rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
@@ -218,11 +217,11 @@ export default function AdmissionDashboard() {
 
       {/* 2. THREE COLUMNS GRAPHICAL ADMISSION DETAILS */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        
+
         {/* Card 1: Fresh Admissions */}
         <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md hover:border-blue-200/50 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-brand-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
-          
+
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs bg-brand-50 text-brand-800 font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-brand-100">
@@ -230,7 +229,7 @@ export default function AdmissionDashboard() {
               </span>
               <Users size={18} className="text-brand-500" />
             </div>
-            
+
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Fresh Admissions</h3>
             <p className="text-2xl font-extrabold text-brand-900 mt-1">15,40,203</p>
             <p className="text-xs text-brand-600 font-semibold mt-1">Admitted Students with APAAR ID</p>
@@ -248,7 +247,7 @@ export default function AdmissionDashboard() {
         {/* Card 2: Courses */}
         <div className="bg-gradient-to-br from-[#faf5ff] via-white to-[#f5ebff] rounded-3xl border border-violet-100/50 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md hover:border-violet-200/50 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-violet-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
-          
+
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs bg-violet-50 text-avatar font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-violet-100">
@@ -256,7 +255,7 @@ export default function AdmissionDashboard() {
               </span>
               <BookOpen size={18} className="text-avatar" />
             </div>
-            
+
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Total Courses</h3>
             <p className="text-2xl font-extrabold text-brand-900 mt-1">508</p>
             <p className="text-xs text-avatar font-semibold mt-1">Courses by Program Type</p>
@@ -274,7 +273,7 @@ export default function AdmissionDashboard() {
         {/* Card 3: Colleges & Polytechnics */}
         <div className="bg-gradient-to-br from-[#f0fdf4] via-white to-[#ecfdf5] rounded-3xl border border-emerald-100/50 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md hover:border-emerald-200/50 transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
-          
+
           <div>
             <div className="flex items-center justify-between mb-4">
               <span className="text-xs bg-emerald-50 text-emerald-800 font-bold px-2.5 py-1 rounded-full uppercase tracking-wider border border-emerald-100">
@@ -282,7 +281,7 @@ export default function AdmissionDashboard() {
               </span>
               <School size={18} className="text-emerald-500" />
             </div>
-            
+
             <h3 className="text-sm font-bold text-slate-400 uppercase tracking-wider">Colleges & Polytechnics</h3>
             <p className="text-2xl font-extrabold text-brand-900 mt-1">8,064</p>
             <p className="text-xs text-emerald-600 font-semibold mt-1">Admitted Students by College Type</p>
@@ -414,7 +413,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
 
   return (
     <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#f0f6ff] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
-      
+
       {/* Expand/Collapse Float Button */}
       <button
         onClick={onToggleExpand}
@@ -423,10 +422,10 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
       >
         {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
       </button>
-      
+
       {/* Top Filter & Header Row */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
-        
+
         {/* Left Dropdown */}
         <div className="flex flex-col w-full sm:w-48">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
@@ -476,7 +475,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
       {/* Bar Chart Graphic Area */}
       <div className="w-full overflow-x-auto scrollbar-thin pb-2">
         <div className={`relative min-w-[1350px] flex items-end gap-2 px-2 mt-4 select-none transition-all duration-300 ${isExpanded ? "h-96" : "h-64"}`}>
-          
+
           {/* Render Grid Lines */}
           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pr-12 pb-8">
             <div className="w-full border-t border-slate-100 h-0" />
@@ -498,7 +497,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                 <div key={group.key} className="flex flex-col items-center w-full max-w-[180px]">
                   {/* Visual Bars Container */}
                   <div className={`w-full flex items-end justify-center gap-2 relative transition-all duration-300 ${isExpanded ? "h-72" : "h-44"}`}>
-                    
+
                     {/* Female Bar */}
                     <div
                       style={{ height: `${Math.max(femalePercent, 1.5)}%` }}
@@ -514,7 +513,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                           {formatNumber(group.data.female)}
                         </span>
                       )}
-                      
+
                       {hoveredBar && hoveredBar.group === group.label && hoveredBar.gender === "Female" && (
                         <ChartTooltip
                           label1="Program Type"
@@ -543,7 +542,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                           {formatNumber(group.data.male)}
                         </span>
                       )}
-                      
+
                       {hoveredBar && hoveredBar.group === group.label && hoveredBar.gender === "Male" && (
                         <ChartTooltip
                           label1="Program Type"
@@ -580,7 +579,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                     </div>
 
                   </div>
-                  
+
                   {/* X-Axis label */}
                   <span className="text-xs md:text-sm font-extrabold text-brand-900 mt-3 select-none">
                     {group.label}
@@ -679,7 +678,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
 
   return (
     <div className="bg-gradient-to-br from-[#f5f3ff] via-white to-[#ecfeff] rounded-3xl border border-indigo-100/40 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden">
-      
+
       {/* Expand/Collapse Float Button */}
       <button
         onClick={onToggleExpand}
@@ -688,10 +687,10 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
       >
         {isExpanded ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
       </button>
-      
+
       {/* Top Header Row with Filters */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
-        
+
         {/* Left Dropdown */}
         <div className="flex flex-col w-full sm:w-48">
           <label className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-1.5">
@@ -745,7 +744,7 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
       {/* SVG Graphics Container */}
       <div className="w-full overflow-x-auto scrollbar-thin pb-2">
         <div className={`relative min-w-[700px] mt-4 select-none transition-all duration-300 ${isExpanded ? "h-[450px]" : "h-80"}`}>
-          
+
           <svg viewBox="0 0 800 300" className="w-full h-full">
             {/* Y Axis Grid lines (horizontal) */}
             {[40, 90, 140, 190, 240].map((y, idx) => (
@@ -922,16 +921,16 @@ function RegionCoverageChart({ isExpanded, onToggleExpand }: { isExpanded: boole
               <div className="grid grid-cols-[110px_1fr] gap-y-1.5 text-xs text-left">
                 <span className="font-bold text-blue-700/90 pr-2">Region</span>
                 <span className="font-black text-brand-950">{hoveredBar.region}</span>
-                
+
                 <span className="font-bold text-blue-700/90 pr-2">Metric</span>
                 <span className="font-black text-brand-950">{hoveredBar.type}</span>
-                
+
                 <span className="font-bold text-blue-700/90 pr-2">Value</span>
                 <span className="font-black text-brand-950">{hoveredBar.value}</span>
               </div>
-              
+
               <div className="border-t border-blue-200 my-2.5" />
-              
+
               <div className="flex items-center gap-1.5 text-xs text-blue-700 font-extrabold">
                 <span className="flex items-center justify-center w-4.5 h-4.5 rounded-full bg-blue-100 font-bold text-[10px]">
                   ↓
@@ -1004,7 +1003,7 @@ function UniversityCoverageChart() {
       {/* Bar Chart Graphic Area */}
       <div className="w-full overflow-x-auto scrollbar-thin pb-2">
         <div className="relative min-w-[900px] h-72 flex items-end justify-between px-4 mt-8 select-none pb-12 pt-8">
-          
+
           {/* Render Grid Lines */}
           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pr-4 pb-12 pt-8">
             <div className="w-full border-t border-slate-100 h-0" />
@@ -1023,14 +1022,13 @@ function UniversityCoverageChart() {
               return (
                 <div
                   key={uni.name}
-                  className={`flex flex-col items-center w-full max-w-[70px] relative ${
-                    hoveredIndex === index ? "z-50" : "z-10"
-                  }`}
+                  className={`flex flex-col items-center w-full max-w-[70px] relative ${hoveredIndex === index ? "z-50" : "z-10"
+                    }`}
                 >
-                  
+
                   {/* Visual Bar Container */}
                   <div className="h-44 w-full flex flex-col justify-end items-center relative">
-                    
+
                     {/* Pct Label */}
                     <span
                       className="absolute bottom-full mb-1.5 text-[11px] font-black whitespace-nowrap select-none animate-fadeIn"
@@ -1058,26 +1056,25 @@ function UniversityCoverageChart() {
                       {/* Tooltip Popup */}
                       {hoveredUni && hoveredIndex === index && (
                         <div
-                          className={`absolute top-1/2 -translate-y-1/2 z-45 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none pointer-events-none animate-fadeIn ${
-                            index < 7 ? "left-full ml-4" : "right-full mr-4"
-                          }`}
+                          className={`absolute top-1/2 -translate-y-1/2 z-45 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none pointer-events-none animate-fadeIn ${index < 7 ? "left-full ml-4" : "right-full mr-4"
+                            }`}
                         >
                           <div className="grid grid-cols-[130px_1fr] gap-y-1.5 text-xs text-left">
                             <span className="font-bold text-blue-800/80 pr-2">University</span>
                             <span className="font-extrabold text-brand-950 text-right">{uni.name}</span>
-                            
+
                             <span className="font-bold text-blue-800/80 pr-2">APAAR ID Generated</span>
                             <span className="font-extrabold text-brand-950 text-right">{uni.pct.toFixed(2)}%</span>
-                            
+
                             <span className="font-bold text-blue-800/80 pr-2">Admitted Students</span>
                             <span className="font-extrabold text-brand-950 text-right">{formatNumber(uni.admitted)}</span>
-                            
+
                             <span className="font-bold text-blue-800/80 pr-2">APAAR ID Students</span>
                             <span className="font-extrabold text-brand-950 text-right">{formatNumber(uni.apaar)}</span>
                           </div>
-                          
+
                           <div className="border-t border-[#b9d7ff] my-2.5" />
-                          
+
                           <div className="flex items-center justify-between text-xs text-blue-800 font-extrabold">
                             <div className="flex items-center gap-1.5">
                               <div className="w-5 h-5 rounded-full bg-blue-100 flex items-center justify-center">
@@ -1094,11 +1091,10 @@ function UniversityCoverageChart() {
 
                           {/* Tooltip Arrow */}
                           <div
-                            className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${
-                              index < 7
+                            className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${index < 7
                                 ? "-left-1.5 border-l border-b"
                                 : "-right-1.5 border-t border-r"
-                            }`}
+                              }`}
                           />
                         </div>
                       )}
@@ -1148,23 +1144,22 @@ function ChartTooltip({
 }: ChartTooltipProps) {
   return (
     <div
-      className={`absolute top-1/2 -translate-y-1/2 z-30 pointer-events-none animate-fadeIn bg-blue-50 border border-blue-200 shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none ${
-        isLeft ? "right-full mr-3" : "left-full ml-3"
-      }`}
+      className={`absolute top-1/2 -translate-y-1/2 z-30 pointer-events-none animate-fadeIn bg-blue-50 border border-blue-200 shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none ${isLeft ? "right-full mr-3" : "left-full ml-3"
+        }`}
     >
       <div className="grid grid-cols-[120px_1fr] gap-y-1.5 text-xs text-left">
         <span className="font-bold text-blue-700/90 pr-2">{label1}</span>
         <span className="font-black text-brand-950">{val1}</span>
-        
+
         <span className="font-bold text-blue-700/90 pr-2">{label2}</span>
         <span className="font-black text-brand-950">{val2}</span>
-        
+
         <span className="font-bold text-blue-700/90 pr-2">{label3}</span>
         <span className="font-black text-brand-950">{val3}</span>
       </div>
-      
+
       <div className="border-t border-blue-200 my-2.5" />
-      
+
       <div className="flex items-center gap-1.5 text-xs text-blue-700 font-extrabold">
         <span className="flex items-center justify-center w-4.5 h-4.5 rounded-full bg-blue-100 font-bold text-[10px]">
           ↓
@@ -1174,11 +1169,10 @@ function ChartTooltip({
 
       {/* Tooltip Arrow pointing left/right to the bar */}
       <div
-        className={`absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-blue-50 border-blue-200 transform rotate-45 ${
-          isLeft
+        className={`absolute top-1/2 -translate-y-1/2 w-3.5 h-3.5 bg-blue-50 border-blue-200 transform rotate-45 ${isLeft
             ? "-right-1.5 border-t border-r border-l-0 border-b-0"
             : "-left-1.5 border-l border-b border-r-0 border-t-0"
-        }`}
+          }`}
       />
     </div>
   );
@@ -1237,7 +1231,7 @@ function GenderProgramUniversityChart() {
 
               {/* Stacked Bar Container */}
               <div className="relative h-7 w-full bg-slate-50 rounded-lg overflow-visible flex select-none">
-                
+
                 {/* 50% Dashed Divider line */}
                 <div className="absolute top-0 bottom-0 left-1/2 w-0 border-l border-dashed border-white/60 z-20 pointer-events-none" />
 
@@ -1291,7 +1285,7 @@ function GenderProgramUniversityChart() {
                     <div className="grid grid-cols-[100px_1fr] gap-y-1 text-xs text-left">
                       <span className="font-bold text-blue-800/80 pr-2">University</span>
                       <span className="font-extrabold text-brand-950 text-right">{uni.name}</span>
-                      
+
                       <span className="font-bold text-blue-800/80 pr-2">{hoveredRow.gender}</span>
                       <span className="font-extrabold text-brand-950 text-right">
                         {hoveredRow.val} ({hoveredRow.pct.toFixed(2)}%)
@@ -1400,7 +1394,7 @@ function CategoryGenderChart() {
 
   return (
     <div className="bg-gradient-to-br from-[#f4f8ff] via-white to-[#fdf2f8] rounded-3xl border border-blue-100/50 shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden h-[540px]">
-      
+
       {/* Header and Controls */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4 border-b border-slate-100 pb-4">
         {/* Left Dropdown */}
@@ -1435,7 +1429,7 @@ function CategoryGenderChart() {
       {/* Bar Chart Graphic Area */}
       <div className="w-full overflow-x-auto scrollbar-thin flex-1 pb-4">
         <div className="relative min-w-[700px] h-72 flex items-end justify-between px-2 mt-8 select-none pb-12 pt-8">
-          
+
           {/* Grid lines behind */}
           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-12 pt-8">
             <div className="w-full border-t border-slate-100 h-0" />
@@ -1451,15 +1445,14 @@ function CategoryGenderChart() {
               return (
                 <div
                   key={cat.name}
-                  className={`flex flex-col items-center w-full max-w-[64px] relative ${
-                    hoveredIndex === index ? "z-50" : "z-10"
-                  }`}
+                  className={`flex flex-col items-center w-full max-w-[64px] relative ${hoveredIndex === index ? "z-50" : "z-10"
+                    }`}
                   onMouseLeave={() => {
                     setHoveredBar(null);
                     setHoveredIndex(null);
                   }}
                 >
-                  
+
                   {/* Vertical Stacked Bar */}
                   <div className="h-44 w-10 flex flex-col rounded-md overflow-hidden cursor-pointer relative shadow-sm border border-slate-200/10">
                     {/* Male Segment (Blue, on top) */}
@@ -1505,34 +1498,32 @@ function CategoryGenderChart() {
                   {/* Tooltip for Category & Gender (Moved outside the overflow-hidden bar container) */}
                   {hoveredBar && hoveredIndex === index && (
                     <div
-                      className={`absolute top-[88px] -translate-y-1/2 z-45 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none animate-fadeIn ${
-                        index < 7 ? "left-full ml-4" : "right-full mr-4"
-                      }`}
+                      className={`absolute top-[88px] -translate-y-1/2 z-45 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none animate-fadeIn ${index < 7 ? "left-full ml-4" : "right-full mr-4"
+                        }`}
                     >
                       <div className="grid grid-cols-[130px_1fr] gap-y-1.5 text-xs text-left">
                         <span className="font-bold text-blue-800/80 pr-2">Category</span>
                         <span className="font-extrabold text-brand-950 text-right">{cat.name}</span>
-                        
+
                         <span className="font-bold text-blue-800/80 pr-2">{hoveredBar.gender}</span>
                         <span className="font-extrabold text-brand-950 text-right">{hoveredBar.pct}%</span>
-                        
+
                         <span className="font-bold text-blue-800/80 pr-2">Total Students</span>
                         <span className="font-extrabold text-brand-950 text-right">{formatNumber(hoveredBar.total)}</span>
-                        
+
                         <span className="font-bold text-blue-800/80 pr-2">Female Students</span>
                         <span className="font-extrabold text-brand-950 text-right">{formatNumber(hoveredBar.femaleVal)}</span>
-                        
+
                         <span className="font-bold text-blue-800/80 pr-2">Male Students</span>
                         <span className="font-extrabold text-brand-950 text-right">{formatNumber(hoveredBar.maleVal)}</span>
                       </div>
 
                       {/* Tooltip Arrow */}
                       <div
-                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${
-                          index < 7
+                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${index < 7
                             ? "-left-1.5 border-l border-b"
                             : "-right-1.5 border-t border-r"
-                        }`}
+                          }`}
                       />
                     </div>
                   )}
@@ -1683,7 +1674,7 @@ function CategoryUniversityDistributionChart() {
       {/* Scrollable Chart Wrapper */}
       <div className="w-full overflow-x-auto scrollbar-thin pb-4 relative">
         <div className="min-w-[2200px] h-[360px] relative flex items-end justify-between px-4 mt-4 select-none pb-16">
-          
+
           {/* Y Axis Grid lines */}
           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-16 pt-4">
             <div className="w-full border-t border-slate-100 h-0" />
@@ -1705,9 +1696,8 @@ function CategoryUniversityDistributionChart() {
               return (
                 <div
                   key={uni.name}
-                  className={`flex flex-col items-center w-full max-w-[80px] relative ${
-                    hoveredIndex === idx ? "z-50" : "z-10"
-                  }`}
+                  className={`flex flex-col items-center w-full max-w-[80px] relative ${hoveredIndex === idx ? "z-50" : "z-10"
+                    }`}
                   onMouseLeave={() => {
                     setHoveredSegment(null);
                     setHoveredIndex(null);
@@ -1745,14 +1735,13 @@ function CategoryUniversityDistributionChart() {
                   {/* Tooltip (Positioned relative to the Column wrapper, outside the overflow-hidden bar container) */}
                   {hoveredSegment && hoveredIndex === idx && (
                     <div
-                      className={`absolute top-[128px] -translate-y-1/2 z-50 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-[270px] select-none animate-fadeIn ${
-                        idx < 14 ? "left-full ml-4" : "right-full mr-4"
-                      }`}
+                      className={`absolute top-[128px] -translate-y-1/2 z-50 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-[270px] select-none animate-fadeIn ${idx < 14 ? "left-full ml-4" : "right-full mr-4"
+                        }`}
                     >
                       <div className="grid grid-cols-[100px_1fr] gap-y-1 text-xs text-left">
                         <span className="font-bold text-blue-800/80 pr-2">University</span>
                         <span className="font-extrabold text-brand-950 text-right">{uni.name}</span>
-                        
+
                         <span className="font-bold text-blue-800/80 pr-2">{hoveredSegment.cat}</span>
                         <span className="font-extrabold text-brand-950 text-right">
                           {formatNumber(hoveredSegment.count)} ({hoveredSegment.pct.toFixed(2)}%)
@@ -1778,11 +1767,10 @@ function CategoryUniversityDistributionChart() {
 
                       {/* Tooltip Arrow */}
                       <div
-                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${
-                          idx < 14
+                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${idx < 14
                             ? "-left-1.5 border-l border-b"
                             : "-right-1.5 border-t border-r"
-                        }`}
+                          }`}
                       />
                     </div>
                   )}
@@ -1841,7 +1829,7 @@ function AdmissionTopProgramsChart() {
     { name: "B.Com", type: "UG", female: 245000, male: 264000 },
     { name: "B.E - B.Tech", type: "UG", female: 135000, male: 250000 },
     { name: "B.Pharm", type: "UG", female: 65000, male: 46000 },
-    
+
     // PG
     { name: "B.A.", type: "PG", female: 11167, male: 10865 },
     { name: "B.Sc.", type: "PG", female: 11958, male: 12200 },
@@ -1917,11 +1905,10 @@ function AdmissionTopProgramsChart() {
             <button
               key={t}
               onClick={() => toggleType(t)}
-              className={`px-6 py-2 rounded-xl text-xs font-black min-w-[120px] flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
-                isChecked
+              className={`px-6 py-2 rounded-xl text-xs font-black min-w-[120px] flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${isChecked
                   ? "bg-brand-900 text-white shadow-soft"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
-              }`}
+                }`}
             >
               {isChecked && (
                 <svg viewBox="0 0 24 24" className="w-3 h-3 fill-none stroke-current" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
@@ -1936,7 +1923,7 @@ function AdmissionTopProgramsChart() {
 
       {/* Main Grid: Female vs Male side-by-side */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-2">
-        
+
         {/* Left Side: Female Admissions */}
         <div className="flex flex-col gap-5 bg-pink-50/10 p-5 rounded-2xl border border-pink-100/20">
           <div className="flex items-center gap-2 pb-2 border-b border-pink-100/50">
@@ -2089,7 +2076,7 @@ function FeeWaiverImpactChartCard() {
   // Coordinates computed for viewBox 0 0 500 250
   // X = 60 + index * 133.33
   // Y = 215 - (value / 60000) * 180
-  
+
   const getObcPoints = () => "60,168.68 193.33,146.21 326.67,76.18 460,47.43";
   const getSebcPoints = () => "326.67,186.08 460,170.57";
   const getEwsPoints = () => "60,207.96 193.33,207.36 326.67,207.94 460,209.70";
@@ -2100,7 +2087,7 @@ function FeeWaiverImpactChartCard() {
         <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
           Impact of Fee Waiver in Professional Courses for Females
         </h3>
-        
+
         {/* Legend */}
         <div className="flex items-center gap-4 text-xs font-black text-slate-700">
           <span className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Category</span>
@@ -2214,10 +2201,10 @@ function FeeWaiverImpactChartCard() {
                 strokeWidth="1.5"
                 strokeDasharray="2 2"
               />
-              <circle cx={60 + hoveredYear * 133.33} cy={215 - (ewsValues[hoveredYear]/60000)*180} r="6" fill="#3b82f6" stroke="white" strokeWidth="2" />
-              <circle cx={60 + hoveredYear * 133.33} cy={215 - (obcValues[hoveredYear]/60000)*180} r="6" fill="#1d4ed8" stroke="white" strokeWidth="2" />
+              <circle cx={60 + hoveredYear * 133.33} cy={215 - (ewsValues[hoveredYear] / 60000) * 180} r="6" fill="#3b82f6" stroke="white" strokeWidth="2" />
+              <circle cx={60 + hoveredYear * 133.33} cy={215 - (obcValues[hoveredYear] / 60000) * 180} r="6" fill="#1d4ed8" stroke="white" strokeWidth="2" />
               {sebcValues[hoveredYear] !== null && (
-                <circle cx={60 + hoveredYear * 133.33} cy={215 - (sebcValues[hoveredYear]!/60000)*180} r="6" fill="#f97316" stroke="white" strokeWidth="2" />
+                <circle cx={60 + hoveredYear * 133.33} cy={215 - (sebcValues[hoveredYear]! / 60000) * 180} r="6" fill="#f97316" stroke="white" strokeWidth="2" />
               )}
             </>
           )}

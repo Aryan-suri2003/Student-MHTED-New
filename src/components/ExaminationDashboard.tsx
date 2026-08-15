@@ -709,68 +709,101 @@ export default function ExaminationDashboard({
       )}
 
       {/* ========================================================================= */}
-      {/* 1. TOP 3 SUMMARY KPI CARDS (GENERAL EXAM OVERVIEW) */}
+      {/* 1. TOP 3 SUMMARY KPI CARDS (SEPARATE BOXES WITH SHADES & SHADOWS) */}
       {/* ========================================================================= */}
-      <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 divide-y md:divide-y-0 md:divide-x divide-slate-100">
-          
-          {/* Card 1: Total Students */}
-          <div className="flex items-center gap-5 px-4 first:pl-0">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-blue-600 to-indigo-700 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-500/20">
-              <Users size={32} className="stroke-[2.2]" />
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        
+        {/* Card 1: Total Students */}
+        <div className="bg-gradient-to-br from-[#dbeafe]/70 via-slate-50 to-[#d0e5ff]/50 rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-blue-700 to-indigo-800 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-blue-600/20">
+                <Users size={24} className="stroke-[2.2]" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-blue-900 uppercase tracking-wider">No. of Students</h4>
+                <p className="text-[11px] text-slate-500 font-semibold mt-0.5 flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-blue-600 inline-block animate-pulse"></span>
+                  {effectiveUniCode ? `${effectiveUniCode} Registered` : "Total Registered"}
+                </p>
+              </div>
             </div>
-            <div>
-              <p className="text-xs font-extrabold text-blue-600 uppercase tracking-wider">No. of Students</p>
-              <h3 className="text-3xl lg:text-4xl font-black text-blue-950 mt-1 tracking-tight">
-                {currentData.students.toLocaleString("en-IN")}
-              </h3>
-              <p className="text-xs font-semibold text-slate-500 mt-1 flex items-center gap-1.5">
-                <span className="w-2 h-2 rounded-full bg-blue-500 inline-block animate-pulse"></span>{" "}
-                {effectiveUniCode ? `${effectiveUniCode} Registered` : "Total Registered"}
-              </p>
-            </div>
+            <span className="text-[10px] font-black bg-blue-100/70 text-blue-800 px-2.5 py-1 rounded-lg border border-blue-200/50">
+              100%
+            </span>
           </div>
-
-          {/* Card 2: Fresher Percentage */}
-          <div className="flex items-center gap-5 px-4 pt-4 md:pt-0">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-sky-500 to-blue-600 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-sky-500/20">
-              <GraduationCap size={32} className="stroke-[2.2]" />
-            </div>
-            <div>
-              <p className="text-xs font-extrabold text-sky-600 uppercase tracking-wider">Fresher</p>
-              <h3 className="text-3xl lg:text-4xl font-black text-sky-800 mt-1 tracking-tight">
-                {currentData.fresherPct}%
-              </h3>
-              <p className="text-xs font-semibold text-slate-500 mt-1">
-                {((currentData.students * currentData.fresherPct) / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 })} Students
-              </p>
-            </div>
+          <div className="mt-2">
+            <h3 className="text-3xl lg:text-4xl font-black text-brand-900 tracking-tight">
+              {currentData.students.toLocaleString("en-IN")}
+            </h3>
+            <p className="text-xs text-blue-700 font-bold mt-1.5">
+              Enrolled across all programs
+            </p>
           </div>
-
-          {/* Card 3: Repeater Percentage */}
-          <div className="flex items-center gap-5 px-4 pt-4 md:pt-0 last:pr-0">
-            <div className="w-16 h-16 rounded-2xl bg-gradient-to-tr from-indigo-700 to-slate-900 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-indigo-500/20">
-              <RotateCcw size={30} className="stroke-[2.2]" />
-            </div>
-            <div>
-              <p className="text-xs font-extrabold text-indigo-700 uppercase tracking-wider">Repeater</p>
-              <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 mt-1 tracking-tight">
-                {currentData.repeaterPct}%
-              </h3>
-              <p className="text-xs font-semibold text-slate-500 mt-1">
-                {((currentData.students * currentData.repeaterPct) / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 })} Students
-              </p>
-            </div>
-          </div>
-
         </div>
 
-        {/* Disclaimer */}
-        <div className="mt-5 pt-3 border-t border-slate-100 text-center">
-          <p className="text-[11px] font-medium text-slate-400 italic">
-            *Disclaimer: Data updated as on 14-Aug-2026
-          </p>
+        {/* Card 2: Fresher Percentage */}
+        <div className="bg-gradient-to-br from-[#ccfbf1]/60 via-slate-50 to-[#99f6e4]/30 rounded-3xl border border-teal-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition-all duration-300 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-teal-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-teal-600/20">
+                <GraduationCap size={24} className="stroke-[2.2]" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-teal-950 uppercase tracking-wider">Fresher</h4>
+                <p className="text-[11px] text-slate-500 font-semibold mt-0.5">First-time Candidates</p>
+              </div>
+            </div>
+            <span className="text-xs font-black bg-teal-100/70 text-teal-900 px-2.5 py-1 rounded-lg border border-teal-200/50">
+              {currentData.fresherPct}%
+            </span>
+          </div>
+          <div className="mt-2">
+            <h3 className="text-3xl lg:text-4xl font-black text-teal-950 tracking-tight">
+              {currentData.fresherPct}%
+            </h3>
+            <p className="text-xs text-teal-800 font-bold mt-1.5">
+              {((currentData.students * currentData.fresherPct) / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 })} Students
+            </p>
+          </div>
         </div>
+
+        {/* Card 3: Repeater Percentage */}
+        <div className="bg-gradient-to-br from-[#e2e8f0]/70 via-slate-50 to-[#cbd5e1]/40 rounded-3xl border border-slate-200 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all duration-300 relative overflow-hidden group">
+          <div className="absolute top-0 right-0 w-24 h-24 bg-slate-200/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
+          <div className="flex items-center justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-slate-700 to-slate-500 text-white flex items-center justify-center flex-shrink-0 shadow-md shadow-slate-600/20">
+                <RotateCcw size={22} className="stroke-[2.2]" />
+              </div>
+              <div>
+                <h4 className="text-xs font-black text-slate-800 uppercase tracking-wider">Repeater</h4>
+                <p className="text-[11px] text-slate-500 font-semibold mt-0.5">Re-appearing Students</p>
+              </div>
+            </div>
+            <span className="text-xs font-black bg-slate-100 text-slate-700 px-2.5 py-1 rounded-lg border border-slate-200/70">
+              {currentData.repeaterPct}%
+            </span>
+          </div>
+          <div className="mt-2">
+            <h3 className="text-3xl lg:text-4xl font-black text-slate-900 tracking-tight">
+              {currentData.repeaterPct}%
+            </h3>
+            <p className="text-xs text-slate-600 font-bold mt-1.5">
+              {((currentData.students * currentData.repeaterPct) / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 })} Students
+            </p>
+          </div>
+        </div>
+
+      </div>
+
+      {/* Disclaimer */}
+      <div className="-mt-3 text-right">
+        <p className="text-[11px] font-medium text-slate-400 italic">
+          *Disclaimer: Data updated as on 14-Aug-2026
+        </p>
       </div>
 
       {/* ========================================================================= */}
