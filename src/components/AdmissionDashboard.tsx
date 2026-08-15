@@ -324,6 +324,9 @@ export default function AdmissionDashboard() {
         <CategoryGenderChart />
       </div>
 
+      {/* 6. CATEGORY-WISE DISTRIBUTION IN UNIVERSITIES AND PROGRAMS (FULL WIDTH) */}
+      <CategoryUniversityDistributionChart />
+
     </div>
   );
 }
@@ -1559,6 +1562,214 @@ function CategoryGenderChart() {
         </span>
       </div>
 
+    </div>
+  );
+}
+
+function CategoryUniversityDistributionChart() {
+  const [hoveredSegment, setHoveredSegment] = useState<{
+    uni: string;
+    cat: string;
+    pct: number;
+    count: number;
+    splits: Record<string, number>;
+    total: number;
+  } | null>(null);
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  const uniData = [
+    { name: "SPPU", total: 48900, splits: { General: 40.00, OBC: 27.00, SC: 12.00, ST: 9.00, EWS: 12.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "MU", total: 35600, splits: { General: 68.00, OBC: 16.00, SC: 8.00, ST: 8.00, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "YCMOU", total: 54100, splits: { General: 50.00, OBC: 20.00, SC: 12.00, ST: 9.00, EWS: 9.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "SUK", total: 18900, splits: { General: 63.00, OBC: 13.00, SC: 12.00, ST: 8.00, EWS: 4.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "BAMU", total: 24500, splits: { General: 48.00, OBC: 18.00, SC: 17.00, ST: 11.00, EWS: 6.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "DBATU", total: 12800, splits: { General: 50.00, OBC: 23.00, SC: 10.00, ST: 10.00, EWS: 7.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "MSBTE", total: 42100, splits: { General: 43.00, OBC: 25.00, SC: 13.00, ST: 9.00, EWS: 10.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "SGBAU", total: 15600, splits: { General: 18.00, OBC: 44.00, SC: 19.00, ST: 8.00, EWS: 11.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "SNDT", total: 9800, splits: { General: 35.00, OBC: 24.00, SC: 23.00, ST: 8.00, EWS: 10.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "SRTMU", total: 11400, splits: { General: 44.00, OBC: 13.00, SC: 22.00, ST: 11.00, EWS: 10.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "KKSU", total: 4200, splits: { General: 32.00, OBC: 19.00, SC: 14.00, ST: 11.00, EWS: 24.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "KBCNMU", total: 28900, splits: { General: 21.00, OBC: 43.00, SC: 8.00, ST: 19.00, EWS: 9.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "PAHUSH", total: 8500, splits: { General: 35.00, OBC: 18.00, SC: 17.00, ST: 15.00, EWS: 15.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "DBAMU", total: 19200, splits: { General: 94.00, OBC: 6.00, SC: 0, ST: 0, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "GUG", total: 6400, splits: { General: 100.00, OBC: 0, SC: 0, ST: 0, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "HBSU", total: 7200, splits: { General: 37.00, OBC: 14.00, SC: 23.00, ST: 9.00, EWS: 17.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "KBPU", total: 7480, splits: { General: 48.75, OBC: 15.34, SC: 11.84, ST: 0.75, EWS: 7.91, NT: 6.57, VJ: 2.92, SBC: 0.71, SEBC: 5.21, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "COEP", total: 15400, splits: { General: 49.00, OBC: 16.00, SC: 12.00, ST: 8.00, EWS: 15.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "BALAJI", total: 9600, splits: { General: 50.00, OBC: 21.00, SC: 10.00, ST: 10.00, EWS: 9.00, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "TMV", total: 4300, splits: { General: 63.00, OBC: 25.00, SC: 9.00, ST: 3.00, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "MGM", total: 8200, splits: { General: 70.00, OBC: 15.00, SC: 9.00, ST: 6.00, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "MIT AD...", total: 11200, splits: { General: 55.00, OBC: 21.00, SC: 8.00, ST: 16.00, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "(Blank)", total: 18400, splits: { General: 73.00, OBC: 19.00, SC: 8.00, ST: 0, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "Sanjivani", total: 6400, splits: { General: 72.00, OBC: 17.00, SC: 11.00, ST: 0, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "Pimpri...", total: 9800, splits: { General: 37.00, OBC: 56.00, SC: 7.00, ST: 0, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "GIPE Pu...", total: 7200, splits: { General: 61.00, OBC: 28.00, SC: 11.00, ST: 0, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } },
+    { name: "Ramdeo...", total: 10400, splits: { General: 67.00, OBC: 16.00, SC: 9.00, ST: 8.00, EWS: 0, NT: 0, VJ: 0, SBC: 0, SEBC: 0, EBC: 0, DT: 0, FN: 0, NA: 0 } }
+  ];
+
+  const categoryColors: Record<string, string> = {
+    General: "#06b6d4",
+    OBC: "#f97316",
+    SC: "#facc15",
+    ST: "#a855f7",
+    EWS: "#ec4899",
+    NT: "#3b82f6",
+    VJ: "#ef4444",
+    SBC: "#0d9488",
+    SEBC: "#8b5cf6",
+    EBC: "#4b5563",
+    DT: "#ec4899",
+    "Foreign National": "#6366f1",
+    NA: "#94a3b8"
+  };
+
+  const categories = Object.keys(categoryColors);
+
+  const formatNumber = (num: number) => {
+    return num.toLocaleString("en-IN");
+  };
+
+  return (
+    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative overflow-hidden mt-6">
+      {/* Title */}
+      <div className="text-center border-b border-slate-100 pb-4">
+        <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
+          Category-wise Distribution in Universities and Programs
+        </h3>
+        <p className="text-xs text-brand-600 font-bold mt-0.5">2025-26</p>
+      </div>
+
+      {/* Scrollable Chart Wrapper */}
+      <div className="w-full overflow-x-auto scrollbar-thin pb-4 relative">
+        <div className="min-w-[2200px] h-[360px] relative flex items-end justify-between px-4 mt-4 select-none pb-16">
+          
+          {/* Y Axis Grid lines */}
+          <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pb-16 pt-4">
+            <div className="w-full border-t border-slate-100 h-0" />
+            <div className="w-full border-t border-slate-100 h-0" />
+            <div className="w-full border-t border-slate-100 h-0" />
+            <div className="w-full border-t border-slate-100 h-0" />
+            <div className="w-full border-t border-slate-100 h-0" />
+          </div>
+
+          {/* Render Bars */}
+          <div className="w-full h-full flex items-end justify-between z-10 relative">
+            {uniData.map((uni, idx) => {
+              // Convert splits to active segment array (in reverse order to stack correctly from bottom to top)
+              const activeSplits = Object.entries(uni.splits)
+                .map(([cat, pct]) => ({ cat, pct }))
+                .filter(s => s.pct > 0)
+                .reverse();
+
+              return (
+                <div
+                  key={uni.name}
+                  className={`flex flex-col items-center w-full max-w-[80px] relative ${
+                    hoveredIndex === idx ? "z-50" : "z-10"
+                  }`}
+                >
+                  {/* Vertical Stacked Bar Container */}
+                  <div className="h-64 w-12 flex flex-col rounded-md overflow-hidden cursor-pointer relative shadow-sm border border-slate-200/10">
+                    {activeSplits.map(({ cat, pct }) => {
+                      const color = categoryColors[cat] || "#94a3b8";
+                      return (
+                        <div
+                          key={cat}
+                          style={{ height: `${pct}%`, backgroundColor: color }}
+                          className="w-full flex items-center justify-center relative transition-colors duration-200 hover:brightness-95"
+                          onMouseEnter={() => {
+                            setHoveredSegment({
+                              uni: uni.name,
+                              cat,
+                              pct,
+                              count: Math.round(uni.total * (pct / 100)),
+                              splits: uni.splits,
+                              total: uni.total
+                            });
+                            setHoveredIndex(idx);
+                          }}
+                          onMouseLeave={() => {
+                            setHoveredSegment(null);
+                            setHoveredIndex(null);
+                          }}
+                        >
+                          {pct >= 5 && (
+                            <span className="text-[11px] font-black text-white">{Math.round(pct)}%</span>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+
+                  {/* Tooltip (Positioned relative to the Column wrapper, outside the overflow-hidden bar container) */}
+                  {hoveredSegment && hoveredIndex === idx && (
+                    <div
+                      className={`absolute top-[128px] -translate-y-1/2 z-50 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-[270px] select-none pointer-events-none animate-fadeIn ${
+                        idx < 14 ? "left-full ml-4" : "right-full mr-4"
+                      }`}
+                    >
+                      <div className="grid grid-cols-[100px_1fr] gap-y-1 text-xs text-left">
+                        <span className="font-bold text-blue-800/80 pr-2">University</span>
+                        <span className="font-extrabold text-brand-950 text-right">{uni.name}</span>
+                        
+                        <span className="font-bold text-blue-800/80 pr-2">{hoveredSegment.cat}</span>
+                        <span className="font-extrabold text-brand-950 text-right">
+                          {formatNumber(hoveredSegment.count)} ({hoveredSegment.pct.toFixed(2)}%)
+                        </span>
+                      </div>
+
+                      <div className="border-t border-blue-200/50 my-2" />
+                      <div className="text-[10px] font-extrabold text-blue-800/80 uppercase tracking-wider mb-1">
+                        All Percentages
+                      </div>
+
+                      <div className="flex flex-col gap-0.5 text-xs text-left max-h-[160px] overflow-y-auto pr-1">
+                        {Object.entries(hoveredSegment.splits).map(([cat, pct]) => {
+                          const displayPct = pct > 0 ? `${pct.toFixed(2)}%` : "-";
+                          return (
+                            <div key={cat} className="flex justify-between items-center text-[11px]">
+                              <span className="font-bold text-slate-600">{cat} Percentage</span>
+                              <span className="font-extrabold text-brand-950">{displayPct}</span>
+                            </div>
+                          );
+                        })}
+                      </div>
+
+                      {/* Tooltip Arrow */}
+                      <div
+                        className={`absolute top-1/2 -translate-y-1/2 w-3 h-3 bg-[#dbebff]/95 border-[#b9d7ff] transform rotate-45 ${
+                          idx < 14
+                            ? "-left-1.5 border-l border-b"
+                            : "-right-1.5 border-t border-r"
+                        }`}
+                      />
+                    </div>
+                  )}
+
+                  {/* Vertical / Rotated Label */}
+                  <span
+                    className="text-xs font-black text-brand-900 mt-3 block select-none h-12 flex items-center justify-center"
+                    style={{ writingMode: "vertical-lr", transform: "rotate(180deg)" }}
+                  >
+                    {uni.name}
+                  </span>
+                </div>
+              );
+            })}
+          </div>
+
+        </div>
+      </div>
+
+      {/* Legend Container */}
+      <div className="flex justify-center items-center flex-wrap gap-x-6 gap-y-2 text-xs font-bold text-slate-700 mt-2 border-t border-slate-100 pt-4">
+        {categories.map(cat => (
+          <span key={cat} className="flex items-center gap-2">
+            <span className="w-3 h-3 rounded-full" style={{ backgroundColor: categoryColors[cat] }} />
+            {cat}
+          </span>
+        ))}
+      </div>
     </div>
   );
 }
