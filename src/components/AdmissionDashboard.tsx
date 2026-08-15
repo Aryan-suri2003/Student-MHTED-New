@@ -1350,13 +1350,11 @@ function CategoryGenderChart() {
     { name: "SC", female: 50, male: 50, total: 45200 },
     { name: "ST", female: 46, male: 54, total: 28900 },
     { name: "EWS", female: 48, male: 52, total: 35000 },
+    { name: "EBC", female: 50, male: 50, total: 64000 },
     { name: "NT", female: 45, male: 55, total: 18400 },
     { name: "SBC", female: 50, male: 50, total: 47814 },
     { name: "SEBC", female: 45, male: 55, total: 12300 },
-    { name: "VJ", female: 46, male: 54, total: 8900 },
-    { name: "DT", female: 40, male: 60, total: 15400 },
-    { name: "EBC", female: 50, male: 50, total: 64000 },
-    { name: "Others", female: 48, male: 52, total: 9800 },
+    { name: "Foreign National", female: 48, male: 52, total: 9800 },
     { name: "NA", female: 32, male: 68, total: 12000 }
   ];
 
@@ -1608,20 +1606,55 @@ function CategoryUniversityDistributionChart() {
   ];
 
   const categoryColors: Record<string, string> = {
-    General: "#06b6d4",
-    OBC: "#f97316",
-    SC: "#facc15",
-    ST: "#a855f7",
-    EWS: "#ec4899",
-    NT: "#3b82f6",
-    VJ: "#ef4444",
-    SBC: "#0d9488",
-    SEBC: "#8b5cf6",
-    EBC: "#4b5563",
-    DT: "#ec4899",
-    "Foreign National": "#6366f1",
-    NA: "#94a3b8"
+    General: "#139fc3",
+    OBC: "#e68863",
+    SC: "#f5e49e",
+    ST: "#f5ba4f",
+    EWS: "#939393",
+    EBC: "#e8e8e8",
+    NT: "#c79ec9",
+    SBC: "#c6bde2",
+    SEBC: "#efa8b5",
+    "Foreign National": "#17a346",
+    NA: "#f2cca6"
   };
+
+  const uniDataMapped = uniData.map(uni => {
+    const raw = uni.splits as any;
+    const general = raw.General || 0;
+    const obc = raw.OBC || 0;
+    const sc = raw.SC || 0;
+    const st = raw.ST || 0;
+    const ews = raw.EWS || 0;
+    const ebc = raw.EBC || 0;
+    const nt = (raw.NT || 0) + (raw.VJ || 0);
+    const sbc = raw.SBC || 0;
+    const sebc = raw.SEBC || 0;
+    const fn = (raw["Foreign National"] || 0) + (raw.FN || 0);
+    const na = (raw.NA || 0) + (raw.DT || 0);
+
+    const sum = general + obc + sc + st + ews + ebc + nt + sbc + sebc + fn + na;
+    const diff = 100 - sum;
+    const adjustedGeneral = Math.max(0, general + diff);
+
+    return {
+      name: uni.name,
+      total: uni.total,
+      splits: {
+        General: parseFloat(adjustedGeneral.toFixed(2)),
+        OBC: obc,
+        SC: sc,
+        ST: st,
+        EWS: ews,
+        EBC: ebc,
+        NT: nt,
+        SBC: sbc,
+        SEBC: sebc,
+        "Foreign National": fn,
+        NA: na
+      }
+    };
+  });
 
   const categories = Object.keys(categoryColors);
 
@@ -1654,7 +1687,7 @@ function CategoryUniversityDistributionChart() {
 
           {/* Render Bars */}
           <div className="w-full h-full flex items-end justify-between z-10 relative">
-            {uniData.map((uni, idx) => {
+            {uniDataMapped.map((uni, idx) => {
               // Convert splits to active segment array (in reverse order to stack correctly from bottom to top)
               const activeSplits = Object.entries(uni.splits)
                 .map(([cat, pct]) => ({ cat, pct }))
