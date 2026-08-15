@@ -1442,6 +1442,10 @@ function CategoryGenderChart() {
                   className={`flex flex-col items-center w-full max-w-[64px] relative ${
                     hoveredIndex === index ? "z-50" : "z-10"
                   }`}
+                  onMouseLeave={() => {
+                    setHoveredBar(null);
+                    setHoveredIndex(null);
+                  }}
                 >
                   
                   {/* Vertical Stacked Bar */}
@@ -1460,10 +1464,6 @@ function CategoryGenderChart() {
                           maleVal: cat.maleVal
                         });
                         setHoveredIndex(index);
-                      }}
-                      onMouseLeave={() => {
-                        setHoveredBar(null);
-                        setHoveredIndex(null);
                       }}
                     >
                       <span className="text-[11px] font-black text-white">{cat.malePct}%</span>
@@ -1484,10 +1484,6 @@ function CategoryGenderChart() {
                         });
                         setHoveredIndex(index);
                       }}
-                      onMouseLeave={() => {
-                        setHoveredBar(null);
-                        setHoveredIndex(null);
-                      }}
                     >
                       <span className="text-[11px] font-black text-white">{cat.femalePct}%</span>
                     </div>
@@ -1497,7 +1493,7 @@ function CategoryGenderChart() {
                   {/* Tooltip for Category & Gender (Moved outside the overflow-hidden bar container) */}
                   {hoveredBar && hoveredIndex === index && (
                     <div
-                      className={`absolute top-[88px] -translate-y-1/2 z-45 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none pointer-events-none animate-fadeIn ${
+                      className={`absolute top-[88px] -translate-y-1/2 z-45 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-64 select-none animate-fadeIn ${
                         index < 7 ? "left-full ml-4" : "right-full mr-4"
                       }`}
                     >
@@ -1606,17 +1602,17 @@ function CategoryUniversityDistributionChart() {
   ];
 
   const categoryColors: Record<string, string> = {
-    General: "#139fc3",
-    OBC: "#e68863",
-    SC: "#f5e49e",
-    ST: "#f5ba4f",
-    EWS: "#939393",
-    EBC: "#e8e8e8",
-    NT: "#c79ec9",
-    SBC: "#c6bde2",
-    SEBC: "#efa8b5",
-    "Foreign National": "#17a346",
-    NA: "#f2cca6"
+    General: "#06b6d4",
+    OBC: "#f97316",
+    SC: "#facc15",
+    ST: "#a855f7",
+    EWS: "#ec4899",
+    EBC: "#4b5563",
+    NT: "#3b82f6",
+    SBC: "#0d9488",
+    SEBC: "#8b5cf6",
+    "Foreign National": "#6366f1",
+    NA: "#94a3b8"
   };
 
   const uniDataMapped = uniData.map(uni => {
@@ -1700,6 +1696,10 @@ function CategoryUniversityDistributionChart() {
                   className={`flex flex-col items-center w-full max-w-[80px] relative ${
                     hoveredIndex === idx ? "z-50" : "z-10"
                   }`}
+                  onMouseLeave={() => {
+                    setHoveredSegment(null);
+                    setHoveredIndex(null);
+                  }}
                 >
                   {/* Vertical Stacked Bar Container */}
                   <div className="h-64 w-12 flex flex-col rounded-md overflow-hidden cursor-pointer relative shadow-sm border border-slate-200/10">
@@ -1721,10 +1721,6 @@ function CategoryUniversityDistributionChart() {
                             });
                             setHoveredIndex(idx);
                           }}
-                          onMouseLeave={() => {
-                            setHoveredSegment(null);
-                            setHoveredIndex(null);
-                          }}
                         >
                           {pct >= 5 && (
                             <span className="text-[11px] font-black text-white">{Math.round(pct)}%</span>
@@ -1737,7 +1733,7 @@ function CategoryUniversityDistributionChart() {
                   {/* Tooltip (Positioned relative to the Column wrapper, outside the overflow-hidden bar container) */}
                   {hoveredSegment && hoveredIndex === idx && (
                     <div
-                      className={`absolute top-[128px] -translate-y-1/2 z-50 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-[270px] select-none pointer-events-none animate-fadeIn ${
+                      className={`absolute top-[128px] -translate-y-1/2 z-50 bg-[#dbebff]/95 border border-[#b9d7ff] backdrop-blur-sm shadow-xl rounded-2xl p-4 text-brand-900 w-[270px] select-none animate-fadeIn ${
                         idx < 14 ? "left-full ml-4" : "right-full mr-4"
                       }`}
                     >
