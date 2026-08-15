@@ -5,13 +5,18 @@ import Filters from "@/components/Filters";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
+import ExaminationDashboard from "@/components/ExaminationDashboard";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("admission");
-
-
+  const [globalFilters, setGlobalFilters] = useState({
+    academicYear: "2025-26",
+    university: "All",
+    universityType: "All",
+    college: "All",
+  });
 
   // Helper to map tab to page number and name
   const getPageData = () => {
@@ -47,7 +52,7 @@ export default function Home() {
           {/* Right Column: Content Area */}
           <div className="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 gap-6">
             {/* Filters Section */}
-            <Filters onFilterChange={(f) => console.log("Filters updated:", f)} />
+            <Filters filters={globalFilters} onFilterChange={setGlobalFilters} />
 
             {/* Header Section */}
             <Header activeTab={activeTab} />
@@ -55,6 +60,13 @@ export default function Home() {
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
               <AdmissionDashboard />
+            ) : activeTab === "examination" ? (
+              <ExaminationDashboard
+                globalFilters={globalFilters}
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
+                }
+              />
             ) : (
               <div className="bg-background rounded-2xl md:rounded-3xl border border-borderLight p-12 text-center min-h-[350px] flex flex-col items-center justify-center flex-1">
                 <div className="space-y-3">

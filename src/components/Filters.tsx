@@ -1,40 +1,33 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { ChevronDown } from "lucide-react";
 
-interface FiltersProps {
-  onFilterChange: (filters: {
-    academicYear: string;
-    university: string;
-    universityType: string;
-    college: string;
-  }) => void;
+export interface GlobalFilterState {
+  academicYear: string;
+  university: string;
+  universityType: string;
+  college: string;
 }
 
-export default function Filters({ onFilterChange }: FiltersProps) {
-  const [academicYear, setAcademicYear] = useState("2025-26");
-  const [university, setUniversity] = useState("All");
-  const [universityType, setUniversityType] = useState("All");
-  const [college, setCollege] = useState("All");
+interface FiltersProps {
+  filters?: GlobalFilterState;
+  onFilterChange: (filters: GlobalFilterState) => void;
+}
 
-  const handleChange = (
-    field: "academicYear" | "university" | "universityType" | "college",
-    value: string
-  ) => {
-    const updated = {
-      academicYear: field === "academicYear" ? value : academicYear,
-      university: field === "university" ? value : university,
-      universityType: field === "universityType" ? value : universityType,
-      college: field === "college" ? value : college,
-    };
+export default function Filters({ filters, onFilterChange }: FiltersProps) {
+  const currentFilters: GlobalFilterState = filters || {
+    academicYear: "2025-26",
+    university: "All",
+    universityType: "All",
+    college: "All",
+  };
 
-    if (field === "academicYear") setAcademicYear(value);
-    if (field === "university") setUniversity(value);
-    if (field === "universityType") setUniversityType(value);
-    if (field === "college") setCollege(value);
-
-    onFilterChange(updated);
+  const handleChange = (field: keyof GlobalFilterState, value: string) => {
+    onFilterChange({
+      ...currentFilters,
+      [field]: value,
+    });
   };
 
   return (
@@ -48,7 +41,7 @@ export default function Filters({ onFilterChange }: FiltersProps) {
           </label>
           <div className="relative">
             <select
-              value={academicYear}
+              value={currentFilters.academicYear}
               onChange={(e) => handleChange("academicYear", e.target.value)}
               className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
             >
@@ -69,14 +62,27 @@ export default function Filters({ onFilterChange }: FiltersProps) {
           </label>
           <div className="relative">
             <select
-              value={university}
+              value={currentFilters.university}
               onChange={(e) => handleChange("university", e.target.value)}
               className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-              <option className="text-slate-900" value="All">All</option>
-              <option className="text-slate-900" value="COEP Technological University">COEP Technological University</option>
-              <option className="text-slate-900" value="Mumbai University">Mumbai University</option>
-              <option className="text-slate-900" value="Savitribai Phule Pune University">Savitribai Phule Pune University</option>
+              <option className="text-slate-900" value="All">All Universities</option>
+              <option className="text-slate-900" value="SPPU">SPPU - Savitribai Phule Pune University</option>
+              <option className="text-slate-900" value="MU">MU - University of Mumbai</option>
+              <option className="text-slate-900" value="DBATU">DBATU - Dr. BATU Lonere</option>
+              <option className="text-slate-900" value="SUK">SUK - Shivaji University Kolhapur</option>
+              <option className="text-slate-900" value="SGBAU">SGBAU - Sant Gadge Baba Amravati University</option>
+              <option className="text-slate-900" value="PAHSU">PAHSU - Solapur University</option>
+              <option className="text-slate-900" value="KBCNMU">KBCNMU - North Maharashtra University</option>
+              <option className="text-slate-900" value="SRTMUN">SRTMUN - SRTM University Nanded</option>
+              <option className="text-slate-900" value="HSNC">HSNC - HSNC University Mumbai</option>
+              <option className="text-slate-900" value="BAMU">BAMU - Dr. BAMU Chh. Sambhajinagar</option>
+              <option className="text-slate-900" value="COEP">COEP - COEP Technological University</option>
+              <option className="text-slate-900" value="KBPU">KBPU - Karmaveer Bhaurao Patil University</option>
+              <option className="text-slate-900" value="HBSU">HBSU - Dr. Homi Bhabha State University</option>
+              <option className="text-slate-900" value="SNDT">SNDT - SNDT Women&apos;s University</option>
+              <option className="text-slate-900" value="GUG">GUG - Gondwana University Gadchiroli</option>
+              <option className="text-slate-900" value="LIT">LIT - Laxminarayan Innovation Tech Univ</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
               <ChevronDown size={16} />
@@ -91,11 +97,11 @@ export default function Filters({ onFilterChange }: FiltersProps) {
           </label>
           <div className="relative">
             <select
-              value={universityType}
+              value={currentFilters.universityType}
               onChange={(e) => handleChange("universityType", e.target.value)}
               className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-              <option className="text-slate-900" value="All">All</option>
+              <option className="text-slate-900" value="All">All Types</option>
               <option className="text-slate-900" value="State Government">State Government</option>
               <option className="text-slate-900" value="Deemed">Deemed</option>
               <option className="text-slate-900" value="Private">Private</option>
@@ -113,14 +119,16 @@ export default function Filters({ onFilterChange }: FiltersProps) {
           </label>
           <div className="relative">
             <select
-              value={college}
+              value={currentFilters.college}
               onChange={(e) => handleChange("college", e.target.value)}
               className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
             >
-              <option className="text-slate-900" value="All">All</option>
+              <option className="text-slate-900" value="All">All Colleges</option>
               <option className="text-slate-900" value="COEP Pune">COEP Pune</option>
               <option className="text-slate-900" value="VJTI Mumbai">VJTI Mumbai</option>
               <option className="text-slate-900" value="ICT Mumbai">ICT Mumbai</option>
+              <option className="text-slate-900" value="Sanjivani COE">Sanjivani COE</option>
+              <option className="text-slate-900" value="MIT Pune">MIT Pune</option>
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
               <ChevronDown size={16} />
