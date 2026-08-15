@@ -1938,7 +1938,7 @@ function AdmissionTopProgramsChart() {
                     <span>{item.name}</span>
                     <span className="text-slate-600 font-bold">{formatNumber(item.value)}</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden relative shadow-inner">
+                  <div className="w-full bg-slate-100 rounded-full h-5 overflow-hidden relative shadow-inner">
                     <div
                       style={{ width: `${pct}%` }}
                       className="bg-[#ff60b5] hover:bg-[#ec4899] transition-all duration-500 h-full rounded-full"
@@ -1969,7 +1969,7 @@ function AdmissionTopProgramsChart() {
                     <span>{item.name}</span>
                     <span className="text-slate-600 font-bold">{formatNumber(item.value)}</span>
                   </div>
-                  <div className="w-full bg-slate-100 rounded-full h-3 overflow-hidden relative shadow-inner">
+                  <div className="w-full bg-slate-100 rounded-full h-5 overflow-hidden relative shadow-inner">
                     <div
                       style={{ width: `${pct}%` }}
                       className="bg-[#3b82f6] hover:bg-[#2563eb] transition-all duration-500 h-full rounded-full"
