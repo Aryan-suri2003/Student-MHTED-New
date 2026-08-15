@@ -8,6 +8,7 @@ import AdmissionDashboard from "@/components/AdmissionDashboard";
 import FRADashboard from "@/components/FRADashboard";
 import ScholarshipDashboard from "@/components/ScholarshipDashboard";
 import ExaminationDashboard from "@/components/ExaminationDashboard";
+import CAPDashboard from "@/components/CAPDashboard";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
@@ -32,8 +33,9 @@ export default function Home() {
       case "fra":
         return { num: "4", name: "FRA" };
       case "cap":
-      default:
         return { num: "5", name: "CAP" };
+      default:
+        return { num: "1", name: "Admission" };
     }
   };
 
@@ -73,6 +75,13 @@ export default function Home() {
               />
             ) : activeTab === "examination" ? (
               <ExaminationDashboard
+                globalFilters={globalFilters}
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
+                }
+              />
+            ) : activeTab === "cap" ? (
+              <CAPDashboard
                 globalFilters={globalFilters}
                 onUniversityChange={(uni) =>
                   setGlobalFilters((prev) => ({ ...prev, university: uni }))

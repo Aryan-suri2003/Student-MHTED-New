@@ -17,6 +17,7 @@ import {
   MoveVertical,
 } from "lucide-react";
 import { GlobalFilterState } from "@/components/Filters";
+import ChartTooltip, { ChartTooltipData } from "@/components/ChartTooltip";
 
 interface Slice {
   label: string;
@@ -29,9 +30,10 @@ interface DoughnutChartProps {
   slices: Slice[];
   totalLabel: string;
   totalValue: string;
+  onTooltip?: (data: ChartTooltipData | null, pos?: { x: number; y: number } | null) => void;
 }
 
-function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartProps) {
+function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: DoughnutChartProps) {
   const [hoveredSlice, setHoveredSlice] = useState<Slice | null>(null);
   const [activeLegendIndex, setActiveLegendIndex] = useState<number | null>(null);
 
@@ -66,8 +68,22 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
                   transformOrigin: "60px 60px",
                 }}
                 className="transition-all duration-300 cursor-pointer"
-                onMouseEnter={() => setHoveredSlice(slice)}
-                onMouseLeave={() => setHoveredSlice(null)}
+                onMouseEnter={(e) => {
+                  setHoveredSlice(slice);
+                  onTooltip?.({
+                    title: `Examination Status: ${slice.label}`,
+                    subtitle: "Candidate Result Classification",
+                    items: [
+                      { label: "Result Outcome", value: slice.label },
+                      { label: "Candidate Count", value: slice.raw, highlight: true },
+                      { label: "Percentage Share", value: `${slice.value}%` },
+                    ]
+                  }, { x: e.clientX, y: e.clientY });
+                }}
+                onMouseLeave={() => {
+                  setHoveredSlice(null);
+                  onTooltip?.(null);
+                }}
               />
             );
           })}
@@ -480,6 +496,7 @@ export default function ExaminationDashboard({
 }: ExaminationDashboardProps) {
   // Chart click / cross-filtering selection state
   const [clickedUniversity, setClickedUniversity] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<{ data: ChartTooltipData; pos: { x: number; y: number } } | null>(null);
 
   // Local section filter states
   const [programType, setProgramType] = useState("All");
@@ -680,8 +697,11 @@ export default function ExaminationDashboard({
   ];
 
   return (
-    <div className="flex flex-col gap-8 w-full animate-fadeIn pb-12">
+    <div className="flex flex-col gap-8 w-full animate-fadeIn pb-12 relative">
       
+      {/* Floating Info Box Tooltip */}
+      <ChartTooltip data={tooltip?.data || null} pos={tooltip?.pos || null} />
+
       {/* ========================================================================= */}
       {/* ACTIVE SELECTION BANNER / CHIP (CROSS-FILTERING STATUS) */}
       {/* ========================================================================= */}
@@ -711,7 +731,24 @@ export default function ExaminationDashboard({
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         
         {/* Card 1: Total Students */}
-        <div className="bg-gradient-to-br from-[#dbeafe]/70 via-slate-50 to-[#d0e5ff]/50 rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden group">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Total Examination Candidates",
+                subtitle: effectiveUniCode ? `University: ${UNIVERSITIES_DATA[effectiveUniCode]?.name || effectiveUniCode}` : "Maharashtra State Universities Aggregate",
+                items: [
+                  { label: "Total Candidates", value: currentData.students.toLocaleString("en-IN"), highlight: true },
+                  { label: "Examination Papers", value: currentData.papers.toLocaleString("en-IN") },
+                  { label: "Evaluation Mode", value: "OMR / Digital Evaluation Active" },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-[#dbeafe]/70 via-slate-50 to-[#d0e5ff]/50 rounded-3xl border border-blue-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-blue-300 transition-all duration-300 relative overflow-hidden group cursor-pointer"
+        >
           <div className="absolute top-0 right-0 w-24 h-24 bg-blue-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -741,7 +778,24 @@ export default function ExaminationDashboard({
         </div>
 
         {/* Card 2: Fresher Percentage */}
-        <div className="bg-gradient-to-br from-[#ccfbf1]/60 via-slate-50 to-[#99f6e4]/30 rounded-3xl border border-teal-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition-all duration-300 relative overflow-hidden group">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Fresher Candidates (First-time Appear)",
+                subtitle: "Regular Academic Cycle Candidates",
+                items: [
+                  { label: "Fresher Share", value: `${currentData.fresherPct}%`, highlight: true },
+                  { label: "Fresher Count", value: ((currentData.students * currentData.fresherPct) / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 }) },
+                  { label: "Total Candidates", value: currentData.students.toLocaleString("en-IN") },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-[#ccfbf1]/60 via-slate-50 to-[#99f6e4]/30 rounded-3xl border border-teal-200/80 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-teal-300 transition-all duration-300 relative overflow-hidden group cursor-pointer"
+        >
           <div className="absolute top-0 right-0 w-24 h-24 bg-teal-100/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -768,7 +822,24 @@ export default function ExaminationDashboard({
         </div>
 
         {/* Card 3: Repeater Percentage */}
-        <div className="bg-gradient-to-br from-[#e2e8f0]/70 via-slate-50 to-[#cbd5e1]/40 rounded-3xl border border-slate-200 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all duration-300 relative overflow-hidden group">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Repeater Candidates (Re-appearing)",
+                subtitle: "Semester Backlog / Improvement Candidates",
+                items: [
+                  { label: "Repeater Share", value: `${currentData.repeaterPct}%`, highlight: true },
+                  { label: "Repeater Count", value: ((currentData.students * currentData.repeaterPct) / 100).toLocaleString("en-IN", { maximumFractionDigits: 0 }) },
+                  { label: "Total Candidates", value: currentData.students.toLocaleString("en-IN") },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-[#e2e8f0]/70 via-slate-50 to-[#cbd5e1]/40 rounded-3xl border border-slate-200 shadow-soft p-6 flex flex-col justify-between hover:shadow-md hover:border-slate-300 transition-all duration-300 relative overflow-hidden group cursor-pointer"
+        >
           <div className="absolute top-0 right-0 w-24 h-24 bg-slate-200/40 rounded-full -mr-8 -mt-8 pointer-events-none group-hover:scale-110 transition-transform" />
           <div className="flex items-center justify-between mb-4">
             <div className="flex items-center gap-3">
@@ -915,7 +986,7 @@ export default function ExaminationDashboard({
               />
             </svg>
 
-            {/* Bars and Data Points for all 16 universities */}
+            {/* Bars and Data Points for all universities */}
             <div
               className="relative z-10 grid gap-4 h-full items-end"
               style={{ gridTemplateColumns: `repeat(${filteredUniversityExamsList.length}, minmax(72px, 1fr))` }}
@@ -933,6 +1004,22 @@ export default function ExaminationDashboard({
                   <div
                     key={uni.name}
                     onClick={() => handleBarClick(uni.name)}
+                    onMouseMove={(e) =>
+                      setTooltip({
+                        data: {
+                          title: UNIVERSITIES_DATA[uni.name]?.name || uni.name,
+                          subtitle: `University Code: ${uni.name} • Exam Papers Analysis`,
+                          items: [
+                            { label: "University", value: UNIVERSITIES_DATA[uni.name]?.name || uni.name },
+                            { label: "Conducted Exam Papers", value: uni.papers.toLocaleString("en-IN"), highlight: true },
+                            { label: "Appeared Candidates", value: uni.students.toLocaleString("en-IN") },
+                            { label: "Program Type", value: programType },
+                          ],
+                        },
+                        pos: { x: e.clientX, y: e.clientY },
+                      })
+                    }
+                    onMouseLeave={() => setTooltip(null)}
                     className={`flex flex-col items-center h-full justify-end group relative cursor-pointer transition-all duration-300 ${
                       isDimmed ? "opacity-35 grayscale-40" : "opacity-100"
                     }`}
@@ -978,14 +1065,6 @@ export default function ExaminationDashboard({
                     >
                       {uni.name}
                     </span>
-
-                    {/* Hover Tooltip */}
-                    <div className="absolute -top-12 opacity-0 group-hover:opacity-100 transition-opacity bg-slate-900/95 text-white text-[11px] px-2.5 py-1.5 rounded-xl shadow-xl pointer-events-none whitespace-nowrap z-30 flex flex-col items-center">
-                      <span className="font-bold text-slate-100 border-b border-slate-700 pb-1 mb-1">{uni.name}</span>
-                      <span className="text-sky-300">Papers: <b>{uni.papers.toLocaleString("en-IN")}</b></span>
-                      <span className="text-blue-300">Students: <b>{uni.students.toLocaleString("en-IN")}</b></span>
-                      <span className="text-[10px] text-teal-300 mt-1">Click to toggle filter</span>
-                    </div>
                   </div>
                 );
               })}
@@ -1000,7 +1079,7 @@ export default function ExaminationDashboard({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         
-        {/* Chart A: University-wise Fresher vs Repeater (Scrollable through all 16 universities) */}
+        {/* Chart A: University-wise Fresher vs Repeater (Scrollable through all universities) */}
         <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between mb-4">
@@ -1037,6 +1116,21 @@ export default function ExaminationDashboard({
                   <div
                     key={uni.name}
                     onClick={() => handleBarClick(uni.name)}
+                    onMouseMove={(e) =>
+                      setTooltip({
+                        data: {
+                          title: UNIVERSITIES_DATA[uni.name]?.name || uni.name,
+                          subtitle: `Candidate Composition: ${uni.name}`,
+                          items: [
+                            { label: "Fresher Candidates", value: `${uni.fresher}%`, highlight: true },
+                            { label: "Repeater Candidates", value: `${uni.repeater}%` },
+                            { label: "Total Candidates", value: (UNIVERSITIES_DATA[uni.name]?.students || 50000).toLocaleString("en-IN") },
+                          ],
+                        },
+                        pos: { x: e.clientX, y: e.clientY },
+                      })
+                    }
+                    onMouseLeave={() => setTooltip(null)}
                     className={`flex items-center gap-3 text-xs p-1.5 rounded-xl transition-all duration-300 cursor-pointer ${
                       isSelected
                         ? "bg-blue-50/90 ring-2 ring-blue-500 scale-[1.01] shadow-sm"
@@ -1095,7 +1189,7 @@ export default function ExaminationDashboard({
                 <span className="flex items-center gap-1.5 text-indigo-700">
                   <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-t from-indigo-500 to-indigo-300"></span> Female
                 </span>
-                <span className="flex items-center gap-1.5 text-steel-700">
+                <span className="flex items-center gap-1.5 text-slate-700">
                   <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-t from-slate-500 to-slate-300"></span> Male
                 </span>
               </div>
@@ -1117,7 +1211,26 @@ export default function ExaminationDashboard({
                 const isCrossFiltered = effectiveUniCode !== null;
 
                 return (
-                  <div key={item.medium} className="flex flex-col items-center h-full justify-end">
+                  <div
+                    key={item.medium}
+                    onMouseMove={(e) =>
+                      setTooltip({
+                        data: {
+                          title: `Medium of Exam: ${item.medium}`,
+                          subtitle: effectiveUniCode ? `Filtered University: ${effectiveUniCode}` : "Maharashtra Statewide Examination Medium",
+                          items: [
+                            { label: "Language Medium", value: item.medium },
+                            { label: "Female Candidates", value: (isCrossFiltered ? item.activeFemale : item.totalFemale).toLocaleString("en-IN"), highlight: true },
+                            { label: "Male Candidates", value: (isCrossFiltered ? item.activeMale : item.totalMale).toLocaleString("en-IN") },
+                            { label: "Medium Share of Total", value: `${(((item.totalFemale + item.totalMale) / 1950000) * 100).toFixed(1)}%` },
+                          ],
+                        },
+                        pos: { x: e.clientX, y: e.clientY },
+                      })
+                    }
+                    onMouseLeave={() => setTooltip(null)}
+                    className="flex flex-col items-center h-full justify-end cursor-pointer"
+                  >
                     <div className="flex items-end justify-center gap-2.5 w-full h-48">
                       
                       {/* Female Bar Container */}
@@ -1243,7 +1356,24 @@ export default function ExaminationDashboard({
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         
         {/* Pass Students */}
-        <div className="bg-gradient-to-br from-teal-50/70 via-white to-white rounded-3xl border border-teal-200/60 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Cleared / Pass Candidates",
+                subtitle: effectiveUniCode ? `${effectiveUniCode} Results` : "State Universities Aggregate",
+                items: [
+                  { label: "Successful Candidates", value: currentData.results.pass.toLocaleString("en-IN"), highlight: true },
+                  { label: "Passing Rate", value: `${((currentData.results.pass / (currentData.results.pass + currentData.results.fail + currentData.results.atkt + currentData.results.absent || 1)) * 100).toFixed(1)}%` },
+                  { label: "Audit Status", value: "Declared on State Digilocker" },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-teal-50/70 via-white to-white rounded-3xl border border-teal-200/60 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer"
+        >
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-extrabold text-teal-800 uppercase tracking-wider">Pass Students</span>
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-teal-700 to-teal-500 text-white flex items-center justify-center shadow-md shadow-teal-600/15">
@@ -1259,7 +1389,24 @@ export default function ExaminationDashboard({
         </div>
 
         {/* Students Not Cleared */}
-        <div className="bg-gradient-to-br from-red-50/50 via-white to-white rounded-3xl border border-red-200/50 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Students Not Cleared (Failed)",
+                subtitle: "Eligible for Supplementary / Re-evaluation Examination",
+                items: [
+                  { label: "Failed Candidates", value: currentData.results.fail.toLocaleString("en-IN"), highlight: true },
+                  { label: "Failure Rate", value: `${((currentData.results.fail / (currentData.results.pass + currentData.results.fail + currentData.results.atkt + currentData.results.absent || 1)) * 100).toFixed(1)}%` },
+                  { label: "Next Re-exam", value: "Summer 2026 Supplementary" },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-red-50/50 via-white to-white rounded-3xl border border-red-200/50 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer"
+        >
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-extrabold text-red-800 uppercase tracking-wider">Students Not Cleared</span>
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-red-700 to-red-500 text-white flex items-center justify-center shadow-md shadow-red-600/15">
@@ -1275,7 +1422,23 @@ export default function ExaminationDashboard({
         </div>
 
         {/* Absent Students */}
-        <div className="bg-gradient-to-br from-amber-50/50 via-white to-white rounded-3xl border border-amber-200/50 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Absent Candidates",
+                subtitle: "Registered but did not attend examination hall",
+                items: [
+                  { label: "Absent Candidates", value: currentData.results.absent.toLocaleString("en-IN"), highlight: true },
+                  { label: "Absent Rate", value: `${((currentData.results.absent / (currentData.results.pass + currentData.results.fail + currentData.results.atkt + currentData.results.absent || 1)) * 100).toFixed(1)}%` },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-amber-50/50 via-white to-white rounded-3xl border border-amber-200/50 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer"
+        >
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-extrabold text-amber-800 uppercase tracking-wider">Absent Students</span>
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-amber-700 to-amber-500 text-white flex items-center justify-center shadow-md shadow-amber-600/15">
@@ -1291,7 +1454,23 @@ export default function ExaminationDashboard({
         </div>
 
         {/* Backlog Students */}
-        <div className="bg-gradient-to-br from-slate-50/70 via-white to-white rounded-3xl border border-slate-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform">
+        <div
+          onMouseMove={(e) =>
+            setTooltip({
+              data: {
+                title: "Allowed to Keep Terms (ATKT) / Backlogs",
+                subtitle: "Promoted with active subject backlogs",
+                items: [
+                  { label: "ATKT / Backlog Count", value: currentData.results.atkt.toLocaleString("en-IN"), highlight: true },
+                  { label: "Backlog Ratio", value: `${((currentData.results.atkt / (currentData.results.pass + currentData.results.fail + currentData.results.atkt + currentData.results.absent || 1)) * 100).toFixed(1)}%` },
+                ],
+              },
+              pos: { x: e.clientX, y: e.clientY },
+            })
+          }
+          onMouseLeave={() => setTooltip(null)}
+          className="bg-gradient-to-br from-slate-50/70 via-white to-white rounded-3xl border border-slate-200 shadow-soft p-6 flex flex-col justify-between hover:scale-[1.02] transition-transform cursor-pointer"
+        >
           <div className="flex items-center justify-between mb-3">
             <span className="text-xs font-extrabold text-slate-700 uppercase tracking-wider">Backlog Students</span>
             <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-slate-700 to-slate-500 text-white flex items-center justify-center shadow-md shadow-slate-600/15">
@@ -1345,6 +1524,7 @@ export default function ExaminationDashboard({
 
           <div className="py-2">
             <InteractiveDoughnut
+              onTooltip={(data, pos) => setTooltip(data && pos ? { data, pos } : null)}
               slices={dynamicGenderSlices}
               totalLabel={effectiveUniCode || "Total Results"}
               totalValue={currentData.students.toLocaleString("en-IN")}
@@ -1384,7 +1564,26 @@ export default function ExaminationDashboard({
             {/* Region List with Custom Vertical Scroll */}
             <div className="max-h-80 overflow-y-auto custom-scrollbar pr-2 space-y-3.5 mt-2">
               {regionResultData.map((reg) => (
-                <div key={reg.name} className="space-y-1.5">
+                <div
+                  key={reg.name}
+                  onMouseMove={(e) =>
+                    setTooltip({
+                      data: {
+                        title: `Division: ${reg.name}`,
+                        subtitle: "Administrative Division Examination Performance",
+                        items: [
+                          { label: "Region", value: reg.name },
+                          { label: "Pass Percentage", value: `${reg.percentage}%`, highlight: true },
+                          { label: "Passed Students", value: reg.pass.toLocaleString("en-IN") },
+                          { label: "Failed Students", value: reg.fail.toLocaleString("en-IN") },
+                        ],
+                      },
+                      pos: { x: e.clientX, y: e.clientY },
+                    })
+                  }
+                  onMouseLeave={() => setTooltip(null)}
+                  className="space-y-1.5 cursor-pointer hover:bg-blue-50/30 p-1.5 rounded-xl transition-colors"
+                >
                   <div className="flex justify-between items-center text-xs">
                     <span className="font-extrabold text-slate-900">{reg.name}</span>
                     <span className="text-slate-500 font-semibold text-[11px]">
@@ -1498,7 +1697,7 @@ export default function ExaminationDashboard({
               />
             </svg>
 
-            {/* Bars for all 16 universities */}
+            {/* Bars for all universities */}
             <div
               className="relative z-10 grid gap-4 h-52 items-end"
               style={{ gridTemplateColumns: `repeat(${RESULTS_BREAKUP_LIST.length}, minmax(72px, 1fr))` }}
@@ -1515,6 +1714,22 @@ export default function ExaminationDashboard({
                   <div
                     key={d.name}
                     onClick={() => handleBarClick(d.name)}
+                    onMouseMove={(e) =>
+                      setTooltip({
+                        data: {
+                          title: UNIVERSITIES_DATA[d.name]?.name || d.name,
+                          subtitle: `Results Breakup: ${d.name}`,
+                          items: [
+                            { label: "University", value: UNIVERSITIES_DATA[d.name]?.name || d.name },
+                            { label: "Pass Percentage", value: `${d.percentage}%`, highlight: true },
+                            { label: "Passed Students", value: d.pass.toLocaleString("en-IN") },
+                            { label: "Failed Students", value: d.fail.toLocaleString("en-IN") },
+                          ],
+                        },
+                        pos: { x: e.clientX, y: e.clientY },
+                      })
+                    }
+                    onMouseLeave={() => setTooltip(null)}
                     className={`flex flex-col items-center h-full justify-end group relative cursor-pointer transition-all ${
                       effectiveUniCode && !isSelected ? "opacity-35 grayscale-40" : "opacity-100"
                     }`}
@@ -1616,7 +1831,25 @@ export default function ExaminationDashboard({
         <div className="w-full overflow-x-auto custom-scrollbar pb-2">
           <div className="min-w-[600px] grid grid-cols-5 gap-4 h-64 items-end pt-4 pb-2">
             {programPassingRateData.map((item) => (
-              <div key={item.type} className="flex flex-col items-center h-full justify-end group cursor-pointer">
+              <div
+                key={item.type}
+                onMouseMove={(e) =>
+                  setTooltip({
+                    data: {
+                      title: `${item.type} — Academic Level`,
+                      subtitle: "Passing Efficiency Analysis",
+                      items: [
+                        { label: "Academic Level", value: item.type },
+                        { label: "Passing Rate", value: `${item.rate}%`, highlight: true },
+                        { label: "State Benchmark", value: "65.0% Average Pass Rate" },
+                      ],
+                    },
+                    pos: { x: e.clientX, y: e.clientY },
+                  })
+                }
+                onMouseLeave={() => setTooltip(null)}
+                className="flex flex-col items-center h-full justify-end group cursor-pointer"
+              >
                 <span className="text-base font-black text-blue-900 mb-2 group-hover:scale-110 transition-transform">
                   {item.rate}%
                 </span>
@@ -1685,7 +1918,23 @@ export default function ExaminationDashboard({
           <div className="min-w-[1050px] flex items-start gap-8">
             
             {/* Level 0: Total Records */}
-            <div className="flex flex-col items-center justify-center w-36 flex-shrink-0">
+            <div
+              onMouseMove={(e) =>
+                setTooltip({
+                  data: {
+                    title: "Decomposition Root: Total Records",
+                    subtitle: "Maharashtra Higher & Technical Education Exam Database",
+                    items: [
+                      { label: "Total Examination Records", value: "202,368", highlight: true },
+                      { label: "Status", value: "Multi-level Drill-down Active" },
+                    ],
+                  },
+                  pos: { x: e.clientX, y: e.clientY },
+                })
+              }
+              onMouseLeave={() => setTooltip(null)}
+              className="flex flex-col items-center justify-center w-36 flex-shrink-0 cursor-pointer"
+            >
               <span className="text-[11px] font-extrabold uppercase text-slate-400 mb-2">Total Records</span>
               <div className="w-full bg-slate-50/90 border-2 border-blue-900 rounded-2xl p-3 shadow-sm text-center">
                 <span className="text-xs font-bold text-blue-900 block">Total Records</span>
@@ -1699,6 +1948,20 @@ export default function ExaminationDashboard({
               <span className="text-[11px] font-extrabold uppercase text-slate-400 mb-2">Season</span>
               <div
                 onClick={() => setSelectedSeason("Winter")}
+                onMouseMove={(e) =>
+                  setTooltip({
+                    data: {
+                      title: "Season: Winter 2025-26",
+                      subtitle: "Winter Examination Cycle",
+                      items: [
+                        { label: "Season Name", value: "Winter" },
+                        { label: "Records", value: "202,368", highlight: true },
+                      ],
+                    },
+                    pos: { x: e.clientX, y: e.clientY },
+                  })
+                }
+                onMouseLeave={() => setTooltip(null)}
                 className="w-full bg-gradient-to-br from-blue-50 to-indigo-50/60 border-2 border-blue-600 rounded-2xl p-3 shadow-sm text-center cursor-pointer transition-all hover:scale-105"
               >
                 <span className="text-xs font-bold text-blue-900 block">Winter</span>
@@ -1721,6 +1984,20 @@ export default function ExaminationDashboard({
                     <div
                       key={u.name}
                       onClick={() => setSelectedUniversity(u.name)}
+                      onMouseMove={(e) =>
+                        setTooltip({
+                          data: {
+                            title: `Tree Node: ${u.name}`,
+                            subtitle: "University Hierarchy Level",
+                            items: [
+                              { label: "University", value: u.name },
+                              { label: "Candidate Nodes", value: u.count.toLocaleString("en-IN"), highlight: true },
+                            ],
+                          },
+                          pos: { x: e.clientX, y: e.clientY },
+                        })
+                      }
+                      onMouseLeave={() => setTooltip(null)}
                       className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                         isSelected
                           ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
@@ -1754,6 +2031,20 @@ export default function ExaminationDashboard({
                     <div
                       key={c.name}
                       onClick={() => setSelectedCourse(c.name)}
+                      onMouseMove={(e) =>
+                        setTooltip({
+                          data: {
+                            title: `Course: ${c.name}`,
+                            subtitle: "Academic Degree Program Level",
+                            items: [
+                              { label: "Course Name", value: c.name },
+                              { label: "Candidate Nodes", value: c.count.toLocaleString("en-IN"), highlight: true },
+                            ],
+                          },
+                          pos: { x: e.clientX, y: e.clientY },
+                        })
+                      }
+                      onMouseLeave={() => setTooltip(null)}
                       className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                         isSelected
                           ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
@@ -1780,6 +2071,20 @@ export default function ExaminationDashboard({
               <span className="text-[11px] font-extrabold uppercase text-slate-400 mb-1 text-center">Exam Type</span>
               <div
                 onClick={() => setSelectedExamType("Repeater")}
+                onMouseMove={(e) =>
+                  setTooltip({
+                    data: {
+                      title: "Exam Type: Repeater",
+                      subtitle: "Exam Pattern Node",
+                      items: [
+                        { label: "Exam Type", value: "Repeater" },
+                        { label: "Candidate Count", value: "504", highlight: true },
+                      ],
+                    },
+                    pos: { x: e.clientX, y: e.clientY },
+                  })
+                }
+                onMouseLeave={() => setTooltip(null)}
                 className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                   selectedExamType === "Repeater"
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm ring-1 ring-blue-400"
@@ -1810,6 +2115,20 @@ export default function ExaminationDashboard({
                     <div
                       key={s.name}
                       onClick={() => setSelectedSemester(s.name)}
+                      onMouseMove={(e) =>
+                        setTooltip({
+                          data: {
+                            title: `Semester: ${s.name}`,
+                            subtitle: "Academic Term Level",
+                            items: [
+                              { label: "Semester", value: s.name },
+                              { label: "Candidate Count", value: s.count.toLocaleString("en-IN"), highlight: true },
+                            ],
+                          },
+                          pos: { x: e.clientX, y: e.clientY },
+                        })
+                      }
+                      onMouseLeave={() => setTooltip(null)}
                       className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
                         isSelected
                           ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
@@ -1837,7 +2156,21 @@ export default function ExaminationDashboard({
                 return (
                   <div
                     key={r.name}
-                    className="rounded-2xl p-2.5 border bg-white border-slate-200 shadow-xs"
+                    onMouseMove={(e) =>
+                      setTooltip({
+                        data: {
+                          title: `Result: ${r.name}`,
+                          subtitle: "Terminal Decomposition Status",
+                          items: [
+                            { label: "Outcome", value: r.name },
+                            { label: "Candidate Count", value: r.count.toLocaleString("en-IN"), highlight: true },
+                          ],
+                        },
+                        pos: { x: e.clientX, y: e.clientY },
+                      })
+                    }
+                    onMouseLeave={() => setTooltip(null)}
+                    className="rounded-2xl p-2.5 border bg-white border-slate-200 shadow-xs cursor-pointer"
                   >
                     <div className="flex justify-between text-xs">
                       <span className="font-bold text-slate-800">{r.name}</span>
