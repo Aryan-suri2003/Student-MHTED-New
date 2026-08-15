@@ -327,6 +327,8 @@ export default function AdmissionDashboard() {
       {/* 6. CATEGORY-WISE DISTRIBUTION IN UNIVERSITIES AND PROGRAMS (FULL WIDTH) */}
       <CategoryUniversityDistributionChart />
 
+      {/* 7. ADMISSION BASED - TOP 5 PROGRAM (FULL WIDTH) */}
+      <AdmissionTopProgramsChart />
     </div>
   );
 }
@@ -1798,6 +1800,238 @@ function CategoryUniversityDistributionChart() {
             {cat}
           </span>
         ))}
+      </div>
+    </div>
+  );
+}
+
+function AdmissionTopProgramsChart() {
+  const [selectedTypes, setSelectedTypes] = useState<string[]>([
+    "PhD",
+    "PG",
+    "PG Diploma",
+    "UG",
+    "Diploma",
+    "Certificate",
+    "Other"
+  ]);
+
+  const toggleType = (type: string) => {
+    if (selectedTypes.includes(type)) {
+      setSelectedTypes(selectedTypes.filter(t => t !== type));
+    } else {
+      setSelectedTypes([...selectedTypes, type]);
+    }
+  };
+
+  const programDatabase = [
+    // UG
+    { name: "B.A.", type: "UG", female: 310000, male: 312000 },
+    { name: "B.Sc.", type: "UG", female: 250000, male: 242008 },
+    { name: "B.Com", type: "UG", female: 245000, male: 264000 },
+    { name: "B.E - B.Tech", type: "UG", female: 135000, male: 250000 },
+    { name: "B.Pharm", type: "UG", female: 65000, male: 46000 },
+    
+    // PG
+    { name: "B.A.", type: "PG", female: 11167, male: 10865 },
+    { name: "B.Sc.", type: "PG", female: 11958, male: 12200 },
+    { name: "B.Com", type: "PG", female: 11250, male: 12812 },
+    { name: "B.E - B.Tech", type: "PG", female: 10031, male: 12318 },
+    { name: "B.Pharm", type: "PG", female: 3877, male: 4348 },
+
+    // PhD
+    { name: "Ph.D. Arts", type: "PhD", female: 1500, male: 1800 },
+    { name: "Ph.D. Science", type: "PhD", female: 2200, male: 2500 },
+
+    // PG Diploma
+    { name: "PGD CA", type: "PG Diploma", female: 800, male: 950 },
+    { name: "PGD Business", type: "PG Diploma", female: 1200, male: 1100 },
+
+    // Diploma
+    { name: "Diploma Eng.", type: "Diploma", female: 600, male: 900 },
+    { name: "Diploma Pharm.", type: "Diploma", female: 450, male: 550 },
+
+    // Certificate
+    { name: "Cert. IT", type: "Certificate", female: 2000, male: 3000 },
+    { name: "Cert. Language", type: "Certificate", female: 1500, male: 1200 },
+
+    // Other
+    { name: "Other Voc.", type: "Other", female: 3000, male: 4000 }
+  ];
+
+  const filteredData = programDatabase.filter(item => selectedTypes.includes(item.type));
+
+  const femaleAggregated: Record<string, number> = {};
+  filteredData.forEach(item => {
+    femaleAggregated[item.name] = (femaleAggregated[item.name] || 0) + item.female;
+  });
+  const femaleList = Object.entries(femaleAggregated)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 5);
+
+  const maleAggregated: Record<string, number> = {};
+  filteredData.forEach(item => {
+    maleAggregated[item.name] = (maleAggregated[item.name] || 0) + item.male;
+  });
+  const maleList = Object.entries(maleAggregated)
+    .map(([name, value]) => ({ name, value }))
+    .sort((a, b) => b.value - a.value)
+    .slice(0, 5);
+
+  const maxFemale = femaleList.length > 0 ? Math.max(...femaleList.map(d => d.value)) : 1;
+  const maxMale = maleList.length > 0 ? Math.max(...maleList.map(d => d.value)) : 1;
+  const globalMax = Math.max(maxFemale, maxMale);
+
+  const formatNumber = (num: number) => {
+    return num.toLocaleString("en-IN");
+  };
+
+  const types = ["PhD", "PG", "PG Diploma", "UG", "Diploma", "Certificate", "Other"];
+
+  return (
+    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-6 w-full relative mt-6">
+      {/* Title */}
+      <div className="text-center border-b border-slate-100 pb-4">
+        <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
+          Admission Based - Top 5 Program
+        </h3>
+        <p className="text-xs text-brand-600 font-bold mt-0.5">2025-26</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-[1fr_200px_1fr] gap-6 items-stretch">
+        
+        {/* Left Side: Female */}
+        <div className="flex flex-col gap-6 justify-between">
+          <div className="flex items-center gap-3">
+            <div className="border-[4px] border-[#ff60b5]/20 bg-pink-50 rounded-full w-14 h-14 flex items-center justify-center shadow-sm">
+              <svg viewBox="0 0 64 64" className="w-10 h-10">
+                <circle cx="16" cy="28" r="7" fill="#e06a55" />
+                <circle cx="48" cy="28" r="7" fill="#e06a55" />
+                <circle cx="32" cy="28" r="15" fill="#fdd5b1" />
+                <path d="M16,24 C20,14 44,14 48,24 C42,16 22,16 16,24 Z" fill="#d15743" />
+                <path d="M16,20 Q32,8 48,20 Q32,12 16,20" fill="#b03e2c" />
+                <circle cx="26" cy="26" r="1.8" fill="#2c3e50" />
+                <circle cx="38" cy="26" r="1.8" fill="#2c3e50" />
+                <path d="M29,32 Q32,34.5 35,32" stroke="#e06a55" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                <circle cx="22" cy="30" r="1.5" fill="#ff9999" opacity="0.6" />
+                <circle cx="42" cy="30" r="1.5" fill="#ff9999" opacity="0.6" />
+                <path d="M18,48 L46,48 L42,38 L22,38 Z" fill="#ff60b5" />
+                <path d="M28,38 L32,44 L36,38" fill="#fdd5b1" />
+                <path d="M22,38 L30,48 L32,38" fill="#ffffff" />
+                <path d="M42,38 L34,48 L32,38" fill="#ffffff" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {femaleList.map((item) => {
+              const pct = (item.value / globalMax) * 80; // Scale to max 80% width
+              return (
+                <div key={item.name} className="grid grid-cols-[110px_1fr] items-center gap-3">
+                  <span className="text-right text-xs font-black text-brand-900 pr-1">{item.name}</span>
+                  <div className="w-full flex items-center relative h-8">
+                    <div
+                      style={{ width: `${pct}%` }}
+                      className="bg-[#ff60b5] hover:bg-[#ec4899] transition-all duration-300 h-6 rounded-md flex items-center justify-end pr-2.5 relative shadow-sm"
+                    >
+                      {pct >= 40 && (
+                        <span className="text-[10px] font-black text-white">{formatNumber(item.value)}</span>
+                      )}
+                    </div>
+                    {pct < 40 && (
+                      <span className="ml-2 text-[10px] font-black text-slate-700">{formatNumber(item.value)}</span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+            {femaleList.length === 0 && (
+              <div className="text-center text-xs text-slate-400 py-8 font-bold">No programs selected</div>
+            )}
+          </div>
+        </div>
+
+        {/* Middle: Checkbox Filters */}
+        <div className="flex flex-col justify-center items-start gap-3.5 border-l border-r border-slate-100/80 px-6 py-4">
+          {types.map(t => {
+            const isChecked = selectedTypes.includes(t);
+            return (
+              <label key={t} className="flex items-center gap-3 cursor-pointer group select-none">
+                <input
+                  type="checkbox"
+                  checked={isChecked}
+                  onChange={() => toggleType(t)}
+                  className="hidden"
+                />
+                <div
+                  className={`w-4 h-4 border-2 rounded transition-colors duration-200 flex items-center justify-center ${
+                    isChecked
+                      ? "border-brand-600 bg-brand-600 text-white"
+                      : "border-slate-300 bg-white group-hover:border-slate-400"
+                  }`}
+                >
+                  {isChecked && (
+                    <svg viewBox="0 0 24 24" className="w-2.5 h-2.5 fill-none stroke-current" strokeWidth="4">
+                      <polyline points="20 6 9 17 4 12" />
+                    </svg>
+                  )}
+                </div>
+                <span className="text-xs font-black text-brand-900/90 group-hover:text-brand-900 transition-colors">
+                  {t}
+                </span>
+              </label>
+            );
+          })}
+        </div>
+
+        {/* Right Side: Male */}
+        <div className="flex flex-col gap-6 justify-between">
+          <div className="flex items-center justify-end gap-3">
+            <div className="border-[4px] border-[#3b82f6]/20 bg-blue-50 rounded-full w-14 h-14 flex items-center justify-center shadow-sm">
+              <svg viewBox="0 0 64 64" className="w-10 h-10">
+                <circle cx="32" cy="28" r="15" fill="#fdd5b1" />
+                <path d="M16,24 Q32,10 48,24 Q42,14 38,16 Q32,10 26,16 Q22,14 16,24 Z" fill="#784421" />
+                <path d="M16,24 Q24,18 32,22 Q40,18 48,24 C48,24 46,16 42,16 C38,16 32,12 26,16 C22,16 16,24 16,24 Z" fill="#5c3014" />
+                <circle cx="26" cy="26" r="1.8" fill="#2c3e50" />
+                <circle cx="38" cy="26" r="1.8" fill="#2c3e50" />
+                <path d="M29,32 Q32,34.5 35,32" stroke="#784421" strokeWidth="1.5" strokeLinecap="round" fill="none" />
+                <circle cx="22" cy="30" r="1.5" fill="#ff9999" opacity="0.4" />
+                <circle cx="42" cy="30" r="1.5" fill="#ff9999" opacity="0.4" />
+                <path d="M18,48 L46,48 L42,38 L22,38 Z" fill="#3b82f6" />
+                <path d="M26,38 Q32,42 38,38" stroke="#fdd5b1" strokeWidth="2" fill="none" />
+              </svg>
+            </div>
+          </div>
+
+          <div className="flex flex-col gap-4">
+            {maleList.map((item) => {
+              const pct = (item.value / globalMax) * 80; // Scale to max 80% width
+              return (
+                <div key={item.name} className="grid grid-cols-[110px_1fr] items-center gap-3">
+                  <span className="text-right text-xs font-black text-brand-900 pr-1">{item.name}</span>
+                  <div className="w-full flex items-center relative h-8">
+                    <div
+                      style={{ width: `${pct}%` }}
+                      className="bg-[#3b82f6] hover:bg-[#2563eb] transition-all duration-300 h-6 rounded-md flex items-center justify-end pr-2.5 relative shadow-sm"
+                    >
+                      {pct >= 40 && (
+                        <span className="text-[10px] font-black text-white">{formatNumber(item.value)}</span>
+                      )}
+                    </div>
+                    {pct < 40 && (
+                      <span className="ml-2 text-[10px] font-black text-slate-700">{formatNumber(item.value)}</span>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+            {maleList.length === 0 && (
+              <div className="text-center text-xs text-slate-400 py-8 font-bold">No programs selected</div>
+            )}
+          </div>
+        </div>
+
       </div>
     </div>
   );
