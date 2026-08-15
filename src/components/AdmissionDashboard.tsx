@@ -1900,7 +1900,7 @@ function AdmissionTopProgramsChart() {
       </div>
 
       {/* Modern Filter Pills at Top */}
-      <div className="flex flex-wrap justify-center items-center gap-2 border-b border-slate-100 pb-5">
+      <div className="w-[80%] mx-auto flex flex-wrap justify-around items-center gap-x-3 gap-y-3 border-b border-slate-100 pb-5">
         {types.map(t => {
           const isChecked = selectedTypes.includes(t);
           return (
