@@ -1907,13 +1907,18 @@ function AdmissionTopProgramsChart() {
             <button
               key={t}
               onClick={() => toggleType(t)}
-              className={`px-6 py-2 rounded-xl text-xs font-black min-w-[120px] text-center transition-all duration-200 cursor-pointer ${
+              className={`px-6 py-2 rounded-xl text-xs font-black min-w-[120px] flex items-center justify-center gap-1.5 transition-all duration-200 cursor-pointer ${
                 isChecked
                   ? "bg-brand-900 text-white shadow-soft"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
               }`}
             >
-              {t}
+              {isChecked && (
+                <svg viewBox="0 0 24 24" className="w-3 h-3 fill-none stroke-current" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round">
+                  <polyline points="20 6 9 17 4 12" />
+                </svg>
+              )}
+              <span>{t}</span>
             </button>
           );
         })}
