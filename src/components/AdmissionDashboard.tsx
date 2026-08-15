@@ -329,6 +329,12 @@ export default function AdmissionDashboard() {
 
       {/* 7. ADMISSION BASED - TOP 5 PROGRAM (FULL WIDTH) */}
       <AdmissionTopProgramsChart />
+
+      {/* 8. ADMITTED STUDENTS MAP & IMPACT OF FEE WAIVER (TWO CARDS GRID) */}
+      <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 w-full mt-6">
+        <AdmittedStudentsMapCard />
+        <FeeWaiverImpactChartCard />
+      </div>
     </div>
   );
 }
@@ -1989,6 +1995,294 @@ function AdmissionTopProgramsChart() {
           </div>
         </div>
 
+      </div>
+    </div>
+  );
+}
+
+function AdmittedStudentsMapCard() {
+  const [hoveredState, setHoveredState] = useState<{ name: string; x: number; y: number; count: number } | null>(null);
+
+  const formatNumber = (num: number) => {
+    return num.toLocaleString("en-IN");
+  };
+
+  const otherStatesData = [
+    { name: "Gujarat", x: 30, y: 49, count: 1240 },
+    { name: "Karnataka", x: 45, y: 74, count: 980 },
+    { name: "Madhya Pradesh", x: 49, y: 48, count: 850 },
+    { name: "Telangana", x: 53, y: 65, count: 620 },
+    { name: "Goa", x: 41, y: 70, count: 320 },
+    { name: "Uttar Pradesh", x: 56, y: 35, count: 540 },
+    { name: "Rajasthan", x: 37, y: 36, count: 480 },
+    { name: "Delhi NCR", x: 48, y: 28, count: 710 },
+    { name: "West Bengal", x: 71, y: 47, count: 390 },
+    { name: "Tamil Nadu", x: 51, y: 84, count: 430 }
+  ];
+
+  return (
+    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-4 w-full relative">
+      <div className="border-b border-slate-100 pb-3 flex justify-between items-center">
+        <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
+          Admitted Students from Other States
+        </h3>
+      </div>
+
+      <div className="relative w-full h-[320px] bg-slate-50/50 rounded-2xl border border-slate-100/50 flex items-center justify-center overflow-hidden">
+        {/* Simplified vector SVG map of India in background */}
+        <svg viewBox="0 0 100 100" className="w-[280px] h-[280px] select-none opacity-80">
+          <path
+            d="M 48 8 L 52 14 L 46 22 L 48 26 L 38 32 L 32 40 L 26 48 L 30 52 L 34 50 L 40 56 L 44 64 L 41 72 L 44 82 L 47 90 L 51 92 L 53 86 L 56 80 L 54 70 L 60 62 L 66 56 L 72 50 L 74 46 L 68 40 L 64 36 L 58 36 L 54 30 L 50 18 Z"
+            fill="#f1f5f9"
+            stroke="#cbd5e1"
+            strokeWidth="1"
+          />
+        </svg>
+
+        {/* State concentration markers (pulsing blue beacons) */}
+        {otherStatesData.map((state) => (
+          <div
+            key={state.name}
+            className="absolute cursor-pointer transform -translate-x-1/2 -translate-y-1/2 group z-10"
+            style={{ left: `${state.x}%`, top: `${state.y}%` }}
+            onMouseEnter={() => setHoveredState(state)}
+            onMouseLeave={() => setHoveredState(null)}
+          >
+            <span className="flex h-5 w-5 items-center justify-center relative">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#3b82f6] opacity-60"></span>
+              <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-[#1d4ed8] border border-white shadow-soft"></span>
+            </span>
+          </div>
+        ))}
+
+        {/* Map Tooltip */}
+        {hoveredState && (
+          <div
+            className="absolute bg-brand-950 text-white text-[11px] font-black px-2.5 py-1.5 rounded-lg shadow-lg z-30 pointer-events-none transition-all duration-150 transform -translate-x-1/2 -translate-y-full mt-[-10px]"
+            style={{ left: `${hoveredState.x}%`, top: `${hoveredState.y}%` }}
+          >
+            <div className="text-center">{hoveredState.name}</div>
+            <div className="text-center text-blue-300 font-bold mt-0.5">{formatNumber(hoveredState.count)} Students</div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function FeeWaiverImpactChartCard() {
+  const [hoveredYear, setHoveredYear] = useState<number | null>(null);
+
+  const formatNumber = (num: number) => {
+    return num.toLocaleString("en-IN");
+  };
+
+  const years = ["2022-23", "2023-24", "2024-25", "2025-26"];
+  const ewsValues = [2346, 2548, 2353, 1766];
+  const obcValues = [15441, 22929, 46274, 55856];
+  const sebcValues = [null, null, 9640, 14810];
+
+  // Coordinates computed for viewBox 0 0 500 250
+  // X = 60 + index * 133.33
+  // Y = 215 - (value / 60000) * 180
+  
+  const getObcPoints = () => "60,168.68 193.33,146.21 326.67,76.18 460,47.43";
+  const getSebcPoints = () => "326.67,186.08 460,170.57";
+  const getEwsPoints = () => "60,207.96 193.33,207.36 326.67,207.94 460,209.70";
+
+  return (
+    <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col gap-4 w-full relative">
+      <div className="border-b border-slate-100 pb-3 flex flex-col md:flex-row md:justify-between md:items-center gap-2">
+        <h3 className="text-base font-extrabold text-brand-900 tracking-tight">
+          Impact of Fee Waiver in Professional Courses for Females
+        </h3>
+        
+        {/* Legend */}
+        <div className="flex items-center gap-4 text-xs font-black text-slate-700">
+          <span className="text-slate-400 font-bold uppercase tracking-wider text-[10px]">Category</span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#3b82f6]" /> EWS
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#1d4ed8]" /> OBC
+          </span>
+          <span className="flex items-center gap-1.5">
+            <span className="w-2.5 h-2.5 rounded-full bg-[#f97316]" /> SEBC
+          </span>
+        </div>
+      </div>
+
+      <div className="relative w-full h-[320px] flex items-center justify-center mt-2 select-none">
+        {/* SVG Container for the Line Chart */}
+        <svg viewBox="0 0 500 250" className="w-full h-full">
+          {/* Horizontal Gridlines */}
+          <line x1="60" y1="215" x2="460" y2="215" stroke="#e2e8f0" strokeWidth="1.5" />
+          <line x1="60" y1="155" x2="460" y2="155" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="60" y1="95" x2="460" y2="95" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
+          <line x1="60" y1="35" x2="460" y2="35" stroke="#f1f5f9" strokeWidth="1" strokeDasharray="3 3" />
+
+          {/* Y-axis Labels */}
+          <text x="50" y="218" textAnchor="end" className="text-[10px] font-bold fill-slate-400">0</text>
+          <text x="50" y="158" textAnchor="end" className="text-[10px] font-bold fill-slate-400">20K</text>
+          <text x="50" y="98" textAnchor="end" className="text-[10px] font-bold fill-slate-400">40K</text>
+          <text x="50" y="38" textAnchor="end" className="text-[10px] font-bold fill-slate-400">60K</text>
+
+          {/* Y-axis Title */}
+          <text x="18" y="125" textAnchor="middle" transform="rotate(-90 18 125)" className="text-[10px] font-black fill-slate-500 uppercase tracking-wider">
+            Allotted University-wise Students
+          </text>
+
+          {/* X-axis Labels */}
+          <text x="60" y="235" textAnchor="middle" className="text-[11px] font-black fill-slate-700">2022-23</text>
+          <text x="193.33" y="235" textAnchor="middle" className="text-[11px] font-black fill-slate-700">2023-24</text>
+          <text x="326.67" y="235" textAnchor="middle" className="text-[11px] font-black fill-slate-700">2024-25</text>
+          <text x="460" y="235" textAnchor="middle" className="text-[11px] font-black fill-slate-700">2025-26</text>
+
+          {/* Line: OBC (Dark Blue) */}
+          <polyline
+            fill="none"
+            stroke="#1d4ed8"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            points={getObcPoints()}
+            className="transition-all duration-300"
+          />
+          {/* OBC Labels above points */}
+          <text x="60" y="158" textAnchor="middle" className="text-[11px] font-extrabold fill-[#1d4ed8]">15,441</text>
+          <text x="193.33" y="136" textAnchor="middle" className="text-[11px] font-extrabold fill-[#1d4ed8]">22,929</text>
+          <text x="326.67" y="66" textAnchor="middle" className="text-[11px] font-extrabold fill-[#1d4ed8]">46,274</text>
+          <text x="460" y="37" textAnchor="middle" className="text-[11px] font-extrabold fill-[#1d4ed8]">55,856</text>
+
+          {/* Line: SEBC (Orange) */}
+          <polyline
+            fill="none"
+            stroke="#f97316"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            points={getSebcPoints()}
+            className="transition-all duration-300"
+          />
+          {/* SEBC Labels above points */}
+          <text x="326.67" y="176" textAnchor="middle" className="text-[11px] font-extrabold fill-[#f97316]">9,640</text>
+          <text x="460" y="160" textAnchor="middle" className="text-[11px] font-extrabold fill-[#f97316]">14,810</text>
+
+          {/* Line: EWS (Light Blue) */}
+          <polyline
+            fill="none"
+            stroke="#3b82f6"
+            strokeWidth="3"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            points={getEwsPoints()}
+            className="transition-all duration-300"
+          />
+          {/* EWS Labels below points */}
+          <text x="60" y="196" textAnchor="middle" className="text-[11px] font-extrabold fill-[#3b82f6]">2,346</text>
+          <text x="193.33" y="195" textAnchor="middle" className="text-[11px] font-extrabold fill-[#3b82f6]">2,548</text>
+          <text x="326.67" y="196" textAnchor="middle" className="text-[11px] font-extrabold fill-[#3b82f6]">2,353</text>
+          <text x="460" y="198" textAnchor="middle" className="text-[11px] font-extrabold fill-[#3b82f6]">1,766</text>
+
+          {/* Markers */}
+          <circle cx="60" cy="168.68" r="4.5" fill="#1d4ed8" stroke="white" strokeWidth="1.5" />
+          <circle cx="193.33" cy="146.21" r="4.5" fill="#1d4ed8" stroke="white" strokeWidth="1.5" />
+          <circle cx="326.67" cy="76.18" r="4.5" fill="#1d4ed8" stroke="white" strokeWidth="1.5" />
+          <circle cx="460" cy="47.43" r="4.5" fill="#1d4ed8" stroke="white" strokeWidth="1.5" />
+
+          <circle cx="326.67" cy="186.08" r="4.5" fill="#f97316" stroke="white" strokeWidth="1.5" />
+          <circle cx="460" cy="170.57" r="4.5" fill="#f97316" stroke="white" strokeWidth="1.5" />
+
+          <circle cx="60" cy="207.96" r="4.5" fill="#3b82f6" stroke="white" strokeWidth="1.5" />
+          <circle cx="193.33" cy="207.36" r="4.5" fill="#3b82f6" stroke="white" strokeWidth="1.5" />
+          <circle cx="326.67" cy="207.94" r="4.5" fill="#3b82f6" stroke="white" strokeWidth="1.5" />
+          <circle cx="460" cy="209.70" r="4.5" fill="#3b82f6" stroke="white" strokeWidth="1.5" />
+
+          {/* Active selection vertical line and pulsing markers */}
+          {hoveredYear !== null && (
+            <>
+              <line
+                x1={60 + hoveredYear * 133.33}
+                y1="35"
+                x2={60 + hoveredYear * 133.33}
+                y2="215"
+                stroke="#64748b"
+                strokeWidth="1.5"
+                strokeDasharray="2 2"
+              />
+              <circle cx={60 + hoveredYear * 133.33} cy={215 - (ewsValues[hoveredYear]/60000)*180} r="6" fill="#3b82f6" stroke="white" strokeWidth="2" />
+              <circle cx={60 + hoveredYear * 133.33} cy={215 - (obcValues[hoveredYear]/60000)*180} r="6" fill="#1d4ed8" stroke="white" strokeWidth="2" />
+              {sebcValues[hoveredYear] !== null && (
+                <circle cx={60 + hoveredYear * 133.33} cy={215 - (sebcValues[hoveredYear]!/60000)*180} r="6" fill="#f97316" stroke="white" strokeWidth="2" />
+              )}
+            </>
+          )}
+
+          {/* Invisible interactive hover slices */}
+          {years.map((year, index) => {
+            const x = 60 + index * 133.33;
+            return (
+              <rect
+                key={year}
+                x={x - 66}
+                y="35"
+                width="133.33"
+                height="180"
+                fill="transparent"
+                className="cursor-pointer"
+                onMouseEnter={() => setHoveredYear(index)}
+                onMouseLeave={() => setHoveredYear(null)}
+              />
+            );
+          })}
+        </svg>
+
+        {/* Line Chart Tooltip */}
+        {hoveredYear !== null && (
+          <div
+            className="absolute bg-white/95 border border-slate-200 backdrop-blur shadow-xl rounded-xl p-3 text-brand-900 w-44 select-none z-30 pointer-events-none transition-all duration-150"
+            style={{
+              left: `${60 + hoveredYear * 133.33 + 12}px`,
+              top: `45px`,
+              transform: hoveredYear >= 2 ? `translateX(-210px)` : `none`
+            }}
+          >
+            <div className="text-xs font-black text-brand-950 border-b border-slate-100 pb-1 mb-1.5">
+              {years[hoveredYear]}
+            </div>
+            <div className="flex flex-col gap-1 text-[11px]">
+              <div className="flex justify-between items-center">
+                <span className="flex items-center gap-1.5 font-bold text-slate-600">
+                  <span className="w-2 h-2 rounded-full bg-[#3b82f6]" />
+                  EWS
+                </span>
+                <span className="font-extrabold text-brand-950">
+                  {formatNumber(ewsValues[hoveredYear])}
+                </span>
+              </div>
+              <div className="flex justify-between items-center">
+                <span className="flex items-center gap-1.5 font-bold text-slate-600">
+                  <span className="w-2 h-2 rounded-full bg-[#1d4ed8]" />
+                  OBC
+                </span>
+                <span className="font-extrabold text-brand-950">
+                  {formatNumber(obcValues[hoveredYear])}
+                </span>
+              </div>
+              {sebcValues[hoveredYear] !== null && (
+                <div className="flex justify-between items-center">
+                  <span className="flex items-center gap-1.5 font-bold text-slate-600">
+                    <span className="w-2 h-2 rounded-full bg-[#f97316]" />
+                    SEBC
+                  </span>
+                  <span className="font-extrabold text-brand-950">
+                    {formatNumber(sebcValues[hoveredYear]!)}
+                  </span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
