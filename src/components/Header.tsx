@@ -18,8 +18,8 @@ export default function Header({ activeTab }: HeaderProps) {
       subtitle: "Track your semesters, recent examinations, CGPA progression, and grading history.",
     },
     scholarship: {
-      title: "Scholarship Portal",
-      subtitle: "Apply for financial aid, view active scholarships, and track ongoing application status.",
+      title: "Scholarship",
+      subtitle: "Comprehensive tracking of government schemes, applicants, beneficiaries, direct benefit transfers, and disbursal progress.",
     },
     fra: {
       title: "Fee Regulating Authority (FRA)",
