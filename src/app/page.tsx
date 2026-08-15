@@ -6,6 +6,8 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
 import FRADashboard from "@/components/FRADashboard";
+import ScholarshipDashboard from "@/components/ScholarshipDashboard";
+import ExaminationDashboard from "@/components/ExaminationDashboard";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
@@ -62,6 +64,10 @@ export default function Home() {
               <AdmissionDashboard />
             ) : activeTab === "fra" ? (
               <FRADashboard />
+            ) : activeTab === "scholarship" ? (
+              <ScholarshipDashboard />
+            ) : activeTab === "examination" ? (
+              <ExaminationDashboard />
             ) : (
               <div className="bg-background rounded-2xl md:rounded-3xl border border-borderLight p-12 text-center min-h-[350px] flex flex-col items-center justify-center flex-1">
                 <div className="space-y-3">
