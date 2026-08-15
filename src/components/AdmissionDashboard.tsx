@@ -491,14 +491,14 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
               const transPercent = (group.data.trans / maxValue) * 100;
 
               return (
-                <div key={group.key} className="flex flex-col items-center w-full max-w-[140px]">
+                <div key={group.key} className="flex flex-col items-center w-full max-w-[180px]">
                   {/* Visual Bars Container */}
                   <div className={`w-full flex items-end justify-center gap-2 relative transition-all duration-300 ${isExpanded ? "h-72" : "h-44"}`}>
                     
                     {/* Female Bar */}
                     <div
                       style={{ height: `${Math.max(femalePercent, 1.5)}%` }}
-                      className="w-8 bg-[#ff60b5] hover:bg-[#ec4899] rounded-t transition-all duration-500 cursor-pointer relative group"
+                      className="w-12 bg-[#ff60b5] hover:bg-[#ec4899] rounded-t transition-all duration-500 cursor-pointer relative group"
                       onMouseEnter={() =>
                         setHoveredBar({ group: group.label, gender: "Female", value: formatNumber(group.data.female) })
                       }
@@ -527,7 +527,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                     {/* Male Bar */}
                     <div
                       style={{ height: `${Math.max(malePercent, 1.5)}%` }}
-                      className="w-8 bg-[#3b82f6] hover:bg-[#2563eb] rounded-t transition-all duration-500 cursor-pointer relative group"
+                      className="w-12 bg-[#3b82f6] hover:bg-[#2563eb] rounded-t transition-all duration-500 cursor-pointer relative group"
                       onMouseEnter={() =>
                         setHoveredBar({ group: group.label, gender: "Male", value: formatNumber(group.data.male) })
                       }
@@ -556,7 +556,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
                     {/* Transgender Bar */}
                     <div
                       style={{ height: `${Math.max(transPercent, 1.5)}%` }}
-                      className="w-8 bg-[#8b5cf6] hover:bg-[#7c3aed] rounded-t transition-all duration-500 cursor-pointer relative"
+                      className="w-12 bg-[#8b5cf6] hover:bg-[#7c3aed] rounded-t transition-all duration-500 cursor-pointer relative"
                       onMouseEnter={() =>
                         setHoveredBar({ group: group.label, gender: "Transgender", value: formatNumber(group.data.trans) })
                       }
