@@ -1907,7 +1907,7 @@ function AdmissionTopProgramsChart() {
             <button
               key={t}
               onClick={() => toggleType(t)}
-              className={`px-4 py-1.5 rounded-full text-xs font-black transition-all duration-200 cursor-pointer ${
+              className={`px-6 py-2 rounded-full text-xs font-black min-w-[120px] text-center transition-all duration-200 cursor-pointer ${
                 isChecked
                   ? "bg-brand-900 text-white shadow-soft"
                   : "bg-slate-100 text-slate-600 hover:bg-slate-200"
