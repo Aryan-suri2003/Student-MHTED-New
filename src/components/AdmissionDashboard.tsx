@@ -471,7 +471,7 @@ function ProgramTypeBarChart({ isExpanded, onToggleExpand }: { isExpanded: boole
 
       {/* Bar Chart Graphic Area */}
       <div className="w-full overflow-x-auto scrollbar-thin pb-2">
-        <div className={`relative min-w-[1100px] flex items-end gap-2 px-2 mt-4 select-none transition-all duration-300 ${isExpanded ? "h-96" : "h-64"}`}>
+        <div className={`relative min-w-[1350px] flex items-end gap-2 px-2 mt-4 select-none transition-all duration-300 ${isExpanded ? "h-96" : "h-64"}`}>
           
           {/* Render Grid Lines */}
           <div className="absolute inset-0 flex flex-col justify-between pointer-events-none pr-12 pb-8">
