@@ -45,7 +45,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
                 r="48"
                 fill="transparent"
                 stroke={slice.color}
-                strokeWidth={isHovered ? "20" : "16"}
+                strokeWidth={isHovered ? "26" : "22"}
                 strokeDasharray={circumference}
                 strokeDashoffset={strokeDashoffset}
                 style={{
@@ -59,7 +59,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
             );
           })}
           {/* Inner white hole */}
-          <circle cx="60" cy="60" r="39" className="fill-white dark:fill-surface" />
+          <circle cx="60" cy="60" r="37" className="fill-white dark:fill-surface" />
         </svg>
 
         {/* Center Text Display */}
@@ -102,7 +102,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
       </div>
 
       {/* Legend Container */}
-      <div className="flex-1 flex flex-col justify-center gap-1.5 text-xs pl-8">
+      <div className="flex-1 flex flex-col justify-center gap-1.5 text-xs pl-12">
         {slices.map((slice, index) => {
           const isSelected = activeLegendIndex === index || hoveredSlice?.label === slice.label;
           return (
