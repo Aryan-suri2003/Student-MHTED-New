@@ -65,9 +65,19 @@ export default function Home() {
             ) : activeTab === "fra" ? (
               <FRADashboard />
             ) : activeTab === "scholarship" ? (
-              <ScholarshipDashboard />
+              <ScholarshipDashboard
+                globalFilters={globalFilters}
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
+                }
+              />
             ) : activeTab === "examination" ? (
-              <ExaminationDashboard />
+              <ExaminationDashboard
+                globalFilters={globalFilters}
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
+                }
+              />
             ) : (
               <div className="bg-background rounded-2xl md:rounded-3xl border border-borderLight p-12 text-center min-h-[350px] flex flex-col items-center justify-center flex-1">
                 <div className="space-y-3">

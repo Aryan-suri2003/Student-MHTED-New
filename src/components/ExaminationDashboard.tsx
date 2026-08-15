@@ -524,9 +524,6 @@ export default function ExaminationDashboard({
     if (globalFilters?.university && globalFilters.university !== "All") {
       return globalFilters.university;
     }
-    if (globalFilters?.university === "All") {
-      return null;
-    }
     return clickedUniversity;
   }, [clickedUniversity, globalFilters?.university]);
 
