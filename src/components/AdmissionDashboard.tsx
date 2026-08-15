@@ -25,7 +25,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
   let cumulativePercentage = 0;
 
   return (
-    <div className="flex flex-row items-center justify-between gap-6 w-full h-full mt-auto">
+    <div className="flex flex-row items-center justify-between gap-8 w-full h-full mt-auto">
       {/* Chart Wrapper */}
       <div className="relative w-40 h-40 select-none flex-shrink-0">
         <svg viewBox="0 0 120 120" className="w-full h-full">
@@ -102,7 +102,7 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
       </div>
 
       {/* Legend Container */}
-      <div className="flex-1 flex flex-col justify-center gap-1.5 text-xs">
+      <div className="flex-1 flex flex-col justify-center gap-1.5 text-xs pl-8">
         {slices.map((slice, index) => {
           const isSelected = activeLegendIndex === index || hoveredSlice?.label === slice.label;
           return (
