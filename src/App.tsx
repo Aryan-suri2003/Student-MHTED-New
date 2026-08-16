@@ -8,7 +8,6 @@ import { AffiliationView } from './components/views/AffiliationView';
 import { DrilldownModal } from './components/modals/DrilldownModal';
 import { ReportModal } from './components/modals/ReportModal';
 import { SupportModal } from './components/modals/SupportModal';
-import { RobotMascot } from './components/RobotMascot';
 import { ActiveTab, NavCategory, FilterState } from './types';
 import { Menu, X } from 'lucide-react';
 
@@ -215,8 +214,6 @@ export default function App() {
         isOpen={isSupportModalOpen}
         onClose={() => setIsSupportModalOpen(false)}
       />
-
-      <RobotMascot />
     </div>
   );
 }
