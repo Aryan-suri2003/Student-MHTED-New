@@ -433,27 +433,6 @@ export default function CAPDashboard({
       <ChartTooltip data={tooltip?.data || null} pos={tooltip?.pos || null} />
 
       {/* ========================================================================= */}
-      {/* ACTIVE UNIVERSITY FILTER BANNER */}
-      {/* ========================================================================= */}
-      {globalFilters?.university && globalFilters.university !== "All" && (
-        <div className="bg-brand-50 border border-brand-200 rounded-2xl p-3 px-5 flex items-center justify-between shadow-xs">
-          <div className="flex items-center gap-2.5">
-            <Filter size={16} className="text-brand-600 animate-pulse" />
-            <span className="text-xs font-semibold text-slate-600">
-              Filtered by University:{" "}
-              <b className="text-brand-900 font-bold">{globalFilters.university}</b>
-            </span>
-          </div>
-          <button
-            onClick={handleReset}
-            className="flex items-center gap-1 text-xs font-bold text-brand-700 bg-white hover:bg-brand-100/60 border border-brand-200 px-3 py-1 rounded-xl transition-all cursor-pointer shadow-2xs"
-          >
-            <X size={14} /> Clear Filter
-          </button>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
       {/* 1. TOP SUMMARY KPI BANNER WITH PROGRESS GAUGES */}
       {/* ========================================================================= */}
       <div className="flex flex-col gap-3">

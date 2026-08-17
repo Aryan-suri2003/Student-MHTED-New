@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import Filters from "@/components/Filters";
+import Filters, { GlobalFilterState } from "@/components/Filters";
+import ActiveFilterBanner from "@/components/ActiveFilterBanner";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
@@ -15,9 +16,10 @@ type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState<TabId>("admission");
-  const [globalFilters, setGlobalFilters] = useState({
+  const [globalFilters, setGlobalFilters] = useState<GlobalFilterState>({
     academicYear: "2025-26",
     university: "All",
+    district: "All",
     universityType: "All",
     college: "All",
   });
@@ -62,9 +64,17 @@ export default function Home() {
             {/* Header Section */}
             <Header activeTab={activeTab} />
 
+            {/* Active Filter Banner (Unified across all pages) */}
+            <ActiveFilterBanner filters={globalFilters} onFilterChange={setGlobalFilters} />
+
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
-              <AdmissionDashboard globalFilters={globalFilters} />
+              <AdmissionDashboard
+                globalFilters={globalFilters}
+                onDistrictChange={(dist) =>
+                  setGlobalFilters((prev) => ({ ...prev, district: dist }))
+                }
+              />
             ) : activeTab === "fra" ? (
               <FRAProvider><FRADashboard /></FRAProvider>
             ) : activeTab === "scholarship" ? (
