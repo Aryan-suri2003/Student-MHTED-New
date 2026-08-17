@@ -74,8 +74,8 @@ export default function InteractiveMap() {
       series: []
     };
 
-    let seriesData = [];
-    let bubbleData = [];
+    let seriesData: any[] = [];
+    let bubbleData: any[] = [];
     let visualMapRange = { min: 0, max: 100, color: ["#FFFFFF", "#2563EB"] };
 
     if (mode === "Institutions") {
