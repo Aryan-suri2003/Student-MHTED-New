@@ -2,6 +2,7 @@
 @import "tailwindcss";
 
 @theme {
+  /* ashi-branch theme */
   --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --color-brand-50: #eff6ff;
@@ -25,6 +26,28 @@
 
   --shadow-soft: 0 4px 20px -2px rgba(0, 0, 0, 0.05);
   --shadow-glow: 0 4px 20px -2px rgba(37, 99, 235, 0.15);
+
+  /* main theme */
+  --color-primary: #4F7FEF;
+  --color-primary-dark: #244B87;
+  --color-primary-soft: #EAF2FF;
+  
+  --color-accent-purple: #8B6FE8;
+  --color-pastel-purple: #F0EBFF;
+  
+  --color-accent-green: #25B98A;
+  --color-pastel-green: #E2F8F0;
+  
+  --color-accent-cyan: #48B9D9;
+  --color-pastel-cyan: #E3F6FB;
+  
+  --color-accent-orange: #F2A93B;
+  --color-pastel-orange: #FFF2DD;
+
+  --color-text-primary: #172033;
+  --color-text-secondary: #667085;
+  
+  --color-border-subtle: #E6EAF0;
 }
 
 :root {
@@ -41,6 +64,11 @@ body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* Base resets to reduce card usage globally */
+.no-card-shadow {
+  box-shadow: none !important;
 }
 
 /* Custom Scrollbar for horizontal tabs on mobile */
