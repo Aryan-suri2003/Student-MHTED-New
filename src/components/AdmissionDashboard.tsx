@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Users, BookOpen, School, Info, Percent, Maximize2, Minimize2 } from "lucide-react";
-import { WestBengalAdmissionsSection, DistrictMapItem, ALL_BENGAL_TOTALS } from "./WestBengalMap";
+import { WestBengalAdmissionsSection, DistrictMapItem, ALL_BENGAL_TOTALS, WB_DISTRICTS } from "./WestBengalMap";
 import { GlobalFilterState } from "./Filters";
 
 import { PieChart3DModal, Slice } from "./PieChart3DModal";
@@ -437,6 +437,22 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
   const [expandedChart, setExpandedChart] = useState<"program" | "region" | null>(null);
   const [selectedMapDistrict, setSelectedMapDistrict] = useState<DistrictMapItem | null>(null);
   const [expandedPieData, setExpandedPieData] = useState<{ title: string; slices: Slice[] } | null>(null);
+
+  // Sync selectedMapDistrict when globalFilters.district changes
+  useEffect(() => {
+    if (globalFilters?.district && globalFilters.district !== "All") {
+      const match = WB_DISTRICTS.find(
+        (d) =>
+          d.name.toLowerCase() === globalFilters.district.toLowerCase() ||
+          d.id.toLowerCase() === globalFilters.district.toLowerCase()
+      );
+      if (match) {
+        setSelectedMapDistrict(match);
+      }
+    } else if (globalFilters?.district === "All") {
+      setSelectedMapDistrict(null);
+    }
+  }, [globalFilters?.district]);
 
   // Year scaling multiplier
   const yearMultiplier = 

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Users,
   GraduationCap,
@@ -716,6 +716,15 @@ export default function ScholarshipDashboard({
 }: ScholarshipDashboardProps) {
   const [districtSearch, setDistrictSearch] = useState("");
   const [tooltip, setTooltip] = useState<{ data: ChartTooltipData; pos: { x: number; y: number } } | null>(null);
+
+  // Sync district filter with district table search
+  useEffect(() => {
+    if (globalFilters?.district && globalFilters.district !== "All") {
+      setDistrictSearch(globalFilters.district);
+    } else if (globalFilters?.district === "All") {
+      setDistrictSearch("");
+    }
+  }, [globalFilters?.district]);
 
   // Base Aggregates (Statewide F.Y. 2024-2025)
   const baseData = {
