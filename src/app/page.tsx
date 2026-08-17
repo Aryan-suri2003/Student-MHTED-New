@@ -74,6 +74,9 @@ export default function Home() {
                 onDistrictChange={(dist) =>
                   setGlobalFilters((prev) => ({ ...prev, district: dist }))
                 }
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni, college: "All" }))
+                }
               />
             ) : activeTab === "fra" ? (
               <FRAProvider><FRADashboard /></FRAProvider>
