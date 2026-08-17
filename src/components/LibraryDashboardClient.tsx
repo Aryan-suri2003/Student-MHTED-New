@@ -3,7 +3,6 @@
 import React, { useState, useMemo } from 'react';
 import { Sparkles, ArrowRight, Filter, RotateCcw, CheckCircle2, MapPin, PieChart, Layers, IndianRupee, TrendingUp, Building2, BookOpen } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { Header } from './Header';
 import { FilterBar } from './FilterBar';
 import { KpiSection } from './KpiSection';
 import { DistrictMapAndGradeSection } from './DistrictMapAndGradeSection';
@@ -14,7 +13,6 @@ import { OverviewDashboard } from './OverviewDashboard';
 import { StudentDashboard } from './StudentDashboard';
 import { UniversityDashboard } from './UniversityDashboard';
 import { DistrictDetailModal } from './DistrictDetailModal';
-import { Footer } from './Footer';
 import { financialYears, westBengalDistricts } from '../data/mockData';
 import { ActiveTab, DistrictData, Language, GradeFilter, BuildingFilter } from '../types';
 
@@ -143,13 +141,6 @@ export default function LibraryDashboardClient() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900 flex flex-col font-sans antialiased selection:bg-blue-100">
-      <Header
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        language={language}
-        setLanguage={setLanguage}
-      />
-
       {activeTab === 'public-library' && (
         <FilterBar
           selectedYear={selectedYear}
@@ -175,6 +166,18 @@ export default function LibraryDashboardClient() {
       <main className="flex-1 w-full max-w-7xl 2xl:max-w-[1680px] mx-auto px-4 sm:px-8 lg:px-10 py-8 space-y-8">
         {activeTab === 'public-library' && (
           <div id="unified-single-page-dashboard" className="w-full space-y-8">
+            <div className="flex items-center justify-between pt-1">
+              <div className="inline-flex items-center gap-3 rounded-2xl bg-gradient-to-r from-blue-50 via-indigo-50 to-sky-50 px-4 py-2.5 border border-blue-100 shadow-sm">
+                <span className="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 text-white shadow-md">
+                  <BookOpen className="h-4 w-4" />
+                </span>
+                <div>
+                  <p className="text-[11px] font-bold uppercase tracking-[0.18em] text-blue-700/80">West Bengal</p>
+                  <h2 className="text-2xl font-black tracking-tight text-slate-900">Public Libraries</h2>
+                </div>
+              </div>
+            </div>
+
             <section id="section-kpis" className="w-full">
               <KpiSection
                 totalLibraries={totalLibraries}
@@ -344,8 +347,6 @@ export default function LibraryDashboardClient() {
         onClose={() => setModalDistrict(null)}
         language={language}
       />
-
-      <Footer language={language} />
     </div>
   );
 }
