@@ -13,9 +13,10 @@ export interface GlobalFilterState {
 interface FiltersProps {
   filters?: GlobalFilterState;
   onFilterChange: (filters: GlobalFilterState) => void;
+  activeTab?: string;
 }
 
-export default function Filters({ filters, onFilterChange }: FiltersProps) {
+export default function Filters({ filters, onFilterChange, activeTab }: FiltersProps) {
   const currentFilters: GlobalFilterState = filters || {
     academicYear: "2025-26",
     university: "All",
@@ -39,6 +40,84 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
   };
 
   const isCollegeDisabled = currentFilters.university !== "All";
+
+  if (activeTab === "fra") {
+    return (
+      <div className="w-full bg-brand-900 p-4 md:p-5 rounded-2xl md:rounded-3xl border border-brand-800 shadow-glow mb-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
+          
+          {/* Year */}
+          <div className="flex flex-col">
+            <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase">
+              Academic Year
+            </label>
+            <div className="relative">
+              <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
+                <option className="text-slate-900" value="2025-26">2025-26 (Current)</option>
+                <option className="text-slate-900" value="2024-25">2024-25</option>
+                <option className="text-slate-900" value="2023-24">2023-24</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
+                <ChevronDown size={16} />
+              </div>
+            </div>
+          </div>
+          
+          {/* District */}
+          <div className="flex flex-col">
+            <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase">
+              District
+            </label>
+            <div className="relative">
+              <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
+                <option className="text-slate-900" value="All">All Districts</option>
+                <option className="text-slate-900" value="Kolkata">Kolkata</option>
+                <option className="text-slate-900" value="Howrah">Howrah</option>
+                <option className="text-slate-900" value="Darjeeling">Darjeeling</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
+                <ChevronDown size={16} />
+              </div>
+            </div>
+          </div>
+
+          {/* Stream */}
+          <div className="flex flex-col">
+            <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase">
+              Stream
+            </label>
+            <div className="relative">
+              <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
+                <option className="text-slate-900" value="All">All Streams</option>
+                <option className="text-slate-900" value="Engineering">Engineering</option>
+                <option className="text-slate-900" value="Pharmacy">Pharmacy</option>
+                <option className="text-slate-900" value="Management">Management</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
+                <ChevronDown size={16} />
+              </div>
+            </div>
+          </div>
+
+          {/* Institute */}
+          <div className="flex flex-col">
+            <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase">
+              Colleges & Schools
+            </label>
+            <div className="relative">
+              <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
+                <option className="text-slate-900" value="All">All Colleges & Schools</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
+                <ChevronDown size={16} />
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="w-full bg-brand-900 p-4 md:p-5 rounded-2xl md:rounded-3xl border border-brand-800 shadow-glow mb-6">

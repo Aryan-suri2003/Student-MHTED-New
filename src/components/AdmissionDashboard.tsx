@@ -5,20 +5,17 @@ import { Users, BookOpen, School, Info, Percent, Maximize2, Minimize2 } from "lu
 import { WestBengalAdmissionsSection, DistrictMapItem, ALL_BENGAL_TOTALS } from "./WestBengalMap";
 import { GlobalFilterState } from "./Filters";
 
-interface Slice {
-  label: string;
-  value: number;
-  raw: string;
-  color: string;
-}
+import { PieChart3DModal, Slice } from "./PieChart3DModal";
 
 interface DoughnutChartProps {
   slices: Slice[];
   totalLabel: string;
   totalValue: string;
+  title?: string;
+  onExpand?: (title: string, slices: Slice[]) => void;
 }
 
-function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartProps) {
+function InteractiveDoughnut({ slices, totalLabel, totalValue, title, onExpand }: DoughnutChartProps) {
   const [hoveredSlice, setHoveredSlice] = useState<Slice | null>(null);
   const [activeLegendIndex, setActiveLegendIndex] = useState<number | null>(null);
 
@@ -27,7 +24,16 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue }: DoughnutChartPr
   let cumulativePercentage = 0;
 
   return (
-    <div className="flex flex-row items-center justify-between gap-8 w-full h-full mt-auto">
+    <div className="flex flex-row items-center justify-between gap-8 w-full h-full mt-auto relative group">
+      {onExpand && title && (
+        <button
+          onClick={() => onExpand(title, slices)}
+          className="absolute -top-4 -right-2 p-1.5 bg-slate-100/50 hover:bg-blue-100 text-slate-500 hover:text-blue-700 rounded-lg transition-colors border border-slate-200 shadow-sm z-10 flex items-center gap-1 text-[10px] font-bold uppercase tracking-wider"
+          title="Expand Chart"
+        >
+          <Maximize2 size={14} /> Expand
+        </button>
+      )}
       {/* Chart Wrapper */}
       <div className="relative w-40 h-40 select-none flex-shrink-0">
         <svg viewBox="0 0 120 120" className="w-full h-full">
@@ -430,6 +436,7 @@ const officialUniversityDirectory: Record<string, UniversityStatEntry> = {
 export default function AdmissionDashboard({ globalFilters }: { globalFilters?: GlobalFilterState }) {
   const [expandedChart, setExpandedChart] = useState<"program" | "region" | null>(null);
   const [selectedMapDistrict, setSelectedMapDistrict] = useState<DistrictMapItem | null>(null);
+  const [expandedPieData, setExpandedPieData] = useState<{ title: string; slices: Slice[] } | null>(null);
 
   // Year scaling multiplier
   const yearMultiplier = 
@@ -547,76 +554,78 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
       )}
 
       {/* 1. TOP GENERAL ENROLLMENT STATS GRID */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
 
         {/* Card 1: Total Enrolled */}
-        <div className="bg-[#eff6ff] hover:bg-[#dbeafe] rounded-3xl border border-blue-200/60 hover:border-blue-350 shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
+        <div className="bg-gradient-to-r from-blue-50 to-white hover:from-blue-100 rounded-2xl border border-blue-100 hover:border-blue-200 p-6 flex flex-col justify-between shadow-sm hover:shadow-md relative overflow-hidden h-40 transition-all duration-300 cursor-pointer">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-black text-brand-700/80 uppercase tracking-widest">Total Enrolled</h4>
-            <div className="w-10 h-10 rounded-xl bg-brand-50 text-brand-600 flex items-center justify-center shadow-inner border border-brand-100/50">
-              <Users size={20} className="stroke-[2]" />
+            <h4 className="text-[13px] font-black text-blue-600 uppercase tracking-widest">Total Enrolled</h4>
+            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-500 flex items-center justify-center">
+              <Users size={16} className="stroke-[2.5]" />
             </div>
           </div>
           <div>
-            <p className="text-3xl font-black text-brand-900 tracking-tight">{formatNumber(totalEnrolledNum)}</p>
-            <p className="text-sm text-brand-650 font-bold mt-2">
+            <p className="text-[32px] leading-tight font-extrabold text-[#1e3a8a] tracking-tight">
+              {formatNumber(totalEnrolledNum)}
+            </p>
+            <p className="text-[13px] text-[#1e3a8a] font-bold mt-1">
               {selectedMapDistrict
-                ? `${selectedMapDistrict.name} District`
-                : (globalFilters?.college && globalFilters.college !== "All"
-                  ? globalFilters.college
-                  : (globalFilters?.university && globalFilters.university !== "All"
-                    ? `${globalFilters.university} Enrollment`
-                    : "100% WB Higher Education"))}
+                ? `100% Enrolled in ${selectedMapDistrict.name}`
+                : "100% Enrolled"}
             </p>
           </div>
         </div>
 
-        {/* Card 2: Female Students */}
-        <div className="bg-[#fdf2f8] hover:bg-[#fbcbe7] rounded-3xl border border-pink-200/60 hover:border-pink-350 shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
+        {/* Card 2: Male Students */}
+        <div className="bg-gradient-to-r from-blue-50 to-white hover:from-blue-100 rounded-2xl border border-blue-100 hover:border-blue-200 p-6 flex flex-col justify-between shadow-sm hover:shadow-md relative overflow-hidden h-40 transition-all duration-300 cursor-pointer">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-black text-pink-700/80 uppercase tracking-wider">Female Enrolled</h4>
-            <span className="text-xs font-black bg-pink-50 text-pink-700 px-2.5 py-1 rounded-lg border border-pink-100/50">{rawFemalePct.toFixed(2)}%</span>
+            <h4 className="text-[13px] font-black text-blue-600 uppercase tracking-widest">Male Enrolled</h4>
+            <div className="px-2 py-1 bg-blue-50 text-blue-600 text-[11px] font-extrabold rounded-md">
+              {rawMalePct.toFixed(1)}%
+            </div>
           </div>
           <div>
-            <p className="text-3xl font-black text-brand-900 tracking-tight">{formatNumber(femaleEnrolledNum)}</p>
-            <p className="text-sm text-pink-600 font-bold mt-2">
-              {selectedMapDistrict
-                ? `${((selectedMapDistrict.female / selectedMapDistrict.count) * 100).toFixed(1)}% Share · ${selectedMapDistrict.name}`
-                : `${rawFemalePct.toFixed(2)}% Share (AISHE)`}
+            <p className="text-[32px] leading-tight font-extrabold text-[#1e3a8a] tracking-tight">
+              {formatNumber(maleEnrolledNum)}
+            </p>
+            <p className="text-[13px] text-blue-600 font-bold mt-1">
+              {rawMalePct.toFixed(2)}% Share
             </p>
           </div>
         </div>
 
-        {/* Card 3: Male Students */}
-        <div className="bg-[#eff6ff] hover:bg-[#dbeafe] rounded-3xl border border-blue-200/60 hover:border-blue-350 shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
+        {/* Card 3: Female Students */}
+        <div className="bg-gradient-to-r from-pink-100/60 to-white hover:from-pink-100 rounded-2xl border border-pink-200 hover:border-pink-300 p-6 flex flex-col justify-between shadow-sm hover:shadow-md relative overflow-hidden h-40 transition-all duration-300 cursor-pointer">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-black text-brand-700/80 uppercase tracking-wider">Male Enrolled</h4>
-            <span className="text-xs font-black bg-blue-50 text-blue-700 px-2.5 py-1 rounded-lg border border-blue-100/50">{rawMalePct.toFixed(2)}%</span>
+            <h4 className="text-[13px] font-black text-pink-600 uppercase tracking-widest">Female Enrolled</h4>
+            <div className="px-2 py-1 bg-pink-50 text-pink-600 text-[11px] font-extrabold rounded-md">
+              {rawFemalePct.toFixed(1)}%
+            </div>
           </div>
           <div>
-            <p className="text-3xl font-black text-brand-900 tracking-tight">{formatNumber(maleEnrolledNum)}</p>
-            <p className="text-sm text-blue-600 font-bold mt-2">
-              {selectedMapDistrict
-                ? `${((selectedMapDistrict.male / selectedMapDistrict.count) * 100).toFixed(1)}% Share · ${selectedMapDistrict.name}`
-                : `${rawMalePct.toFixed(2)}% Share`}
+            <p className="text-[32px] leading-tight font-extrabold text-[#1e3a8a] tracking-tight">
+              {formatNumber(femaleEnrolledNum)}
+            </p>
+            <p className="text-[13px] text-pink-600 font-bold mt-1">
+              {rawFemalePct.toFixed(2)}% Share
             </p>
           </div>
         </div>
 
         {/* Card 4: Transgender */}
-        <div className="bg-[#faf5ff] hover:bg-[#edd8fd] rounded-3xl border border-purple-200/60 hover:border-purple-350 shadow-soft p-6 flex flex-col justify-between hover:shadow-md transition-all duration-300 relative overflow-hidden">
-          <div className="absolute top-0 right-0 w-24 h-24 bg-white/40 rounded-full -mr-8 -mt-8 pointer-events-none" />
+        <div className="bg-gradient-to-r from-purple-100/60 to-white hover:from-purple-100 rounded-2xl border border-purple-200 hover:border-purple-300 p-6 flex flex-col justify-between shadow-sm hover:shadow-md relative overflow-hidden h-40 transition-all duration-300 cursor-pointer">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="text-xs font-black text-purple-700/80 uppercase tracking-wider">Transgender</h4>
-            <span className="text-xs font-black bg-purple-50 text-purple-700 px-2.5 py-1 rounded-lg border border-purple-100/50">0.007%</span>
+            <h4 className="text-[13px] font-black text-purple-600 uppercase tracking-widest">Transgender</h4>
+            <div className="px-2 py-1 bg-purple-50 text-purple-600 text-[11px] font-extrabold rounded-md">
+              0.003%
+            </div>
           </div>
           <div>
-            <p className="text-3xl font-black text-brand-900 tracking-tight">{formatNumber(transEnrolledNum)}</p>
-            <p className="text-sm text-purple-650 font-bold mt-2">
-              {selectedMapDistrict ? `${selectedMapDistrict.name} District` : "0.007% Share"}
+            <p className="text-[32px] leading-tight font-extrabold text-[#1e3a8a] tracking-tight">
+              {formatNumber(transEnrolledNum)}
+            </p>
+            <p className="text-[13px] text-purple-600 font-bold mt-1">
+              0.003% Share
             </p>
           </div>
         </div>
@@ -648,6 +657,8 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
               slices={freshAdmissionsSlices}
               totalLabel="Total"
               totalValue={freshAdmittedNum >= 100000 ? `${(freshAdmittedNum / 100000).toFixed(1)}L` : formatNumber(freshAdmittedNum)}
+              title="Fresh Admissions"
+              onExpand={(title, slices) => setExpandedPieData({ title, slices })}
             />
           </div>
         </div>
@@ -674,6 +685,8 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
               slices={coursesSlices}
               totalLabel="Total"
               totalValue={formatNumber(totalCourses)}
+              title="Total Courses by Program"
+              onExpand={(title, slices) => setExpandedPieData({ title, slices })}
             />
           </div>
         </div>
@@ -700,6 +713,8 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
               slices={collegeSlices}
               totalLabel="Total"
               totalValue={formatNumber(totalInstitutions)}
+              title="Colleges & Institutions"
+              onExpand={(title, slices) => setExpandedPieData({ title, slices })}
             />
           </div>
         </div>
@@ -769,6 +784,14 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
         academicYear={globalFilters?.academicYear || "2025-26"}
         onDistrictChange={setSelectedMapDistrict}
       />
+
+      {expandedPieData && (
+        <PieChart3DModal
+          title={expandedPieData.title}
+          slices={expandedPieData.slices}
+          onClose={() => setExpandedPieData(null)}
+        />
+      )}
     </div>
   );
 }

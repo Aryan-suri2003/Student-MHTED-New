@@ -1,6 +1,7 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
+import { ChevronLeft, ChevronRight, GraduationCap, FileText, Award, BarChart, Layers } from "lucide-react";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
@@ -10,47 +11,115 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
+  const [isCollapsed, setIsCollapsed] = useState(false);
+
   const tabs = [
-    { id: "admission", label: "Admission" },
-    { id: "examination", label: "Examination & Result" },
-    { id: "scholarship", label: "Scholarship" },
-    { id: "fra", label: "FRA" },
-    { id: "cap", label: "CAP" },
+    { id: "admission", label: "Admission", icon: GraduationCap },
+    { id: "examination", label: "Examination & Result", icon: FileText },
+    { id: "scholarship", label: "Scholarship", icon: Award },
+    { id: "fra", label: "FRA", icon: BarChart },
+    { id: "cap", label: "CAP", icon: Layers },
   ] as const;
 
   return (
-    <aside className="w-full lg:w-[320px] bg-brand-900 p-4 lg:p-6 border-b lg:border-b-0 lg:border-r border-brand-800 flex flex-row lg:flex-col overflow-x-auto no-scrollbar gap-2 lg:gap-3.5 h-fit lg:h-full scroll-smooth flex-shrink-0">
-      
-      {/* Decorative Branding Section (Desktop only) */}
-      <div className="hidden lg:flex items-center gap-3 pb-6 mb-2 border-b border-white/10">
-        <div className="w-9 h-9 rounded-xl bg-white/10 flex items-center justify-center text-white font-extrabold text-sm tracking-wider shadow-inner border border-white/5">
-          WB
-        </div>
-        <div>
-          <h3 className="text-xs font-black text-white tracking-widest uppercase">Student Portal</h3>
-          <p className="text-[9px] text-white/60 font-semibold uppercase tracking-wider mt-0.5">Higher Education WB</p>
-        </div>
-      </div>
+    <>
+      <style>{`
+        .sidebar-active-tab {
+          position: relative;
+          background-color: var(--color-background);
+          color: var(--color-brand-900) !important;
+          border-top-left-radius: 9999px;
+          border-bottom-left-radius: 9999px;
+          border-top-right-radius: 0;
+          border-bottom-right-radius: 0;
+          margin-right: -16px; /* pull to the right edge to overlap padding */
+          padding-right: 16px; /* compensate for the pull */
+          width: calc(100% + 16px);
+        }
+        
+        .sidebar-active-tab::before {
+          content: "";
+          position: absolute;
+          top: -20px;
+          right: 0;
+          width: 20px;
+          height: 20px;
+          border-bottom-right-radius: 20px;
+          box-shadow: 10px 10px 0 10px var(--color-background);
+          background-color: transparent;
+          pointer-events: none;
+        }
 
-      {/* Navigation Buttons */}
-      <div className="flex flex-row lg:flex-col gap-2 lg:gap-2.5 w-full">
-        {tabs.map((tab) => {
-          const isActive = activeTab === tab.id;
-          return (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`min-w-[140px] lg:min-w-0 text-center lg:text-left py-3 px-4 lg:py-3.5 lg:px-5 rounded-xl lg:rounded-2xl font-bold text-xs md:text-sm transition-all duration-300 cursor-pointer flex-grow lg:flex-grow-0 select-none ${
-                isActive
-                  ? "bg-white text-brand-900 border border-white shadow-soft lg:pl-8 transform scale-[1.02]"
-                  : "bg-white/5 text-white/80 hover:bg-white/15 hover:text-white border border-transparent lg:hover:pl-7"
-              }`}
-            >
-              {tab.label}
-            </button>
-          );
-        })}
-      </div>
-    </aside>
+        .sidebar-active-tab::after {
+          content: "";
+          position: absolute;
+          bottom: -20px;
+          right: 0;
+          width: 20px;
+          height: 20px;
+          border-top-right-radius: 20px;
+          box-shadow: 10px -10px 0 10px var(--color-background);
+          background-color: transparent;
+          pointer-events: none;
+        }
+      `}</style>
+
+      <aside className={`bg-brand-900 text-white flex flex-col h-[calc(100vh-32px)] my-4 ml-4 rounded-[40px] shadow-lg transition-all duration-300 relative overflow-hidden flex-shrink-0
+        ${isCollapsed ? "w-[90px] px-2 py-6" : "w-[260px] pl-6 pr-4 py-8"}
+      `}>
+        
+        {/* Branding Section */}
+        <div className={`flex items-center mb-8 ${isCollapsed ? "justify-center" : "gap-3 px-2"}`}>
+          <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-extrabold text-sm tracking-wider flex-shrink-0">
+            WB
+          </div>
+          {!isCollapsed && (
+            <div className="whitespace-nowrap overflow-hidden">
+              <h3 className="text-sm font-bold text-white tracking-wide">Brand Name</h3>
+            </div>
+          )}
+        </div>
+
+        {/* Navigation Buttons */}
+        <div className="flex flex-col flex-1 w-full gap-2">
+          {tabs.map((tab) => {
+            const isActive = activeTab === tab.id;
+            const Icon = tab.icon;
+            return (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center transition-all duration-300 cursor-pointer select-none
+                  ${isCollapsed ? "justify-center w-[50px] mx-auto py-3 rounded-full" : "justify-start py-3 pl-4 rounded-l-full w-full"}
+                  ${isActive 
+                    ? (isCollapsed ? "bg-[var(--color-background)] text-brand-900 shadow-sm" : "sidebar-active-tab")
+                    : "text-white/80 hover:bg-white/10 hover:text-white"
+                  }
+                `}
+                title={isCollapsed ? tab.label : undefined}
+              >
+                <Icon size={isCollapsed ? 24 : 20} className="flex-shrink-0" strokeWidth={isActive ? 2.5 : 2} />
+                {!isCollapsed && (
+                  <span className="whitespace-nowrap overflow-hidden ml-4 font-semibold text-sm">
+                    {tab.label}
+                  </span>
+                )}
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Toggle Button at Bottom */}
+        <div className={`mt-auto flex ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
+          <button 
+            onClick={() => setIsCollapsed(!isCollapsed)}
+            className="w-10 h-10 rounded-full bg-white text-brand-900 flex items-center justify-center hover:bg-blue-50 transition-colors shadow-md"
+          >
+            {isCollapsed ? <ChevronRight size={20} strokeWidth={3} /> : <ChevronLeft size={20} strokeWidth={3} />}
+          </button>
+        </div>
+
+      </aside>
+    </>
   );
 }

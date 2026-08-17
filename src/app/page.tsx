@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
 import FRADashboard from "@/components/FRADashboard";
+import { FRAProvider } from "@/context/FRAContext";
 import ScholarshipDashboard from "@/components/ScholarshipDashboard";
 import ExaminationDashboard from "@/components/ExaminationDashboard";
 
@@ -54,7 +55,7 @@ export default function Home() {
           {/* Right Column: Content Area */}
           <div className="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 gap-6 bg-background">
             {/* Filters Section */}
-            <Filters filters={globalFilters} onFilterChange={setGlobalFilters} />
+            <Filters filters={globalFilters} onFilterChange={setGlobalFilters} activeTab={activeTab} />
 
             {/* Header Section */}
             <Header activeTab={activeTab} />
@@ -63,11 +64,21 @@ export default function Home() {
             {activeTab === "admission" ? (
               <AdmissionDashboard globalFilters={globalFilters} />
             ) : activeTab === "fra" ? (
-              <FRADashboard />
+              <FRAProvider><FRADashboard /></FRAProvider>
             ) : activeTab === "scholarship" ? (
-              <ScholarshipDashboard />
+              <ScholarshipDashboard
+                globalFilters={globalFilters}
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
+                }
+              />
             ) : activeTab === "examination" ? (
-              <ExaminationDashboard />
+              <ExaminationDashboard
+                globalFilters={globalFilters}
+                onUniversityChange={(uni) =>
+                  setGlobalFilters((prev) => ({ ...prev, university: uni }))
+                }
+              />
             ) : (
               <div className="bg-background rounded-2xl md:rounded-3xl border border-borderLight p-12 text-center min-h-[350px] flex flex-col items-center justify-center flex-1">
                 <div className="space-y-3">
