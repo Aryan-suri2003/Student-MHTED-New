@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
 import FRADashboard from "@/components/FRADashboard";
+import { FRAProvider } from "@/context/FRAContext";
 import ScholarshipDashboard from "@/components/ScholarshipDashboard";
 import ExaminationDashboard from "@/components/ExaminationDashboard";
 import CAPDashboard from "@/components/CAPDashboard";
@@ -56,16 +57,16 @@ export default function Home() {
           {/* Right Column: Content Area */}
           <div className="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 gap-6 bg-background">
             {/* Filters Section */}
-            <Filters filters={globalFilters} onFilterChange={setGlobalFilters} />
+            <Filters filters={globalFilters} onFilterChange={setGlobalFilters} activeTab={activeTab} />
 
             {/* Header Section */}
             <Header activeTab={activeTab} />
 
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
-              <AdmissionDashboard />
+              <AdmissionDashboard globalFilters={globalFilters} />
             ) : activeTab === "fra" ? (
-              <FRADashboard />
+              <FRAProvider><FRADashboard /></FRAProvider>
             ) : activeTab === "scholarship" ? (
               <ScholarshipDashboard
                 globalFilters={globalFilters}
@@ -106,8 +107,8 @@ export default function Home() {
 
             {/* Footer */}
             <footer className="border-t border-borderLight pt-6 text-center text-xs text-textMuted mt-auto flex-shrink-0">
-              <p>© 2026 Higher and Technical Education Department, Maharashtra. All rights reserved.</p>
-              <p className="mt-1 text-[10px] text-textMuted">Designated for student portal administration mockups.</p>
+              <p>© 2026 Department of Higher Education, Government of West Bengal (Banglar Uchchashiksha). All rights reserved.</p>
+              <p className="mt-1 text-[10px] text-textMuted">West Bengal State Higher Education Institutions Portal & MIS Dashboard.</p>
             </footer>
           </div>
 
