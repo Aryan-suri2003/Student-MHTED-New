@@ -1,0 +1,37 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #4F7FEF;
+  --color-primary-dark: #244B87;
+  --color-primary-soft: #EAF2FF;
+  
+  --color-accent-purple: #8B6FE8;
+  --color-pastel-purple: #F0EBFF;
+  
+  --color-accent-green: #25B98A;
+  --color-pastel-green: #E2F8F0;
+  
+  --color-accent-cyan: #48B9D9;
+  --color-pastel-cyan: #E3F6FB;
+  
+  --color-accent-orange: #F2A93B;
+  --color-pastel-orange: #FFF2DD;
+
+  --color-text-primary: #172033;
+  --color-text-secondary: #667085;
+  --color-text-muted: #98A2B3;
+  
+  --color-border-subtle: #E6EAF0;
+  
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+}
+
+body {
+  background-color: #F7F9FC;
+  color: #172033;
+}
+
+/* Base resets to reduce card usage globally */
+.no-card-shadow {
+  box-shadow: none !important;
+}
