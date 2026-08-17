@@ -22,49 +22,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
   ] as const;
 
   return (
-    <>
-      <style>{`
-        .sidebar-active-tab {
-          position: relative;
-          background-color: var(--color-background);
-          color: var(--color-brand-900) !important;
-          border-top-left-radius: 9999px;
-          border-bottom-left-radius: 9999px;
-          border-top-right-radius: 0;
-          border-bottom-right-radius: 0;
-          margin-right: -16px; /* pull to the right edge to overlap padding */
-          padding-right: 16px; /* compensate for the pull */
-          width: calc(100% + 16px);
-        }
-        
-        .sidebar-active-tab::before {
-          content: "";
-          position: absolute;
-          top: -20px;
-          right: 0;
-          width: 20px;
-          height: 20px;
-          border-bottom-right-radius: 20px;
-          box-shadow: 10px 10px 0 10px var(--color-background);
-          background-color: transparent;
-          pointer-events: none;
-        }
-
-        .sidebar-active-tab::after {
-          content: "";
-          position: absolute;
-          bottom: -20px;
-          right: 0;
-          width: 20px;
-          height: 20px;
-          border-top-right-radius: 20px;
-          box-shadow: 10px -10px 0 10px var(--color-background);
-          background-color: transparent;
-          pointer-events: none;
-        }
-      `}</style>
-
-      <aside className={`bg-brand-900 text-white flex flex-col h-[calc(100vh-32px)] my-4 ml-4 rounded-[40px] shadow-lg transition-all duration-300 relative overflow-hidden flex-shrink-0
+    <aside className={`bg-brand-900 text-white flex flex-col h-[calc(100vh-32px)] my-4 ml-4 rounded-[40px] shadow-lg transition-all duration-300 relative overflow-hidden flex-shrink-0
         ${isCollapsed ? "w-[90px] px-2 py-6" : "w-[260px] pl-6 pr-4 py-8"}
       `}>
         
@@ -120,6 +78,5 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
         </div>
 
       </aside>
-    </>
   );
 }

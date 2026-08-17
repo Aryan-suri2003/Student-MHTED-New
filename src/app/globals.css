@@ -94,3 +94,44 @@ body {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f1f5f9;
 }
+
+/* Sidebar active tab inverted curved corner effect */
+.sidebar-active-tab {
+  position: relative;
+  background-color: var(--color-background);
+  color: var(--color-brand-900) !important;
+  border-top-left-radius: 9999px;
+  border-bottom-left-radius: 9999px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  margin-right: -16px;
+  padding-right: 16px;
+  width: calc(100% + 16px);
+}
+
+.sidebar-active-tab::before {
+  content: "";
+  position: absolute;
+  top: -20px;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-bottom-right-radius: 20px;
+  box-shadow: 10px 10px 0 10px var(--color-background);
+  background-color: transparent;
+  pointer-events: none;
+}
+
+.sidebar-active-tab::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  right: 0;
+  width: 20px;
+  height: 20px;
+  border-top-right-radius: 20px;
+  box-shadow: 10px -10px 0 10px var(--color-background);
+  background-color: transparent;
+  pointer-events: none;
+}
+
