@@ -15,25 +15,32 @@ import {
   X,
   MoveHorizontal,
   MoveVertical,
+  Maximize2,
 } from "lucide-react";
 import { GlobalFilterState } from "@/components/Filters";
 import ChartTooltip, { ChartTooltipData } from "@/components/ChartTooltip";
+import { PieChart3DModal, Slice } from "./PieChart3DModal";
 
-interface Slice {
-  label: string;
-  value: number;
-  raw: string;
-  color: string;
-}
-
+// ─── Interactive Doughnut Chart Component ──────────────────────────────────────
 interface DoughnutChartProps {
   slices: Slice[];
   totalLabel: string;
   totalValue: string;
+  title?: string;
+  onExpand?: (title: string, slices: Slice[]) => void;
   onTooltip?: (data: ChartTooltipData | null, pos?: { x: number; y: number } | null) => void;
+  columns?: 1 | 2;
 }
 
-function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: DoughnutChartProps) {
+function InteractiveDoughnut({
+  slices,
+  totalLabel,
+  totalValue,
+  title,
+  onExpand,
+  onTooltip,
+  columns = 2,
+}: DoughnutChartProps) {
   const [hoveredSlice, setHoveredSlice] = useState<Slice | null>(null);
   const [activeLegendIndex, setActiveLegendIndex] = useState<number | null>(null);
 
@@ -41,8 +48,19 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
   let cumulativePercentage = 0;
 
   return (
-    <div className="flex flex-col items-center gap-4 w-full">
-      <div className="relative w-48 h-48 select-none">
+    <div className="flex flex-col items-center gap-5 w-full relative group">
+      {onExpand && title && (
+        <button
+          onClick={() => onExpand(title, slices)}
+          className="absolute -top-3 -right-1 p-1.5 bg-slate-100/80 hover:bg-blue-100 text-slate-500 hover:text-blue-700 rounded-lg transition-all border border-slate-200 shadow-xs z-10 flex items-center gap-1 text-[10px] font-extrabold uppercase tracking-wider cursor-pointer"
+          title="Expand 3D Chart"
+        >
+          <Maximize2 size={13} /> Expand
+        </button>
+      )}
+
+      {/* SVG Doughnut Chart */}
+      <div className="relative w-44 h-44 select-none flex-shrink-0">
         <svg viewBox="0 0 120 120" className="w-full h-full">
           {slices.map((slice, index) => {
             const percentage = slice.value;
@@ -51,6 +69,9 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
             cumulativePercentage += percentage;
 
             const isHovered = hoveredSlice?.label === slice.label || activeLegendIndex === index;
+            const someActive = hoveredSlice !== null || activeLegendIndex !== null;
+            const opacity = someActive ? (isHovered ? 1 : 0.28) : 1;
+            const filter = someActive && !isHovered ? "grayscale(45%)" : "none";
 
             return (
               <circle
@@ -60,25 +81,30 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
                 r="48"
                 fill="transparent"
                 stroke={slice.color}
-                strokeWidth={isHovered ? "22" : "18"}
+                strokeWidth={isHovered ? "26" : "21"}
                 strokeDasharray={circumference}
                 strokeDashoffset={strokeDashoffset}
                 style={{
                   transform: `rotate(${startAngle - 90}deg)`,
                   transformOrigin: "60px 60px",
+                  opacity,
+                  filter,
                 }}
                 className="transition-all duration-300 cursor-pointer"
                 onMouseEnter={(e) => {
                   setHoveredSlice(slice);
-                  onTooltip?.({
-                    title: `Examination Status: ${slice.label}`,
-                    subtitle: "Candidate Result Classification",
-                    items: [
-                      { label: "Result Outcome", value: slice.label },
-                      { label: "Candidate Count", value: slice.raw, highlight: true },
-                      { label: "Percentage Share", value: `${slice.value}%` },
-                    ]
-                  }, { x: e.clientX, y: e.clientY });
+                  onTooltip?.(
+                    {
+                      title: `Examination Status: ${slice.label}`,
+                      subtitle: "Candidate Result Classification",
+                      items: [
+                        { label: "Result Outcome", value: slice.label },
+                        { label: "Candidate Count", value: String(slice.raw), highlight: true },
+                        { label: "Percentage Share", value: `${slice.value}%` },
+                      ],
+                    },
+                    { x: e.clientX, y: e.clientY }
+                  );
                 }}
                 onMouseLeave={() => {
                   setHoveredSlice(null);
@@ -87,40 +113,42 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
               />
             );
           })}
-          <circle cx="60" cy="60" r="38" className="fill-white" />
+          {/* Inner white circle */}
+          <circle cx="60" cy="60" r="37" className="fill-white" />
         </svg>
 
-        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-4 pointer-events-none">
+        {/* Center Display */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-2 pointer-events-none">
           {hoveredSlice ? (
             <>
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider truncate max-w-[85px]">
+              <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider truncate max-w-[100px]">
                 {hoveredSlice.label}
               </span>
-              <span className="text-base font-extrabold text-brand-900 mt-0.5 truncate max-w-[85px]">
+              <span className="text-base font-black text-slate-900 mt-0.5 tracking-tight truncate max-w-[100px]">
                 {hoveredSlice.raw}
               </span>
-              <span className="text-xs font-bold text-brand-600 mt-0.5">
+              <span className="text-xs font-black text-blue-600 mt-0.5">
                 {hoveredSlice.value}%
               </span>
             </>
           ) : activeLegendIndex !== null ? (
             <>
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider truncate max-w-[85px]">
+              <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider truncate max-w-[100px]">
                 {slices[activeLegendIndex].label}
               </span>
-              <span className="text-base font-extrabold text-brand-900 mt-0.5 truncate max-w-[85px]">
+              <span className="text-base font-black text-slate-900 mt-0.5 tracking-tight truncate max-w-[100px]">
                 {slices[activeLegendIndex].raw}
               </span>
-              <span className="text-xs font-bold text-brand-600 mt-0.5">
+              <span className="text-xs font-black text-blue-600 mt-0.5">
                 {slices[activeLegendIndex].value}%
               </span>
             </>
           ) : (
             <>
-              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">
+              <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider">
                 {totalLabel}
               </span>
-              <span className="text-base font-extrabold text-brand-950 mt-0.5">
+              <span className="text-base font-black text-slate-900 mt-0.5 tracking-tight">
                 {totalValue}
               </span>
             </>
@@ -128,7 +156,8 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
         </div>
       </div>
 
-      <div className="w-full grid grid-cols-2 gap-2 text-xs">
+      {/* Legend Container: Shows Label, Data (Raw Count), and Percentage */}
+      <div className={`w-full grid ${columns === 1 ? "grid-cols-1" : "grid-cols-1 sm:grid-cols-2"} gap-2 text-xs`}>
         {slices.map((slice, index) => {
           const isSelected = activeLegendIndex === index || hoveredSlice?.label === slice.label;
           return (
@@ -137,15 +166,32 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
               onClick={() => setActiveLegendIndex(activeLegendIndex === index ? null : index)}
               onMouseEnter={() => setHoveredSlice(slice)}
               onMouseLeave={() => setHoveredSlice(null)}
-              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer ${isSelected ? "bg-brand-50 font-bold text-brand-900" : "hover:bg-slate-50 text-slate-600"
-                }`}
+              className={`flex items-center justify-between gap-2.5 p-2 rounded-xl text-left transition-all duration-200 cursor-pointer w-full group ${
+                isSelected
+                  ? "bg-blue-50/90 font-black text-blue-950 scale-[1.01] shadow-xs ring-1 ring-blue-300"
+                  : "hover:bg-slate-50 text-slate-700 font-semibold"
+              }`}
             >
-              <span
-                className="w-3 h-3 rounded-full flex-shrink-0"
-                style={{ backgroundColor: slice.color }}
-              />
-              <span className="truncate max-w-[90px] font-medium">{slice.label}</span>
-              <span className="ml-auto font-semibold text-slate-400">{slice.value}%</span>
+              <div className="flex items-center gap-2 min-w-0 flex-1">
+                <span
+                  className="w-3 h-3 rounded-full flex-shrink-0 border border-white/40 shadow-2xs"
+                  style={{
+                    backgroundColor: slice.color,
+                    boxShadow: isSelected ? `0 0 8px ${slice.color}99` : `0 1px 3px ${slice.color}44`,
+                  }}
+                />
+                <span className="truncate text-xs font-bold group-hover:text-blue-900 transition-colors" title={slice.label}>
+                  {slice.label}
+                </span>
+              </div>
+              <div className="flex items-center gap-1.5 flex-shrink-0">
+                <span className="font-extrabold text-slate-900 text-xs">
+                  {slice.raw}
+                </span>
+                <span className="bg-slate-100 text-slate-700 border border-slate-200/80 px-1.5 py-0.5 rounded-md text-[10px] font-black group-hover:bg-blue-100 group-hover:text-blue-900 transition-colors">
+                  {slice.value}%
+                </span>
+              </div>
             </button>
           );
         })}
@@ -512,6 +558,7 @@ export default function ExaminationDashboard({
 }: ExaminationDashboardProps) {
   // Chart click / cross-filtering selection state
   const [clickedUniversity, setClickedUniversity] = useState<string | null>(null);
+  const [expandedPieData, setExpandedPieData] = useState<{ title: string; slices: Slice[] } | null>(null);
   const [tooltip, setTooltip] = useState<{ data: ChartTooltipData; pos: { x: number; y: number } } | null>(null);
 
   // Local section filter states
@@ -1518,7 +1565,10 @@ export default function ExaminationDashboard({
 
           <div className="py-2">
             <InteractiveDoughnut
+              title={`Gender-wise Result Breakdown (${genderFilter === "All" ? "All Genders" : genderFilter})`}
+              onExpand={(title, slices) => setExpandedPieData({ title, slices })}
               onTooltip={(data, pos) => setTooltip(data && pos ? { data, pos } : null)}
+              columns={2}
               slices={dynamicGenderSlices}
               totalLabel={effectiveUniCode || "Total Results"}
               totalValue={currentData.students.toLocaleString("en-IN")}
@@ -2178,6 +2228,13 @@ export default function ExaminationDashboard({
         </div>
       </div>
 
+      {expandedPieData && (
+        <PieChart3DModal
+          title={expandedPieData.title}
+          slices={expandedPieData.slices}
+          onClose={() => setExpandedPieData(null)}
+        />
+      )}
     </div>
   );
 }
