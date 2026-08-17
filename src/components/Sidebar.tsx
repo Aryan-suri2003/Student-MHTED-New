@@ -1,7 +1,8 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronLeft, ChevronRight, GraduationCap, FileText, Award, BarChart, Layers } from "lucide-react";
+import { ChevronLeft, ChevronRight, GraduationCap, FileText, Award, BarChart, Layers, ArrowLeft } from "lucide-react";
+import Link from "next/link";
 
 type TabId = "admission" | "examination" | "scholarship" | "fra" | "cap";
 
@@ -36,6 +37,14 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
             <h3 className="text-sm font-bold text-white tracking-wide">Higher Education</h3>
           </div>
         )}
+      </div>
+
+      {/* Back to Overview Link */}
+      <div className={`px-4 mb-6 flex ${isCollapsed ? "justify-center" : "justify-start"}`}>
+        <Link href="/" className="flex items-center gap-2 text-white/70 hover:text-white hover:bg-white/10 py-2 px-3 rounded-xl transition-colors">
+          <ArrowLeft size={18} />
+          {!isCollapsed && <span className="text-sm font-medium whitespace-nowrap">Back to Overview</span>}
+        </Link>
       </div>
 
       {/* Navigation Buttons */}
