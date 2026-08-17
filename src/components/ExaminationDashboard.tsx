@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import {
   Users,
   GraduationCap,
@@ -541,8 +541,19 @@ export default function ExaminationDashboard({
     if (globalFilters?.university && globalFilters.university !== "All") {
       return globalFilters.university;
     }
-    return clickedUniversity;
+    if (clickedUniversity && clickedUniversity !== "All") {
+      return clickedUniversity;
+    }
+    return null;
   }, [clickedUniversity, globalFilters?.university]);
+
+  useEffect(() => {
+    if (globalFilters?.university === "All") {
+      setClickedUniversity(null);
+    } else if (globalFilters?.university) {
+      setClickedUniversity(globalFilters.university);
+    }
+  }, [globalFilters?.university]);
 
   // Current active data record
   const currentData: UniversityRecord = useMemo(() => {

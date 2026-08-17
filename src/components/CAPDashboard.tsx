@@ -434,7 +434,7 @@ export default function CAPDashboard({
             </span>
           </div>
           <button
-            onClick={handleReset}
+            onClick={() => onUniversityChange && onUniversityChange("All")}
             className="flex items-center gap-1 text-xs font-bold text-brand-700 bg-white hover:bg-brand-100/60 border border-brand-200 px-3 py-1 rounded-xl transition-all cursor-pointer shadow-2xs"
           >
             <X size={14} /> Clear Filter
