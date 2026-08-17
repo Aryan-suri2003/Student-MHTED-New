@@ -730,29 +730,6 @@ export default function ExaminationDashboard({
       <ChartTooltip data={tooltip?.data || null} pos={tooltip?.pos || null} />
 
       {/* ========================================================================= */}
-      {/* ACTIVE SELECTION BANNER / CHIP (CROSS-FILTERING STATUS) */}
-      {/* ========================================================================= */}
-      {effectiveUniCode && (
-        <div className="bg-brand-50 border border-brand-200 rounded-2xl p-3 px-5 flex items-center justify-between shadow-xs">
-          <div className="flex items-center gap-2.5">
-            <Filter size={16} className="text-brand-600 animate-pulse" />
-            <span className="text-xs font-semibold text-slate-600">
-              Filtered by University:{" "}
-              <b className="text-brand-900 font-bold">
-                {UNIVERSITIES_DATA[effectiveUniCode]?.name || effectiveUniCode} ({effectiveUniCode})
-              </b>
-            </span>
-          </div>
-          <button
-            onClick={clearSelection}
-            className="flex items-center gap-1 text-xs font-bold text-brand-700 bg-white hover:bg-brand-100/60 border border-brand-200 px-3 py-1 rounded-xl transition-all cursor-pointer shadow-2xs"
-          >
-            <X size={14} /> Clear Selection
-          </button>
-        </div>
-      )}
-
-      {/* ========================================================================= */}
       {/* 1. TOP 3 SUMMARY KPI CARDS (SEPARATE BOXES WITH SHADES & SHADOWS) */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

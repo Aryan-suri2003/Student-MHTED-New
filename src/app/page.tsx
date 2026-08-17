@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Filters, { GlobalFilterState } from "@/components/Filters";
+import ActiveFilterBanner from "@/components/ActiveFilterBanner";
 import Sidebar from "@/components/Sidebar";
 import Header from "@/components/Header";
 import AdmissionDashboard from "@/components/AdmissionDashboard";
@@ -63,9 +64,17 @@ export default function Home() {
             {/* Header Section */}
             <Header activeTab={activeTab} />
 
+            {/* Active Filter Banner (Unified across all pages) */}
+            <ActiveFilterBanner filters={globalFilters} onFilterChange={setGlobalFilters} />
+
             {/* Dynamic Section Contents */}
             {activeTab === "admission" ? (
-              <AdmissionDashboard globalFilters={globalFilters} />
+              <AdmissionDashboard
+                globalFilters={globalFilters}
+                onDistrictChange={(dist) =>
+                  setGlobalFilters((prev) => ({ ...prev, district: dist }))
+                }
+              />
             ) : activeTab === "fra" ? (
               <FRAProvider><FRADashboard /></FRAProvider>
             ) : activeTab === "scholarship" ? (

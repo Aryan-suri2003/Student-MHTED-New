@@ -433,7 +433,13 @@ const officialUniversityDirectory: Record<string, UniversityStatEntry> = {
   }
 };
 
-export default function AdmissionDashboard({ globalFilters }: { globalFilters?: GlobalFilterState }) {
+export default function AdmissionDashboard({
+  globalFilters,
+  onDistrictChange,
+}: {
+  globalFilters?: GlobalFilterState;
+  onDistrictChange?: (district: string) => void;
+}) {
   const [expandedChart, setExpandedChart] = useState<"program" | "region" | null>(null);
   const [selectedMapDistrict, setSelectedMapDistrict] = useState<DistrictMapItem | null>(null);
   const [expandedPieData, setExpandedPieData] = useState<{ title: string; slices: Slice[] } | null>(null);
@@ -546,28 +552,6 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
 
   return (
     <div className="flex flex-col gap-8 w-full animate-fadeIn pb-8">
-
-      {/* District Filter Banner */}
-      {selectedMapDistrict && (
-        <div className="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-2xl px-5 py-3 shadow-sm">
-          <span className="flex items-center gap-2 text-blue-700 font-extrabold text-sm">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" className="w-4 h-4"><path strokeLinecap="round" strokeLinejoin="round" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"/><path strokeLinecap="round" strokeLinejoin="round" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
-            Viewing data for:
-          </span>
-          <span className="text-blue-900 font-black text-sm bg-blue-100 px-3 py-1 rounded-full border border-blue-300">
-            {selectedMapDistrict.name} District
-          </span>
-          <span className="text-xs text-blue-600 font-semibold ml-1">
-            {selectedMapDistrict.count.toLocaleString("en-IN")} outside students · Origin: {selectedMapDistrict.topOrigin}
-          </span>
-          <button
-            onClick={() => setSelectedMapDistrict(null)}
-            className="ml-auto text-xs font-bold text-slate-500 hover:text-slate-800 bg-slate-100 hover:bg-slate-200 px-3 py-1 rounded-full transition-colors cursor-pointer"
-          >
-            ✕ Clear District
-          </button>
-        </div>
-      )}
 
       {/* 1. TOP GENERAL ENROLLMENT STATS GRID */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -798,7 +782,12 @@ export default function AdmissionDashboard({ globalFilters }: { globalFilters?: 
       <WestBengalAdmissionsSection
         globalFilters={globalFilters}
         academicYear={globalFilters?.academicYear || "2025-26"}
-        onDistrictChange={setSelectedMapDistrict}
+        onDistrictChange={(distItem) => {
+          setSelectedMapDistrict(distItem);
+          if (onDistrictChange) {
+            onDistrictChange(distItem ? distItem.name : "All");
+          }
+        }}
       />
 
       {expandedPieData && (
