@@ -8,8 +8,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Student Portal - Student Overview",
-  description: "Modern university student portal overview and admission status dashboard.",
+  title: "Student Portal & Overview",
+  description: "West Bengal Higher Education Portal & Student Dashboard",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
