@@ -206,6 +206,244 @@ function InteractiveDoughnut({
 
 // ─── End Doughnut ──────────────────────────────────────────────────────────────
 
+// ─── Year on Year Applied vs Admitted Line Graph ──────────────────────────────
+interface YoYTrendItem {
+  year: string;
+  applied: number;
+  admitted: number;
+  conversion: number;
+  appliedGrowth: string | null;
+  admittedGrowth: string | null;
+  unallotted: number;
+}
+
+function YoYAppliedAdmittedLineGraph({
+  data,
+  onTooltip,
+}: {
+  data: YoYTrendItem[];
+  onTooltip?: (data: ChartTooltipData | null, pos?: { x: number; y: number } | null) => void;
+}) {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
+
+  // Dynamically compute max value for clean auto-scaling across all filter selections
+  const maxDataVal = Math.max(...data.map((d) => d.applied), 1);
+  const maxVal = maxDataVal * 1.35; // 35% headroom on top for floating labels
+  const minVal = 0;
+
+  // Coordinate math (viewBox 0 0 540 260)
+  const padding = { left: 55, right: 45, top: 45, bottom: 45 };
+  const width = 540;
+  const height = 260;
+  const graphWidth = width - padding.left - padding.right;
+  const graphHeight = height - padding.top - padding.bottom;
+
+  const getX = (index: number) => padding.left + (index / (data.length - 1)) * graphWidth;
+  const getY = (val: number) => height - padding.bottom - ((val - minVal) / (maxVal - minVal)) * graphHeight;
+
+  // Build clean polylines
+  const appliedPoints = data.map((d, i) => `${getX(i)},${getY(d.applied)}`).join(" ");
+  const admittedPoints = data.map((d, i) => `${getX(i)},${getY(d.admitted)}`).join(" ");
+
+  return (
+    <div className="flex flex-col justify-between h-full w-full">
+      <div>
+        <div className="mb-2 pb-2 border-b border-slate-100 flex items-center justify-between">
+          <div>
+            <h3 className="text-base md:text-lg font-extrabold text-slate-900 tracking-tight">
+              Year on Year Change in Total Students Applied v/s Admitted
+            </h3>
+            <p className="text-xs text-slate-400 font-semibold mt-0.5">
+              4-Year Progression — Applied vs Confirmed Admissions
+            </p>
+          </div>
+        </div>
+
+        {/* Scaled SVG Line Chart */}
+        <div className="relative w-full pt-1">
+          <svg
+            viewBox={`0 0 ${width} ${height}`}
+            className="w-full h-64 sm:h-72 overflow-visible select-none"
+          >
+            {/* Subtle horizontal grid lines */}
+            {[0.25, 0.5, 0.75, 1.0].map((ratio) => {
+              const val = maxDataVal * ratio;
+              const y = getY(val);
+              return (
+                <g key={ratio}>
+                  <line
+                    x1={padding.left}
+                    y1={y}
+                    x2={width - padding.right}
+                    y2={y}
+                    stroke="#f1f5f9"
+                    strokeWidth="1"
+                    strokeDasharray="4 4"
+                  />
+                  <text
+                    x={padding.left - 8}
+                    y={y + 3}
+                    textAnchor="end"
+                    className="text-[9px] font-bold fill-slate-300"
+                  >
+                    {val >= 100000 ? `${(val / 100000).toFixed(1)}L` : val.toLocaleString("en-IN")}
+                  </text>
+                </g>
+              );
+            })}
+
+            {/* Baseline X-axis */}
+            <line
+              x1={padding.left}
+              y1={height - padding.bottom}
+              x2={width - padding.right}
+              y2={height - padding.bottom}
+              stroke="#cbd5e1"
+              strokeWidth="1.5"
+            />
+
+            {/* Applied Line (Cyan / Sky) */}
+            <polyline
+              fill="none"
+              stroke="#0ea5e9"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              points={appliedPoints}
+              className="transition-all duration-300"
+            />
+
+            {/* Admitted Line (Purple / Indigo) */}
+            <polyline
+              fill="none"
+              stroke="#6366f1"
+              strokeWidth="3.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              points={admittedPoints}
+              className="transition-all duration-300"
+            />
+
+            {/* Nodes, Floating Labels and Interactive Columns */}
+            {data.map((item, index) => {
+              const x = getX(index);
+              const appliedY = getY(item.applied);
+              const admittedY = getY(item.admitted);
+              const isHovered = hoveredIndex === index;
+
+              return (
+                <g
+                  key={item.year}
+                  className="cursor-pointer group"
+                  onMouseEnter={(e) => {
+                    setHoveredIndex(index);
+                    onTooltip?.(
+                      {
+                        title: `Academic Year: ${item.year}`,
+                        subtitle: "Year on Year Applied vs Admitted",
+                        items: [
+                          { label: "Applied Students", value: item.applied.toLocaleString("en-IN"), highlight: true },
+                          { label: "Admitted Students", value: item.admitted.toLocaleString("en-IN"), highlight: true },
+                          { label: "Conversion Rate", value: `${item.conversion}%` },
+                          ...(item.appliedGrowth ? [{ label: "Applied YoY Growth", value: item.appliedGrowth }] : []),
+                        ],
+                      },
+                      { x: e.clientX, y: e.clientY }
+                    );
+                  }}
+                  onMouseLeave={() => {
+                    setHoveredIndex(null);
+                    onTooltip?.(null);
+                  }}
+                >
+                  {/* Vertical Hover Tracking Guideline */}
+                  {isHovered && (
+                    <line
+                      x1={x}
+                      y1={padding.top - 15}
+                      x2={x}
+                      y2={height - padding.bottom}
+                      stroke="#94a3b8"
+                      strokeWidth="1.5"
+                      strokeDasharray="3 3"
+                    />
+                  )}
+
+                  {/* ─── Upper Applied Node & Label ─── */}
+                  <circle
+                    cx={x}
+                    cy={appliedY}
+                    r={isHovered ? "7" : "5"}
+                    fill="#0284c7"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                    className="transition-all duration-200"
+                  />
+                  <text
+                    x={x}
+                    y={appliedY - 12}
+                    textAnchor="middle"
+                    className={`text-[12px] sm:text-[13px] font-bold fill-[#0284c7] transition-all select-none ${
+                      isHovered ? "font-black scale-110" : ""
+                    }`}
+                  >
+                    {item.applied.toLocaleString("en-IN")}
+                  </text>
+
+                  {/* ─── Lower Admitted Node & Label ─── */}
+                  <circle
+                    cx={x}
+                    cy={admittedY}
+                    r={isHovered ? "7" : "5"}
+                    fill="#4f46e5"
+                    stroke="#ffffff"
+                    strokeWidth="2"
+                    className="transition-all duration-200"
+                  />
+                  <text
+                    x={x}
+                    y={admittedY - 12}
+                    textAnchor="middle"
+                    className={`text-[12px] sm:text-[13px] font-bold fill-[#4338ca] transition-all select-none ${
+                      isHovered ? "font-black scale-110" : ""
+                    }`}
+                  >
+                    {item.admitted.toLocaleString("en-IN")}
+                  </text>
+
+                  {/* ─── Bottom X-axis Year Label ─── */}
+                  <text
+                    x={x}
+                    y={height - padding.bottom + 22}
+                    textAnchor="middle"
+                    className={`text-xs font-bold transition-all select-none ${
+                      isHovered ? "fill-blue-900 font-extrabold" : "fill-slate-700"
+                    }`}
+                  >
+                    {item.year}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </div>
+
+      {/* Clean Bottom Legend matching original Maharashtra styling */}
+      <div className="flex items-center justify-center gap-8 pt-3 mt-1 border-t border-slate-100 text-xs font-bold">
+        <span className="flex items-center gap-2 text-sky-600">
+          <span className="w-3 h-3 rounded-full bg-sky-400"></span>
+          Applied Students
+        </span>
+        <span className="flex items-center gap-2 text-indigo-700">
+          <span className="w-3 h-3 rounded-full bg-indigo-600"></span>
+          Admitted Students
+        </span>
+      </div>
+    </div>
+  );
+}
+
 interface CourseAdmittedItem {
   name: string;
   level: "UG" | "PG" | "Diploma" | "Other";
@@ -391,6 +629,61 @@ export default function CAPDashboard({
         admitted: Math.max(1, Math.round(5 * multiplier)),
       },
     ];
+  }, [multiplier]);
+
+  // 3b. Multi-Year Overall Trend (Applied vs Admitted)
+  const yoyOverallTrendData: YoYTrendItem[] = useMemo(() => {
+    const list = [
+      {
+        year: "2022-23",
+        applied: 263324,
+        admitted: 174310,
+        conversion: 66.2,
+        appliedGrowth: null,
+        admittedGrowth: null,
+        unallotted: 89014,
+      },
+      {
+        year: "2023-24",
+        applied: 390847,
+        admitted: 240519,
+        conversion: 61.5,
+        appliedGrowth: "+48.4%",
+        admittedGrowth: "+38.0%",
+        unallotted: 150328,
+      },
+      {
+        year: "2024-25",
+        applied: 603193,
+        admitted: 414512,
+        conversion: 68.7,
+        appliedGrowth: "+54.3%",
+        admittedGrowth: "+72.3%",
+        unallotted: 188681,
+      },
+      {
+        year: "2025-26",
+        applied: 678628,
+        admitted: 447131,
+        conversion: 65.9,
+        appliedGrowth: "+12.5%",
+        admittedGrowth: "+7.9%",
+        unallotted: 231497,
+      },
+    ];
+
+    return list.map((item) => {
+      const app = Math.round(item.applied * multiplier);
+      const adm = Math.round(item.admitted * multiplier);
+      const conv = Number(((adm / (app || 1)) * 100).toFixed(1));
+      return {
+        ...item,
+        applied: app,
+        admitted: adm,
+        conversion: conv,
+        unallotted: app - adm,
+      };
+    });
   }, [multiplier]);
 
   // 4. Year on Year Applied Course-wise Admitted Students
@@ -942,169 +1235,12 @@ export default function CAPDashboard({
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-        {/* Left: Admission Conversion Funnel with Hover Tooltips */}
-        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-soft p-6 lg:p-7">
-          <div className="mb-4 pb-3 border-b border-slate-100">
-            <h3 className="text-base md:text-lg font-extrabold text-slate-900 tracking-tight">
-              CAP Admission Conversion Funnel
-            </h3>
-            <p className="text-xs text-slate-400 font-semibold mt-0.5">2025-26 — Application to Admission Pipeline</p>
-          </div>
-
-          <div className="flex flex-col gap-4 mt-4">
-            {/* Step 1: Total Applications */}
-            <div
-              onMouseMove={(e) =>
-                setTooltip({
-                  data: {
-                    title: "Stage 1: CET Portal Registration",
-                    subtitle: "Centralized Admission Process Pipeline F.Y. 2025-26",
-                    items: [
-                      { label: "Total Applications", value: summary.totalApplications.toLocaleString("en-IN"), highlight: true },
-                      { label: "Pipeline Stage Share", value: "100.0%" },
-                      { label: "Eligibility Criteria", value: "Passed CET / JEE / Equivalent" },
-                    ],
-                  },
-                  pos: { x: e.clientX, y: e.clientY },
-                })
-              }
-              onMouseLeave={() => setTooltip(null)}
-              className="relative cursor-pointer"
-            >
-              <div className="bg-gradient-to-r from-blue-600 to-blue-500 rounded-2xl p-4 text-white shadow-sm hover:brightness-105 transition-all">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <Users size={22} className="stroke-[2.2]" />
-                    <div>
-                      <p className="text-[11px] font-bold text-blue-100 uppercase tracking-wider">Total CAP Applications</p>
-                      <p className="text-2xl font-black tracking-tight">{summary.totalApplications.toLocaleString("en-IN")}</p>
-                    </div>
-                  </div>
-                  <span className="text-xs font-extrabold bg-white/20 px-2.5 py-1 rounded-lg">100%</span>
-                </div>
-              </div>
-              <div className="flex justify-center my-1">
-                <ArrowRight size={20} className="text-slate-300 rotate-90" />
-              </div>
-            </div>
-
-            {/* Step 2: Merit List Verified */}
-            {(() => {
-              const meritCount = Math.round(summary.totalApplications * 0.88);
-              const meritPct = ((meritCount / summary.totalApplications) * 100).toFixed(1);
-              return (
-                <div
-                  onMouseMove={(e) =>
-                    setTooltip({
-                      data: {
-                        title: "Stage 2: Document Verification & Merit List",
-                        subtitle: "Scrutiny Centers / E-Scrutiny Verification",
-                        items: [
-                          { label: "Verified Candidates", value: meritCount.toLocaleString("en-IN"), highlight: true },
-                          { label: "Verification Rate", value: `${meritPct}%` },
-                          { label: "Status", value: "Merit Rank Assigned" },
-                        ],
-                      },
-                      pos: { x: e.clientX, y: e.clientY },
-                    })
-                  }
-                  onMouseLeave={() => setTooltip(null)}
-                  className="relative cursor-pointer"
-                >
-                  <div className="bg-gradient-to-r from-indigo-600 to-indigo-500 rounded-2xl p-4 text-white shadow-sm mx-4 hover:brightness-105 transition-all">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <GraduationCap size={22} className="stroke-[2.2]" />
-                        <div>
-                          <p className="text-[11px] font-bold text-indigo-100 uppercase tracking-wider">Merit List Verified</p>
-                          <p className="text-2xl font-black tracking-tight">{meritCount.toLocaleString("en-IN")}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-extrabold bg-white/20 px-2.5 py-1 rounded-lg">{meritPct}%</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-center my-1">
-                    <ArrowRight size={20} className="text-slate-300 rotate-90" />
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Step 3: Seat Allotted */}
-            {(() => {
-              const allotCount = Math.round(summary.totalApplications * 0.76);
-              const allotPct = ((allotCount / summary.totalApplications) * 100).toFixed(1);
-              return (
-                <div
-                  onMouseMove={(e) =>
-                    setTooltip({
-                      data: {
-                        title: "Stage 3: Central Choice Allotment",
-                        subtitle: "Round 1, 2, 3 Direct Seat Allotment by State CET Cell",
-                        items: [
-                          { label: "Seats Allotted", value: allotCount.toLocaleString("en-IN"), highlight: true },
-                          { label: "Allotment Ratio", value: `${allotPct}%` },
-                          { label: "Option Choice Rules", value: "Strict Merit & Preference Matrix" },
-                        ],
-                      },
-                      pos: { x: e.clientX, y: e.clientY },
-                    })
-                  }
-                  onMouseLeave={() => setTooltip(null)}
-                  className="relative cursor-pointer"
-                >
-                  <div className="bg-gradient-to-r from-teal-600 to-teal-500 rounded-2xl p-4 text-white shadow-sm mx-8 hover:brightness-105 transition-all">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <Layers size={22} className="stroke-[2.2]" />
-                        <div>
-                          <p className="text-[11px] font-bold text-teal-100 uppercase tracking-wider">Seat Allotted via CAP</p>
-                          <p className="text-2xl font-black tracking-tight">{allotCount.toLocaleString("en-IN")}</p>
-                        </div>
-                      </div>
-                      <span className="text-xs font-extrabold bg-white/20 px-2.5 py-1 rounded-lg">{allotPct}%</span>
-                    </div>
-                  </div>
-                  <div className="flex justify-center my-1">
-                    <ArrowRight size={20} className="text-slate-300 rotate-90" />
-                  </div>
-                </div>
-              );
-            })()}
-
-            {/* Step 4: Admissions Confirmed */}
-            <div
-              onMouseMove={(e) =>
-                setTooltip({
-                  data: {
-                    title: "Stage 4: Institutional Reporting & Final Confirmation",
-                    subtitle: "Direct Fee Payment & Document Submission at College",
-                    items: [
-                      { label: "Confirmed Admissions", value: summary.admissionsTaken.toLocaleString("en-IN"), highlight: true },
-                      { label: "Final Fill Rate", value: `${fillRatePct}%` },
-                      { label: "Status", value: "Enrolled & Student ID Generated" },
-                    ],
-                  },
-                  pos: { x: e.clientX, y: e.clientY },
-                })
-              }
-              onMouseLeave={() => setTooltip(null)}
-              className="bg-gradient-to-r from-emerald-600 to-emerald-500 rounded-2xl p-4 text-white shadow-sm mx-12 hover:brightness-105 transition-all cursor-pointer"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-3">
-                  <BookOpen size={22} className="stroke-[2.2]" />
-                  <div>
-                    <p className="text-[11px] font-bold text-emerald-100 uppercase tracking-wider">Admissions Confirmed</p>
-                    <p className="text-2xl font-black tracking-tight">{summary.admissionsTaken.toLocaleString("en-IN")}</p>
-                  </div>
-                </div>
-                <span className="text-xs font-extrabold bg-white/20 px-2.5 py-1 rounded-lg">
-                  {fillRatePct}%
-                </span>
-              </div>
-            </div>
-          </div>
+        {/* Left: Year on Year Change in Total Students Applied v/s Admitted (Clean Line Graph) */}
+        <div className="bg-white rounded-3xl border border-slate-200/90 shadow-soft p-6 lg:p-7 flex flex-col justify-between">
+          <YoYAppliedAdmittedLineGraph
+            data={yoyOverallTrendData}
+            onTooltip={(data, pos) => setTooltip(data && pos ? { data, pos } : null)}
+          />
         </div>
 
         {/* Right: Category-wise Distribution of Admitted Students (DONUT) */}
