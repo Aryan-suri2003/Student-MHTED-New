@@ -67,7 +67,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
       <aside className={`bg-brand-900 text-white flex flex-col h-[calc(100vh-32px)] my-4 ml-4 rounded-[40px] shadow-lg transition-all duration-300 relative overflow-hidden flex-shrink-0
         ${isCollapsed ? "w-[90px] px-2 py-6" : "w-[260px] pl-6 pr-4 py-8"}
       `}>
-        
+
         {/* Branding Section */}
         <div className={`flex items-center mb-8 ${isCollapsed ? "justify-center" : "gap-3 px-2"}`}>
           <div className="w-10 h-10 rounded-full bg-white/20 flex items-center justify-center font-extrabold text-sm tracking-wider flex-shrink-0">
@@ -91,7 +91,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
                 onClick={() => setActiveTab(tab.id)}
                 className={`flex items-center transition-all duration-300 cursor-pointer select-none
                   ${isCollapsed ? "justify-center w-[50px] mx-auto py-3 rounded-full" : "justify-start py-3 pl-4 rounded-l-full w-full"}
-                  ${isActive 
+                  ${isActive
                     ? (isCollapsed ? "bg-[var(--color-background)] text-brand-900 shadow-sm" : "sidebar-active-tab")
                     : "text-white/80 hover:bg-white/10 hover:text-white"
                   }
@@ -111,7 +111,7 @@ export default function Sidebar({ activeTab, setActiveTab }: SidebarProps) {
 
         {/* Toggle Button at Bottom */}
         <div className={`mt-auto flex ${isCollapsed ? "justify-center" : "justify-start pl-4"}`}>
-          <button 
+          <button
             onClick={() => setIsCollapsed(!isCollapsed)}
             className="w-10 h-10 rounded-full bg-white text-brand-900 flex items-center justify-center hover:bg-blue-50 transition-colors shadow-md"
           >

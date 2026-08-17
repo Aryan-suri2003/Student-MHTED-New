@@ -2119,7 +2119,6 @@ function UniversityCoverageChart({
                       {uni.pct.toFixed(2)}%
                     </span>
 
-                    {/* Bar Rect */}
                     <div
                       style={{
                         height: `${barPercent}%`,
@@ -2127,14 +2126,22 @@ function UniversityCoverageChart({
                         transform: isSelected ? "scale(1.08)" : "none",
                         boxShadow: isSelected ? getGlowColor(uni.pct) : "none"
                       }}
-                      className={`w-12 rounded-t-md transition-all duration-300 hover:brightness-110 cursor-pointer relative shadow-sm ${
+                      className={`w-12 rounded-t-md transition-all duration-300 relative shadow-sm ${
+                        (isFilterActive && !isMatch) || (selectedUniIndex !== null && selectedUniIndex !== index)
+                          ? "cursor-default"
+                          : "hover:brightness-110 cursor-pointer"
+                      } ${
                         isMatch ? "ring-4 ring-emerald-500 shadow-xl brightness-105" : ""
                       }`}
                       onClick={(e) => {
                         e.stopPropagation();
+                        if (isFilterActive && !isMatch) return;
+                        if (selectedUniIndex !== null && selectedUniIndex !== index) return;
                         setSelectedUniIndex(selectedUniIndex === index ? null : index);
                       }}
                       onMouseEnter={() => {
+                        if (isFilterActive && !isMatch) return;
+                        if (selectedUniIndex !== null && selectedUniIndex !== index) return;
                         setHoveredUni(uni);
                         setHoveredIndex(index);
                       }}
@@ -2705,16 +2712,24 @@ function CategoryUniversityDistributionChart({
                             opacity: selectedSegment !== null ? (isSegmentSelected ? 1 : 0.25) : 1,
                             filter: selectedSegment !== null && !isSegmentSelected ? "grayscale(40%)" : "none"
                           }}
-                          className={`w-full flex items-center justify-center relative transition-all duration-300 hover:brightness-105 ${
+                          className={`w-full flex items-center justify-center relative transition-all duration-300 ${
+                            (isFilterActive && !isMatch) || (selectedSegment !== null && !isSegmentSelected)
+                              ? "cursor-default"
+                              : "hover:brightness-105 cursor-pointer"
+                          } ${
                             isFirst ? "rounded-t-[5px]" : ""
                           } ${
                             isLast ? "rounded-b-[5px]" : ""
                           }`}
                           onClick={(e) => {
                             e.stopPropagation();
+                            if (isFilterActive && !isMatch) return;
+                            if (selectedSegment !== null && !isSegmentSelected) return;
                             setSelectedSegment(isSegmentSelected ? null : { uni: uni.name, cat });
                           }}
                           onMouseEnter={() => {
+                            if (isFilterActive && !isMatch) return;
+                            if (selectedSegment !== null && !isSegmentSelected) return;
                             setHoveredSegment({
                               uni: uni.name,
                               cat,

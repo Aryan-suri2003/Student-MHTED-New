@@ -52,7 +52,11 @@ export default function Filters({ filters, onFilterChange, activeTab }: FiltersP
               Academic Year
             </label>
             <div className="relative">
-              <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
+              <select
+                value={currentFilters.academicYear}
+                onChange={(e) => handleChange("academicYear", e.target.value)}
+                className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+              >
                 <option className="text-slate-900" value="2025-26">2025-26 (Current)</option>
                 <option className="text-slate-900" value="2024-25">2024-25</option>
                 <option className="text-slate-900" value="2023-24">2023-24</option>
@@ -73,7 +77,15 @@ export default function Filters({ filters, onFilterChange, activeTab }: FiltersP
                 <option className="text-slate-900" value="All">All Districts</option>
                 <option className="text-slate-900" value="Kolkata">Kolkata</option>
                 <option className="text-slate-900" value="Howrah">Howrah</option>
+                <option className="text-slate-900" value="North 24 Parganas">North 24 Parganas</option>
+                <option className="text-slate-900" value="South 24 Parganas">South 24 Parganas</option>
+                <option className="text-slate-900" value="Hooghly">Hooghly</option>
                 <option className="text-slate-900" value="Darjeeling">Darjeeling</option>
+                <option className="text-slate-900" value="Paschim Bardhaman">Paschim Bardhaman</option>
+                <option className="text-slate-900" value="Purba Bardhaman">Purba Bardhaman</option>
+                <option className="text-slate-900" value="Nadia">Nadia</option>
+                <option className="text-slate-900" value="Malda">Malda</option>
+                <option className="text-slate-900" value="Murshidabad">Murshidabad</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
                 <ChevronDown size={16} />
@@ -89,9 +101,11 @@ export default function Filters({ filters, onFilterChange, activeTab }: FiltersP
             <div className="relative">
               <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
                 <option className="text-slate-900" value="All">All Streams</option>
-                <option className="text-slate-900" value="Engineering">Engineering</option>
+                <option className="text-slate-900" value="Engineering">Engineering & Tech</option>
                 <option className="text-slate-900" value="Pharmacy">Pharmacy</option>
-                <option className="text-slate-900" value="Management">Management</option>
+                <option className="text-slate-900" value="Management">Management (MBA/MCA)</option>
+                <option className="text-slate-900" value="Architecture">Architecture</option>
+                <option className="text-slate-900" value="General Degree">General Degree (Arts/Science/Com)</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
                 <ChevronDown size={16} />
@@ -107,6 +121,12 @@ export default function Filters({ filters, onFilterChange, activeTab }: FiltersP
             <div className="relative">
               <select className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-4 pr-10 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-sm focus:outline-none focus:ring-2 focus:ring-white/20">
                 <option className="text-slate-900" value="All">All Colleges & Schools</option>
+                <option className="text-slate-900" value="Presidency College">Presidency College Kolkata</option>
+                <option className="text-slate-900" value="St. Xavier's College">St. Xavier&apos;s College Kolkata</option>
+                <option className="text-slate-900" value="Heritage Tech">Heritage Institute of Technology</option>
+                <option className="text-slate-900" value="Haldia Institute">Haldia Institute of Technology</option>
+                <option className="text-slate-900" value="KGEC Kalyani">Kalyani Govt Engineering College</option>
+                <option className="text-slate-900" value="JGEC Jalpaiguri">Jalpaiguri Govt Engineering College</option>
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3.5 text-white/80">
                 <ChevronDown size={16} />
