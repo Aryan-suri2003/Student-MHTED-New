@@ -137,9 +137,8 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
               onClick={() => setActiveLegendIndex(activeLegendIndex === index ? null : index)}
               onMouseEnter={() => setHoveredSlice(slice)}
               onMouseLeave={() => setHoveredSlice(null)}
-              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer ${
-                isSelected ? "bg-brand-50 font-bold text-brand-900" : "hover:bg-slate-50 text-slate-600"
-              }`}
+              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer ${isSelected ? "bg-brand-50 font-bold text-brand-900" : "hover:bg-slate-50 text-slate-600"
+                }`}
             >
               <span
                 className="w-3 h-3 rounded-full flex-shrink-0"
@@ -165,8 +164,8 @@ interface UniversityRecord {
   repeaterPct: number;
   medium: {
     english: { female: number; male: number };
-    marathi: { female: number; male: number };
-    sanskrit: { female: number; male: number };
+    bengali: { female: number; male: number };
+    hindi: { female: number; male: number };
   };
   results: {
     pass: number;
@@ -178,243 +177,257 @@ interface UniversityRecord {
 }
 
 const UNIVERSITIES_DATA: Record<string, UniversityRecord> = {
-  SPPU: {
-    code: "SPPU",
-    name: "Savitribai Phule Pune University",
-    students: 611564,
-    papers: 6633,
-    fresherPct: 75,
-    repeaterPct: 25,
-    medium: {
-      english: { female: 224000, male: 234564 },
-      marathi: { female: 68000, male: 74000 },
-      sanskrit: { female: 5000, male: 6000 },
-    },
-    results: { pass: 42150, fail: 8920, atkt: 12000, absent: 1240, backlog: 6100 },
-  },
-  MU: {
-    code: "MU",
-    name: "University of Mumbai",
-    students: 540210,
-    papers: 6512,
-    fresherPct: 79,
-    repeaterPct: 21,
-    medium: {
-      english: { female: 230000, male: 225210 },
-      marathi: { female: 42000, male: 38000 },
-      sanskrit: { female: 2500, male: 2500 },
-    },
-    results: { pass: 52400, fail: 12100, atkt: 14200, absent: 1450, backlog: 7200 },
-  },
-  DBATU: {
-    code: "DBATU",
-    name: "Dr. BATU Lonere",
-    students: 167483,
-    papers: 6397,
-    fresherPct: 82,
-    repeaterPct: 18,
-    medium: {
-      english: { female: 68000, male: 74483 },
-      marathi: { female: 11000, male: 12000 },
-      sanskrit: { female: 1000, male: 1000 },
-    },
-    results: { pass: 18200, fail: 4600, atkt: 3200, absent: 540, backlog: 2800 },
-  },
-  SUK: {
-    code: "SUK",
-    name: "Shivaji University Kolhapur",
-    students: 187944,
-    papers: 5528,
-    fresherPct: 75,
-    repeaterPct: 25,
-    medium: {
-      english: { female: 66752, male: 61739 },
-      marathi: { female: 28000, male: 29453 },
-      sanskrit: { female: 1000, male: 1000 },
-    },
-    results: { pass: 66752, fail: 61739, atkt: 8400, absent: 820, backlog: 4200 },
-  },
-  SGBAU: {
-    code: "SGBAU",
-    name: "Sant Gadge Baba Amravati University",
-    students: 199940,
-    papers: 5436,
-    fresherPct: 73,
-    repeaterPct: 27,
-    medium: {
-      english: { female: 72000, male: 79940 },
-      marathi: { female: 21000, male: 24000 },
-      sanskrit: { female: 1500, male: 1500 },
-    },
-    results: { pass: 14200, fail: 5400, atkt: 4100, absent: 910, backlog: 3100 },
-  },
-  PAHSU: {
-    code: "PAHSU",
-    name: "Solapur University",
-    students: 56150,
-    papers: 3052,
-    fresherPct: 76,
-    repeaterPct: 24,
-    medium: {
-      english: { female: 21000, male: 23150 },
-      marathi: { female: 5500, male: 6000 },
-      sanskrit: { female: 250, male: 250 },
-    },
-    results: { pass: 38286, fail: 6624, atkt: 2300, absent: 410, backlog: 1800 },
-  },
-  KBCNMU: {
-    code: "KBCNMU",
-    name: "North Maharashtra University",
-    students: 129644,
-    papers: 2152,
+  CU: {
+    code: "CU",
+    name: "University of Calcutta",
+    students: 485000,
+    papers: 6850,
     fresherPct: 78,
     repeaterPct: 22,
     medium: {
-      english: { female: 47000, male: 53644 },
-      marathi: { female: 13000, male: 15000 },
-      sanskrit: { female: 500, male: 500 },
+      english: { female: 185000, male: 175000 },
+      bengali: { female: 58000, male: 61000 },
+      hindi: { female: 3000, male: 3000 },
     },
-    results: { pass: 9800, fail: 3100, atkt: 2100, absent: 620, backlog: 2100 },
+    results: { pass: 48200, fail: 8900, atkt: 11200, absent: 1100, backlog: 5800 },
   },
-  SRTMUN: {
-    code: "SRTMUN",
-    name: "SRTM University Nanded",
-    students: 112450,
-    papers: 2090,
-    fresherPct: 77,
-    repeaterPct: 23,
+  JU: {
+    code: "JU",
+    name: "Jadavpur University",
+    students: 82400,
+    papers: 4920,
+    fresherPct: 92,
+    repeaterPct: 8,
     medium: {
-      english: { female: 39000, male: 46450 },
-      marathi: { female: 12000, male: 14000 },
-      sanskrit: { female: 500, male: 500 },
+      english: { female: 36000, male: 41400 },
+      bengali: { female: 2400, male: 2200 },
+      hindi: { female: 200, male: 200 },
     },
-    results: { pass: 11400, fail: 3800, atkt: 2600, absent: 520, backlog: 2400 },
+    results: { pass: 18400, fail: 920, atkt: 800, absent: 210, backlog: 720 },
   },
-  HSNC: {
-    code: "HSNC",
-    name: "HSNC University Mumbai",
-    students: 13944,
-    papers: 2060,
-    fresherPct: 75,
-    repeaterPct: 25,
-    medium: {
-      english: { female: 6200, male: 6844 },
-      marathi: { female: 400, male: 450 },
-      sanskrit: { female: 25, male: 25 },
-    },
-    results: { pass: 8079, fail: 2553, atkt: 800, absent: 180, backlog: 420 },
-  },
-  BAMU: {
-    code: "BAMU",
-    name: "Dr. BAMU Chh. Sambhajinagar",
-    students: 311504,
-    papers: 1470,
-    fresherPct: 85,
-    repeaterPct: 15,
-    medium: {
-      english: { female: 110000, male: 125504 },
-      marathi: { female: 34000, male: 38000 },
-      sanskrit: { female: 2000, male: 2000 },
-    },
-    results: { pass: 19400, fail: 6200, atkt: 5100, absent: 1100, backlog: 4500 },
-  },
-  COEP: {
-    code: "COEP",
-    name: "COEP Technological University",
-    students: 12629,
-    papers: 1320,
-    fresherPct: 89,
-    repeaterPct: 11,
-    medium: {
-      english: { female: 5400, male: 6829 },
-      marathi: { female: 180, male: 200 },
-      sanskrit: { female: 10, male: 10 },
-    },
-    results: { pass: 1411, fail: 217, atkt: 180, absent: 45, backlog: 120 },
-  },
-  KBPU: {
-    code: "KBPU",
-    name: "Karmaveer Bhaurao Patil University",
-    students: 6902,
-    papers: 1189,
+  MAKAUT: {
+    code: "MAKAUT",
+    name: "Maulana Abul Kalam Azad Univ of Tech",
+    students: 215600,
+    papers: 6420,
     fresherPct: 84,
     repeaterPct: 16,
     medium: {
-      english: { female: 2800, male: 3302 },
-      marathi: { female: 380, male: 400 },
-      sanskrit: { female: 10, male: 10 },
+      english: { female: 85000, male: 115600 },
+      bengali: { female: 6500, male: 7500 },
+      hindi: { female: 500, male: 500 },
     },
-    results: { pass: 890, fail: 180, atkt: 90, absent: 32, backlog: 85 },
+    results: { pass: 32400, fail: 4800, atkt: 5100, absent: 650, backlog: 3100 },
   },
-  HBSU: {
-    code: "HBSU",
-    name: "Dr. Homi Bhabha State University",
-    students: 7186,
-    papers: 1088,
-    fresherPct: 83,
-    repeaterPct: 17,
+  BU: {
+    code: "BU",
+    name: "University of Burdwan",
+    students: 298500,
+    papers: 5640,
+    fresherPct: 76,
+    repeaterPct: 24,
     medium: {
-      english: { female: 3100, male: 3686 },
-      marathi: { female: 180, male: 200 },
-      sanskrit: { female: 10, male: 10 },
+      english: { female: 95000, male: 98500 },
+      bengali: { female: 48000, male: 52000 },
+      hindi: { female: 2500, male: 2500 },
     },
-    results: { pass: 4313, fail: 2109, atkt: 520, absent: 95, backlog: 210 },
+    results: { pass: 29500, fail: 7800, atkt: 7400, absent: 890, backlog: 4600 },
   },
-  SNDT: {
-    code: "SNDT",
-    name: "SNDT Women's University",
-    students: 156349,
-    papers: 788,
-    fresherPct: 88,
-    repeaterPct: 12,
+  WBSU: {
+    code: "WBSU",
+    name: "West Bengal State University Barasat",
+    students: 176400,
+    papers: 4210,
+    fresherPct: 79,
+    repeaterPct: 21,
     medium: {
-      english: { female: 112000, male: 0 },
-      marathi: { female: 39349, male: 0 },
-      sanskrit: { female: 5000, male: 0 },
+      english: { female: 64000, male: 66400 },
+      bengali: { female: 21000, male: 23000 },
+      hindi: { female: 1000, male: 1000 },
     },
-    results: { pass: 1316, fail: 78, atkt: 120, absent: 60, backlog: 90 },
+    results: { pass: 18900, fail: 4100, atkt: 3800, absent: 520, backlog: 2700 },
   },
-  GUG: {
-    code: "GUG",
-    name: "Gondwana University Gadchiroli",
-    students: 45246,
-    papers: 690,
+  KU: {
+    code: "KU",
+    name: "University of Kalyani",
+    students: 189200,
+    papers: 4560,
     fresherPct: 81,
     repeaterPct: 19,
     medium: {
-      english: { female: 15000, male: 19246 },
-      marathi: { female: 5000, male: 5800 },
-      sanskrit: { female: 100, male: 100 },
+      english: { female: 72000, male: 75200 },
+      bengali: { female: 19000, male: 21000 },
+      hindi: { female: 1000, male: 1000 },
     },
-    results: { pass: 3200, fail: 850, atkt: 420, absent: 180, backlog: 490 },
+    results: { pass: 21200, fail: 4600, atkt: 4200, absent: 580, backlog: 2900 },
   },
-  LIT: {
-    code: "LIT",
-    name: "Laxminarayan Innovation Tech Univ",
-    students: 4820,
-    papers: 560,
+  VU: {
+    code: "VU",
+    name: "Vidyasagar University Midnapore",
+    students: 194800,
+    papers: 4380,
+    fresherPct: 80,
+    repeaterPct: 20,
+    medium: {
+      english: { female: 74000, male: 78800 },
+      bengali: { female: 19500, male: 21000 },
+      hindi: { female: 750, male: 750 },
+    },
+    results: { pass: 22400, fail: 5100, atkt: 4600, absent: 610, backlog: 3200 },
+  },
+  NBU: {
+    code: "NBU",
+    name: "North Bengal University Siliguri",
+    students: 142300,
+    papers: 3890,
+    fresherPct: 77,
+    repeaterPct: 23,
+    medium: {
+      english: { female: 54000, male: 58300 },
+      bengali: { female: 13500, male: 14500 },
+      hindi: { female: 1000, male: 1000 },
+    },
+    results: { pass: 15600, fail: 3900, atkt: 3400, absent: 480, backlog: 2400 },
+  },
+  UGB: {
+    code: "UGB",
+    name: "University of Gour Banga Malda",
+    students: 118500,
+    papers: 3240,
+    fresherPct: 75,
+    repeaterPct: 25,
+    medium: {
+      english: { female: 44000, male: 48500 },
+      bengali: { female: 12000, male: 13000 },
+      hindi: { female: 500, male: 500 },
+    },
+    results: { pass: 12400, fail: 3600, atkt: 2900, absent: 420, backlog: 2100 },
+  },
+  KNU: {
+    code: "KNU",
+    name: "Kazi Nazrul University Asansol",
+    students: 96400,
+    papers: 2780,
+    fresherPct: 79,
+    repeaterPct: 21,
+    medium: {
+      english: { female: 37000, male: 41400 },
+      bengali: { female: 8500, male: 8500 },
+      hindi: { female: 500, male: 500 },
+    },
+    results: { pass: 10800, fail: 2600, atkt: 2200, absent: 340, backlog: 1700 },
+  },
+  SKBU: {
+    code: "SKBU",
+    name: "Sidho-Kanho-Birsha University Purulia",
+    students: 84200,
+    papers: 2460,
+    fresherPct: 76,
+    repeaterPct: 24,
+    medium: {
+      english: { female: 32000, male: 36200 },
+      bengali: { female: 7500, male: 8000 },
+      hindi: { female: 250, male: 250 },
+    },
+    results: { pass: 9200, fail: 2400, atkt: 1900, absent: 310, backlog: 1500 },
+  },
+  BKU: {
+    code: "BKU",
+    name: "Bankura University",
+    students: 76900,
+    papers: 2190,
+    fresherPct: 78,
+    repeaterPct: 22,
+    medium: {
+      english: { female: 29000, male: 33900 },
+      bengali: { female: 6500, male: 7000 },
+      hindi: { female: 250, male: 250 },
+    },
+    results: { pass: 8600, fail: 2100, atkt: 1700, absent: 280, backlog: 1300 },
+  },
+  CBPBU: {
+    code: "CBPBU",
+    name: "Cooch Behar Panchanan Barma Univ",
+    students: 68400,
+    papers: 1980,
+    fresherPct: 77,
+    repeaterPct: 23,
+    medium: {
+      english: { female: 26000, male: 30400 },
+      bengali: { female: 5500, male: 6000 },
+      hindi: { female: 250, male: 250 },
+    },
+    results: { pass: 7800, fail: 1900, atkt: 1500, absent: 250, backlog: 1200 },
+  },
+  Presidency: {
+    code: "Presidency",
+    name: "Presidency University Kolkata",
+    students: 28600,
+    papers: 1840,
     fresherPct: 91,
     repeaterPct: 9,
     medium: {
-      english: { female: 2100, male: 2600 },
-      marathi: { female: 60, male: 50 },
-      sanskrit: { female: 5, male: 5 },
+      english: { female: 13500, male: 14100 },
+      bengali: { female: 450, male: 450 },
+      hindi: { female: 50, male: 50 },
     },
-    results: { pass: 647, fail: 32, atkt: 40, absent: 12, backlog: 28 },
+    results: { pass: 6200, fail: 420, atkt: 380, absent: 95, backlog: 240 },
+  },
+  "Visva-Bharati": {
+    code: "Visva-Bharati",
+    name: "Visva-Bharati Central University Santiniketan",
+    students: 34200,
+    papers: 1920,
+    fresherPct: 88,
+    repeaterPct: 12,
+    medium: {
+      english: { female: 15000, male: 16200 },
+      bengali: { female: 1400, male: 1400 },
+      hindi: { female: 100, male: 100 },
+    },
+    results: { pass: 7400, fail: 680, atkt: 590, absent: 120, backlog: 380 },
+  },
+  Aliah: {
+    code: "Aliah",
+    name: "Aliah University Kolkata",
+    students: 24800,
+    papers: 1420,
+    fresherPct: 85,
+    repeaterPct: 15,
+    medium: {
+      english: { female: 10500, male: 12300 },
+      bengali: { female: 900, male: 1000 },
+      hindi: { female: 50, male: 50 },
+    },
+    results: { pass: 5400, fail: 720, atkt: 610, absent: 140, backlog: 390 },
+  },
+  RBU: {
+    code: "RBU",
+    name: "Rabindra Bharati University",
+    students: 38900,
+    papers: 1650,
+    fresherPct: 87,
+    repeaterPct: 13,
+    medium: {
+      english: { female: 16500, male: 18400 },
+      bengali: { female: 1900, male: 2000 },
+      hindi: { female: 50, male: 50 },
+    },
+    results: { pass: 8100, fail: 890, atkt: 780, absent: 160, backlog: 490 },
   },
 };
 
 const TOTAL_AGGREGATE: UniversityRecord = {
   code: "TOTAL",
-  name: "All Universities (Maharashtra State)",
+  name: "All Universities (West Bengal State)",
   students: 2311967,
   papers: 38714,
   fresherPct: 86,
   repeaterPct: 14,
   medium: {
     english: { female: 847440, male: 858017 },
-    marathi: { female: 141230, male: 152155 },
-    sanskrit: { female: 19896, male: 42030 },
+    bengali: { female: 141230, male: 152155 },
+    hindi: { female: 19896, male: 42030 },
   },
   results: {
     pass: 121355,
@@ -427,62 +440,65 @@ const TOTAL_AGGREGATE: UniversityRecord = {
 
 // Full list of universities for the main exam comparison chart
 const UNIVERSITY_EXAMS_LIST = [
-  { name: "SPPU", papers: 6633, students: 611564 },
-  { name: "MU", papers: 6512, students: 540210 },
-  { name: "DBATU", papers: 6397, students: 167483 },
-  { name: "SUK", papers: 5528, students: 187944 },
-  { name: "SGBAU", papers: 5436, students: 199940 },
-  { name: "PAHSU", papers: 3052, students: 56150 },
-  { name: "KBCNMU", papers: 2152, students: 129644 },
-  { name: "SRTMUN", papers: 2090, students: 112450 },
-  { name: "HSNC", papers: 2060, students: 13944 },
-  { name: "BAMU", papers: 1470, students: 311504 },
-  { name: "COEP", papers: 1320, students: 12629 },
-  { name: "KBPU", papers: 1189, students: 6902 },
-  { name: "HBSU", papers: 1088, students: 7186 },
-  { name: "SNDT", papers: 788, students: 156349 },
-  { name: "GUG", papers: 690, students: 45246 },
-  { name: "LIT", papers: 560, students: 4820 },
+  { name: "CU", papers: 6850, students: 485000 },
+  { name: "MAKAUT", papers: 6420, students: 215600 },
+  { name: "BU", papers: 5640, students: 298500 },
+  { name: "JU", papers: 4920, students: 82400 },
+  { name: "KU", papers: 4560, students: 189200 },
+  { name: "VU", papers: 4380, students: 194800 },
+  { name: "WBSU", papers: 4210, students: 176400 },
+  { name: "NBU", papers: 3890, students: 142300 },
+  { name: "UGB", papers: 3240, students: 118500 },
+  { name: "KNU", papers: 2780, students: 96400 },
+  { name: "SKBU", papers: 2460, students: 84200 },
+  { name: "BKU", papers: 2190, students: 76900 },
+  { name: "CBPBU", papers: 1980, students: 68400 },
+  { name: "Visva-Bharati", papers: 1920, students: 34200 },
+  { name: "Presidency", papers: 1840, students: 28600 },
+  { name: "RBU", papers: 1650, students: 38900 },
+  { name: "Aliah", papers: 1420, students: 24800 },
 ];
 
 // Full list of universities for Fresher vs Repeater
 const FRESHER_REPEATER_LIST = [
-  { name: "SGBAU", fresher: 73, repeater: 27 },
-  { name: "SUK", fresher: 75, repeater: 25 },
-  { name: "HSNC", fresher: 75, repeater: 25 },
-  { name: "SPPU", fresher: 75, repeater: 25 },
-  { name: "PAHSU", fresher: 76, repeater: 24 },
-  { name: "SRTMUN", fresher: 77, repeater: 23 },
-  { name: "KBCNMU", fresher: 78, repeater: 22 },
-  { name: "MU", fresher: 79, repeater: 21 },
-  { name: "GUG", fresher: 81, repeater: 19 },
-  { name: "DBATU", fresher: 82, repeater: 18 },
-  { name: "HBSU", fresher: 83, repeater: 17 },
-  { name: "KBPU", fresher: 84, repeater: 16 },
-  { name: "BAMU", fresher: 85, repeater: 15 },
-  { name: "SNDT", fresher: 88, repeater: 12 },
-  { name: "COEP", fresher: 89, repeater: 11 },
-  { name: "LIT", fresher: 91, repeater: 9 },
+  { name: "UGB", fresher: 75, repeater: 25 },
+  { name: "BU", fresher: 76, repeater: 24 },
+  { name: "SKBU", fresher: 76, repeater: 24 },
+  { name: "NBU", fresher: 77, repeater: 23 },
+  { name: "CBPBU", fresher: 77, repeater: 23 },
+  { name: "CU", fresher: 78, repeater: 22 },
+  { name: "BKU", fresher: 78, repeater: 22 },
+  { name: "WBSU", fresher: 79, repeater: 21 },
+  { name: "KNU", fresher: 79, repeater: 21 },
+  { name: "VU", fresher: 80, repeater: 20 },
+  { name: "KU", fresher: 81, repeater: 19 },
+  { name: "MAKAUT", fresher: 84, repeater: 16 },
+  { name: "Aliah", fresher: 85, repeater: 15 },
+  { name: "RBU", fresher: 87, repeater: 13 },
+  { name: "Visva-Bharati", fresher: 88, repeater: 12 },
+  { name: "Presidency", fresher: 91, repeater: 9 },
+  { name: "JU", fresher: 92, repeater: 8 },
 ];
 
 // Full list of universities for Results Breakup
 const RESULTS_BREAKUP_LIST = [
-  { name: "SUK", pass: 66752, fail: 61739, percentage: 54 },
-  { name: "PAHSU", pass: 38286, fail: 6624, percentage: 66 },
-  { name: "HSNC", pass: 8079, fail: 2553, percentage: 76 },
-  { name: "HBSU", pass: 4313, fail: 2109, percentage: 71 },
-  { name: "SPPU", pass: 42150, fail: 8920, percentage: 83 },
-  { name: "MU", pass: 52400, fail: 12100, percentage: 81 },
-  { name: "DBATU", pass: 18200, fail: 4600, percentage: 80 },
-  { name: "SGBAU", pass: 14200, fail: 5400, percentage: 72 },
-  { name: "SRTMUN", pass: 11400, fail: 3800, percentage: 75 },
-  { name: "KBCNMU", pass: 9800, fail: 3100, percentage: 76 },
-  { name: "BAMU", pass: 19400, fail: 6200, percentage: 76 },
-  { name: "SNDT", pass: 1316, fail: 78, percentage: 94 },
-  { name: "COEP", pass: 1411, fail: 217, percentage: 87 },
-  { name: "KBPU", pass: 890, fail: 180, percentage: 83 },
-  { name: "GUG", pass: 3200, fail: 850, percentage: 79 },
-  { name: "LIT", pass: 647, fail: 32, percentage: 95 },
+  { name: "CU", pass: 48200, fail: 8900, percentage: 84 },
+  { name: "JU", pass: 18400, fail: 920, percentage: 95 },
+  { name: "MAKAUT", pass: 32400, fail: 4800, percentage: 87 },
+  { name: "BU", pass: 29500, fail: 7800, percentage: 79 },
+  { name: "WBSU", pass: 18900, fail: 4100, percentage: 82 },
+  { name: "KU", pass: 21200, fail: 4600, percentage: 82 },
+  { name: "VU", pass: 22400, fail: 5100, percentage: 81 },
+  { name: "NBU", pass: 15600, fail: 3900, percentage: 80 },
+  { name: "UGB", pass: 12400, fail: 3600, percentage: 77 },
+  { name: "KNU", pass: 10800, fail: 2600, percentage: 81 },
+  { name: "SKBU", pass: 9200, fail: 2400, percentage: 79 },
+  { name: "BKU", pass: 8600, fail: 2100, percentage: 80 },
+  { name: "CBPBU", pass: 7800, fail: 1900, percentage: 80 },
+  { name: "Presidency", pass: 6200, fail: 420, percentage: 94 },
+  { name: "Visva-Bharati", pass: 7400, fail: 680, percentage: 92 },
+  { name: "Aliah", pass: 5400, fail: 720, percentage: 88 },
+  { name: "RBU", pass: 8100, fail: 890, percentage: 90 },
 ];
 
 interface ExaminationDashboardProps {
@@ -515,12 +531,12 @@ export default function ExaminationDashboard({
       programType === "UG"
         ? 0.62
         : programType === "PG"
-        ? 0.28
-        : programType === "Diploma"
-        ? 0.07
-        : programType === "Certificate"
-        ? 0.03
-        : 1;
+          ? 0.28
+          : programType === "Diploma"
+            ? 0.07
+            : programType === "Certificate"
+              ? 0.03
+              : 1;
 
     return UNIVERSITY_EXAMS_LIST.map((u) => ({
       name: u.name,
@@ -531,7 +547,7 @@ export default function ExaminationDashboard({
 
   // Decomposition tree state
   const [selectedSeason, setSelectedSeason] = useState("Winter");
-  const [selectedUniversity, setSelectedUniversity] = useState("LIT");
+  const [selectedUniversity, setSelectedUniversity] = useState("CU");
   const [selectedCourse, setSelectedCourse] = useState("B.E - B.Tech");
   const [selectedExamType, setSelectedExamType] = useState("Repeater");
   const [selectedSemester, setSelectedSemester] = useState("Sem 2");
@@ -618,17 +634,17 @@ export default function ExaminationDashboard({
     ];
   }, [currentData]);
 
-  // Region result data (All Maharashtra Divisions)
+  // Region result data (West Bengal Divisions / Zones)
   const regionResultData = [
-    { name: "Nagpur", pass: 16400, fail: 820, percentage: 95 },
-    { name: "Chh. Sambhajinagar", pass: 19400, fail: 6200, percentage: 76 },
-    { name: "Nashik", pass: 12513, fail: 3217, percentage: 80 },
-    { name: "Pune", pass: 42150, fail: 8920, percentage: 83 },
-    { name: "Mumbai", pass: 52400, fail: 12100, percentage: 81 },
-    { name: "Amravati", pass: 18200, fail: 4600, percentage: 80 },
-    { name: "Kolhapur", pass: 66752, fail: 61739, percentage: 54 },
-    { name: "Nanded", pass: 11400, fail: 3800, percentage: 75 },
-    { name: "Konkan", pass: 8079, fail: 2553, percentage: 76 },
+    { name: "Kolkata", pass: 52400, fail: 8900, percentage: 85 },
+    { name: "Presidency", pass: 42150, fail: 7200, percentage: 85 },
+    { name: "Burdwan", pass: 38286, fail: 6624, percentage: 85 },
+    { name: "Medinipur", pass: 29500, fail: 5800, percentage: 84 },
+    { name: "Malda", pass: 19400, fail: 4800, percentage: 80 },
+    { name: "Jalpaiguri", pass: 18200, fail: 4200, percentage: 81 },
+    { name: "North Bengal", pass: 16400, fail: 3600, percentage: 82 },
+    { name: "Howrah & Hooghly", pass: 22400, fail: 4100, percentage: 85 },
+    { name: "South 24 Parganas", pass: 14200, fail: 3100, percentage: 82 },
   ];
 
   // Program Type passing rate
@@ -642,18 +658,18 @@ export default function ExaminationDashboard({
 
   // Tree nodes data
   const universitiesTree = [
-    { name: "SPPU", count: 2450, max: 2500 },
-    { name: "MU", count: 2210, max: 2500 },
-    { name: "SNDT", count: 1724, max: 2500 },
-    { name: "Sanjivani", count: 1628, max: 2500 },
-    { name: "DBATU", count: 1450, max: 2500 },
-    { name: "SUK", count: 1280, max: 2500 },
-    { name: "MIT Vishw.", count: 831, max: 2500 },
-    { name: "LIT", count: 647, max: 2500 },
-    { name: "TMV", count: 605, max: 2500 },
-    { name: "MNLU Aur.", count: 332, max: 2500 },
-    { name: "COEP", count: 290, max: 2500 },
-    { name: "KBPU", count: 180, max: 2500 },
+    { name: "CU", count: 2450, max: 2500 },
+    { name: "MAKAUT", count: 2210, max: 2500 },
+    { name: "BU", count: 1724, max: 2500 },
+    { name: "JU", count: 1628, max: 2500 },
+    { name: "KU", count: 1450, max: 2500 },
+    { name: "VU", count: 1280, max: 2500 },
+    { name: "WBSU", count: 831, max: 2500 },
+    { name: "NBU", count: 647, max: 2500 },
+    { name: "Presidency", count: 605, max: 2500 },
+    { name: "Visva-Bharati", count: 332, max: 2500 },
+    { name: "KNU", count: 290, max: 2500 },
+    { name: "SKBU", count: 180, max: 2500 },
   ];
 
   const coursesTree = [
@@ -682,7 +698,7 @@ export default function ExaminationDashboard({
     { name: "Pass", count: 24, max: 56, color: "#2d8a6e" },
   ];
 
-  // Medium of Appearance items (English, Marathi, Sanskrit)
+  // Medium of Appearance items (English, Bengali, Hindi)
   const mediumList = [
     {
       medium: "English",
@@ -692,24 +708,24 @@ export default function ExaminationDashboard({
       activeMale: currentData.medium.english.male,
     },
     {
-      medium: "Marathi",
-      totalFemale: TOTAL_AGGREGATE.medium.marathi.female,
-      totalMale: TOTAL_AGGREGATE.medium.marathi.male,
-      activeFemale: currentData.medium.marathi.female,
-      activeMale: currentData.medium.marathi.male,
+      medium: "Bengali",
+      totalFemale: TOTAL_AGGREGATE.medium.bengali.female,
+      totalMale: TOTAL_AGGREGATE.medium.bengali.male,
+      activeFemale: currentData.medium.bengali.female,
+      activeMale: currentData.medium.bengali.male,
     },
     {
-      medium: "Sanskrit",
-      totalFemale: TOTAL_AGGREGATE.medium.sanskrit.female,
-      totalMale: TOTAL_AGGREGATE.medium.sanskrit.male,
-      activeFemale: currentData.medium.sanskrit.female,
-      activeMale: currentData.medium.sanskrit.male,
+      medium: "Hindi",
+      totalFemale: TOTAL_AGGREGATE.medium.hindi.female,
+      totalMale: TOTAL_AGGREGATE.medium.hindi.male,
+      activeFemale: currentData.medium.hindi.female,
+      activeMale: currentData.medium.hindi.male,
     },
   ];
 
   return (
     <div className="flex flex-col gap-8 w-full animate-fadeIn pb-12 relative">
-      
+
       {/* Floating Info Box Tooltip */}
       <ChartTooltip data={tooltip?.data || null} pos={tooltip?.pos || null} />
 
@@ -740,14 +756,14 @@ export default function ExaminationDashboard({
       {/* 1. TOP 3 SUMMARY KPI CARDS (SEPARATE BOXES WITH SHADES & SHADOWS) */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        
+
         {/* Card 1: Total Students */}
         <div
           onMouseMove={(e) =>
             setTooltip({
               data: {
                 title: "Total Examination Candidates",
-                subtitle: effectiveUniCode ? `University: ${UNIVERSITIES_DATA[effectiveUniCode]?.name || effectiveUniCode}` : "Maharashtra State Universities Aggregate",
+                subtitle: effectiveUniCode ? `University: ${UNIVERSITIES_DATA[effectiveUniCode]?.name || effectiveUniCode}` : "West Bengal State Universities Aggregate",
                 items: [
                   { label: "Total Candidates", value: currentData.students.toLocaleString("en-IN"), highlight: true },
                   { label: "Examination Papers", value: currentData.papers.toLocaleString("en-IN") },
@@ -939,7 +955,7 @@ export default function ExaminationDashboard({
         {/* Dual Axis Combo Chart (SVG-based with full scrollable width) */}
         <div className="w-full overflow-x-auto custom-scrollbar pb-3">
           <div className="min-w-[1350px] h-72 relative flex flex-col justify-end pt-8 pb-10 px-4">
-            
+
             {/* Grid Lines */}
             <div className="absolute inset-x-0 top-8 bottom-12 flex flex-col justify-between pointer-events-none">
               <div className="border-b border-slate-100 w-full flex justify-between text-[10px] text-slate-300">
@@ -1031,23 +1047,20 @@ export default function ExaminationDashboard({
                       })
                     }
                     onMouseLeave={() => setTooltip(null)}
-                    className={`flex flex-col items-center h-full justify-end group relative cursor-pointer transition-all duration-300 ${
-                      isDimmed ? "opacity-35 grayscale-40" : "opacity-100"
-                    }`}
+                    className={`flex flex-col items-center h-full justify-end group relative cursor-pointer transition-all duration-300 ${isDimmed ? "opacity-35 grayscale-40" : "opacity-100"
+                      }`}
                   >
                     {/* Floating student dot */}
                     <div
-                      className={`absolute rounded-full border-2 border-white shadow-md transition-all z-20 ${
-                        isSelected ? "w-4 h-4 bg-blue-600 scale-125 ring-2 ring-blue-300 shadow-blue-500/40" : "w-2.5 h-2.5 bg-indigo-800 group-hover:scale-150"
-                      }`}
+                      className={`absolute rounded-full border-2 border-white shadow-md transition-all z-20 ${isSelected ? "w-4 h-4 bg-blue-600 scale-125 ring-2 ring-blue-300 shadow-blue-500/40" : "w-2.5 h-2.5 bg-indigo-800 group-hover:scale-150"
+                        }`}
                       style={{ top: `${studentTopPct}%`, transform: "translateY(-50%)" }}
                     />
 
                     {/* Student count label over line */}
                     <span
-                      className={`absolute text-[9px] font-black transition-all z-20 whitespace-nowrap px-1.5 py-0.5 rounded shadow-xs ${
-                        isSelected ? "bg-blue-900 text-white font-extrabold scale-110 shadow-md" : "bg-white/95 text-blue-950 border border-slate-100 opacity-90 group-hover:opacity-100"
-                      }`}
+                      className={`absolute text-[9px] font-black transition-all z-20 whitespace-nowrap px-1.5 py-0.5 rounded shadow-xs ${isSelected ? "bg-blue-900 text-white font-extrabold scale-110 shadow-md" : "bg-white/95 text-blue-950 border border-slate-100 opacity-90 group-hover:opacity-100"
+                        }`}
                       style={{ top: `calc(${studentTopPct}% - 20px)` }}
                     >
                       {uni.students.toLocaleString("en-IN")}
@@ -1061,18 +1074,16 @@ export default function ExaminationDashboard({
                     {/* Blue Gradient Bar */}
                     <div
                       style={{ height: `${barHeight}%` }}
-                      className={`w-full max-w-[36px] rounded-t-md transition-all duration-300 shadow-sm ${
-                        isSelected
+                      className={`w-full max-w-[36px] rounded-t-md transition-all duration-300 shadow-sm ${isSelected
                           ? "bg-gradient-to-t from-indigo-700 via-blue-600 to-sky-300 ring-2 ring-blue-400 shadow-md shadow-blue-500/30 scale-105"
                           : "bg-gradient-to-t from-blue-600 via-blue-500 to-sky-400 group-hover:from-blue-700 group-hover:to-sky-300"
-                      }`}
+                        }`}
                     />
 
                     {/* University Name Label */}
                     <span
-                      className={`text-xs mt-2 text-center transition-all truncate max-w-[70px] ${
-                        isSelected ? "font-black text-blue-900 scale-110" : "font-semibold text-slate-700 group-hover:text-blue-900"
-                      }`}
+                      className={`text-xs mt-2 text-center transition-all truncate max-w-[70px] ${isSelected ? "font-black text-blue-900 scale-110" : "font-semibold text-slate-700 group-hover:text-blue-900"
+                        }`}
                     >
                       {uni.name}
                     </span>
@@ -1089,7 +1100,7 @@ export default function ExaminationDashboard({
       {/* 3. ROW 2: FRESHER VS REPEATER (VERTICALLY SCROLLABLE) + MEDIUM & GENDER */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         {/* Chart A: University-wise Fresher vs Repeater (Scrollable through all universities) */}
         <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6 flex flex-col justify-between">
           <div>
@@ -1142,13 +1153,12 @@ export default function ExaminationDashboard({
                       })
                     }
                     onMouseLeave={() => setTooltip(null)}
-                    className={`flex items-center gap-3 text-xs p-1.5 rounded-xl transition-all duration-300 cursor-pointer ${
-                      isSelected
+                    className={`flex items-center gap-3 text-xs p-1.5 rounded-xl transition-all duration-300 cursor-pointer ${isSelected
                         ? "bg-blue-50/90 ring-2 ring-blue-500 scale-[1.01] shadow-sm"
                         : isDimmed
-                        ? "opacity-30 grayscale-[50%]"
-                        : "hover:bg-slate-50 opacity-100"
-                    }`}
+                          ? "opacity-30 grayscale-[50%]"
+                          : "hover:bg-slate-50 opacity-100"
+                      }`}
                   >
                     <span className={`w-18 font-bold text-right truncate ${isSelected ? "text-blue-900 font-black" : "text-slate-700"}`}>
                       {uni.name}
@@ -1157,18 +1167,16 @@ export default function ExaminationDashboard({
                       {/* Fresher Segment */}
                       <div
                         style={{ width: `${uni.fresher}%` }}
-                        className={`transition-all flex items-center justify-center text-[10px] font-extrabold ${
-                          isSelected ? "bg-gradient-to-r from-teal-700 to-teal-500 text-white shadow-xs" : "bg-gradient-to-r from-teal-600 to-teal-400 text-white"
-                        }`}
+                        className={`transition-all flex items-center justify-center text-[10px] font-extrabold ${isSelected ? "bg-gradient-to-r from-teal-700 to-teal-500 text-white shadow-xs" : "bg-gradient-to-r from-teal-600 to-teal-400 text-white"
+                          }`}
                       >
                         {uni.fresher}%
                       </div>
                       {/* Repeater Segment */}
                       <div
                         style={{ width: `${uni.repeater}%` }}
-                        className={`transition-all flex items-center justify-center text-[10px] font-extrabold ${
-                          isSelected ? "bg-gradient-to-r from-slate-700 to-slate-500 text-white shadow-xs" : "bg-gradient-to-r from-slate-600 to-slate-400 text-white"
-                        }`}
+                        className={`transition-all flex items-center justify-center text-[10px] font-extrabold ${isSelected ? "bg-gradient-to-r from-slate-700 to-slate-500 text-white shadow-xs" : "bg-gradient-to-r from-slate-600 to-slate-400 text-white"
+                          }`}
                       >
                         {uni.repeater}%
                       </div>
@@ -1210,7 +1218,7 @@ export default function ExaminationDashboard({
             <div className="grid grid-cols-3 gap-6 h-64 pt-6 pb-2 items-end border-b border-slate-100">
               {mediumList.map((item) => {
                 const maxVal = 900000;
-                
+
                 // Total bar heights
                 const totalFemaleHeightPct = Math.min(100, Math.max(12, (item.totalFemale / maxVal) * 100));
                 const totalMaleHeightPct = Math.min(100, Math.max(12, (item.totalMale / maxVal) * 100));
@@ -1228,7 +1236,7 @@ export default function ExaminationDashboard({
                       setTooltip({
                         data: {
                           title: `Medium of Exam: ${item.medium}`,
-                          subtitle: effectiveUniCode ? `Filtered University: ${effectiveUniCode}` : "Maharashtra Statewide Examination Medium",
+                          subtitle: effectiveUniCode ? `Filtered University: ${effectiveUniCode}` : "West Bengal Statewide Examination Medium",
                           items: [
                             { label: "Language Medium", value: item.medium },
                             { label: "Female Candidates", value: (isCrossFiltered ? item.activeFemale : item.totalFemale).toLocaleString("en-IN"), highlight: true },
@@ -1243,19 +1251,18 @@ export default function ExaminationDashboard({
                     className="flex flex-col items-center h-full justify-end cursor-pointer"
                   >
                     <div className="flex items-end justify-center gap-2.5 w-full h-48">
-                      
+
                       {/* Female Bar Container */}
                       <div className="flex flex-col items-center flex-1 max-w-[48px] h-full justify-end group relative">
                         <span className="text-[9px] font-bold text-indigo-900 mb-1 truncate max-w-[52px]">
                           {isCrossFiltered ? item.activeFemale.toLocaleString("en-IN") : item.totalFemale.toLocaleString("en-IN")}
                         </span>
-                        
+
                         {/* Bar Body */}
                         <div
                           style={{ height: `${totalFemaleHeightPct}%` }}
-                          className={`w-full rounded-t-lg transition-all duration-300 shadow-sm relative overflow-hidden flex flex-col justify-end ${
-                            isCrossFiltered ? "bg-indigo-100" : "bg-gradient-to-t from-indigo-500 to-indigo-300 group-hover:from-indigo-600 group-hover:to-indigo-200"
-                          }`}
+                          className={`w-full rounded-t-lg transition-all duration-300 shadow-sm relative overflow-hidden flex flex-col justify-end ${isCrossFiltered ? "bg-indigo-100" : "bg-gradient-to-t from-indigo-500 to-indigo-300 group-hover:from-indigo-600 group-hover:to-indigo-200"
+                            }`}
                         >
                           {/* Inner Highlighted Fraction for Selected University */}
                           {isCrossFiltered && (
@@ -1277,13 +1284,12 @@ export default function ExaminationDashboard({
                         <span className="text-[9px] font-bold text-slate-800 mb-1 truncate max-w-[52px]">
                           {isCrossFiltered ? item.activeMale.toLocaleString("en-IN") : item.totalMale.toLocaleString("en-IN")}
                         </span>
-                        
+
                         {/* Bar Body */}
                         <div
                           style={{ height: `${totalMaleHeightPct}%` }}
-                          className={`w-full rounded-t-lg transition-all duration-300 shadow-sm relative overflow-hidden flex flex-col justify-end ${
-                            isCrossFiltered ? "bg-slate-200" : "bg-gradient-to-t from-slate-500 to-slate-300 group-hover:from-slate-600 group-hover:to-slate-200"
-                          }`}
+                          className={`w-full rounded-t-lg transition-all duration-300 shadow-sm relative overflow-hidden flex flex-col justify-end ${isCrossFiltered ? "bg-slate-200" : "bg-gradient-to-t from-slate-500 to-slate-300 group-hover:from-slate-600 group-hover:to-slate-200"
+                            }`}
                         >
                           {/* Inner Highlighted Fraction for Selected University */}
                           {isCrossFiltered && (
@@ -1319,7 +1325,7 @@ export default function ExaminationDashboard({
       {/* 4. RESULT SECTION (ROYAL BLUE ACCENT BANNER + FILTERS) */}
       {/* ========================================================================= */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-4 bg-gradient-to-r from-blue-950 via-brand-900 to-indigo-950 p-4 lg:p-5 rounded-2xl md:rounded-3xl shadow-xl text-white border border-blue-800/40">
-        
+
         {/* Session Dropdown */}
         <div className="flex items-center gap-2 w-full md:w-auto">
           <span className="text-xs font-bold uppercase tracking-wider text-blue-200">Session:</span>
@@ -1365,7 +1371,7 @@ export default function ExaminationDashboard({
       {/* 5. RESULT 4 KPI METRIC CARDS (DYNAMICALLY FILTERED) */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-        
+
         {/* Pass Students */}
         <div
           onMouseMove={(e) =>
@@ -1506,7 +1512,7 @@ export default function ExaminationDashboard({
       {/* 6. ROW 3: GENDER-WISE RESULTS + REGION-WISE RESULT ANALYSIS (SCROLLABLE) */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         {/* Gender-wise Results (Donut Chart) */}
         <div className="bg-white rounded-3xl border border-borderLight shadow-soft p-6">
           <div className="flex items-center justify-between mb-4">
@@ -1518,7 +1524,7 @@ export default function ExaminationDashboard({
                 {effectiveUniCode ? `${effectiveUniCode} Result Breakdown` : "2025-26 Result Breakdown"}
               </p>
             </div>
-            
+
             <div className="relative">
               <select
                 value={genderFilter}
@@ -1678,7 +1684,7 @@ export default function ExaminationDashboard({
         {/* Combination Bar & Line Chart with Horizontal Scroll */}
         <div className="w-full overflow-x-auto custom-scrollbar pb-3">
           <div className="min-w-[1350px] h-72 relative flex flex-col justify-end pt-8 pb-10 px-4">
-            
+
             {/* Background grid */}
             <div className="absolute inset-x-0 top-8 bottom-12 flex flex-col justify-between pointer-events-none">
               <div className="border-b border-slate-100 w-full flex justify-end text-[10px] text-slate-300">100%</div>
@@ -1741,21 +1747,18 @@ export default function ExaminationDashboard({
                       })
                     }
                     onMouseLeave={() => setTooltip(null)}
-                    className={`flex flex-col items-center h-full justify-end group relative cursor-pointer transition-all ${
-                      effectiveUniCode && !isSelected ? "opacity-35 grayscale-40" : "opacity-100"
-                    }`}
+                    className={`flex flex-col items-center h-full justify-end group relative cursor-pointer transition-all ${effectiveUniCode && !isSelected ? "opacity-35 grayscale-40" : "opacity-100"
+                      }`}
                   >
                     {/* Pass % dot & label */}
                     <div
-                      className={`absolute rounded-full border-2 border-white shadow-sm transition-transform z-20 ${
-                        isSelected ? "w-4 h-4 bg-blue-600 scale-125 ring-2 ring-blue-300" : "w-3 h-3 bg-blue-600 group-hover:scale-150"
-                      }`}
+                      className={`absolute rounded-full border-2 border-white shadow-sm transition-transform z-20 ${isSelected ? "w-4 h-4 bg-blue-600 scale-125 ring-2 ring-blue-300" : "w-3 h-3 bg-blue-600 group-hover:scale-150"
+                        }`}
                       style={{ top: `${pctTop}%`, transform: "translateY(-50%)" }}
                     />
                     <span
-                      className={`absolute text-[10px] font-black px-1.5 py-0.5 rounded shadow-xs z-20 ${
-                        isSelected ? "bg-blue-900 text-white font-extrabold" : "bg-white/95 text-blue-700 border border-slate-100"
-                      }`}
+                      className={`absolute text-[10px] font-black px-1.5 py-0.5 rounded shadow-xs z-20 ${isSelected ? "bg-blue-900 text-white font-extrabold" : "bg-white/95 text-blue-700 border border-slate-100"
+                        }`}
                       style={{ top: `calc(${pctTop}% - 22px)` }}
                     >
                       {d.percentage}%
@@ -1927,14 +1930,14 @@ export default function ExaminationDashboard({
         {/* Interactive Decomposition Tree Visualization (Horizontal Scroll Container) */}
         <div className="w-full overflow-x-auto custom-scrollbar py-4">
           <div className="min-w-[1050px] flex items-start gap-8">
-            
+
             {/* Level 0: Total Records */}
             <div
               onMouseMove={(e) =>
                 setTooltip({
                   data: {
                     title: "Decomposition Root: Total Records",
-                    subtitle: "Maharashtra Higher & Technical Education Exam Database",
+                    subtitle: "West Bengal Higher Education Department Exam Database",
                     items: [
                       { label: "Total Examination Records", value: "202,368", highlight: true },
                       { label: "Status", value: "Multi-level Drill-down Active" },
@@ -2009,11 +2012,10 @@ export default function ExaminationDashboard({
                         })
                       }
                       onMouseLeave={() => setTooltip(null)}
-                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
-                        isSelected
+                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${isSelected
                           ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
                           : "bg-white border-slate-200 hover:bg-slate-50"
-                      }`}
+                        }`}
                     >
                       <div className="flex justify-between text-xs">
                         <span className={`font-bold ${isSelected ? "text-blue-900 font-black" : "text-slate-800"}`}>{u.name}</span>
@@ -2056,11 +2058,10 @@ export default function ExaminationDashboard({
                         })
                       }
                       onMouseLeave={() => setTooltip(null)}
-                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
-                        isSelected
+                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${isSelected
                           ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
                           : "bg-white border-slate-200 hover:bg-slate-50"
-                      }`}
+                        }`}
                     >
                       <div className="flex justify-between text-xs">
                         <span className={`font-bold truncate max-w-[95px] ${isSelected ? "text-blue-900 font-black" : "text-slate-800"}`}>
@@ -2096,11 +2097,10 @@ export default function ExaminationDashboard({
                   })
                 }
                 onMouseLeave={() => setTooltip(null)}
-                className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
-                  selectedExamType === "Repeater"
+                className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${selectedExamType === "Repeater"
                     ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm ring-1 ring-blue-400"
                     : "bg-white border-slate-200"
-                }`}
+                  }`}
               >
                 <div className="flex justify-between text-xs">
                   <span className="font-bold text-blue-900">Repeater</span>
@@ -2140,11 +2140,10 @@ export default function ExaminationDashboard({
                         })
                       }
                       onMouseLeave={() => setTooltip(null)}
-                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${
-                        isSelected
+                      className={`rounded-2xl p-2.5 border transition-all cursor-pointer ${isSelected
                           ? "bg-gradient-to-r from-blue-50 to-indigo-50/80 border-blue-600 shadow-sm scale-102 ring-1 ring-blue-400"
                           : "bg-white border-slate-200 hover:bg-slate-50"
-                      }`}
+                        }`}
                     >
                       <div className="flex justify-between text-xs">
                         <span className={`font-bold ${isSelected ? "text-blue-900 font-black" : "text-slate-800"}`}>{s.name}</span>

@@ -44,9 +44,9 @@ export default function Header({ activeTab }: HeaderProps) {
         <div>
           <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 mb-1.5">
             <Landmark size={13} className="text-blue-600" />
-            <span>Govt. of Maharashtra</span>
+            <span>Govt. of West Bengal</span>
             <ChevronRight size={12} className="text-slate-300" />
-            <span>Higher & Technical Education</span>
+            <span>Higher Education Department</span>
             <ChevronRight size={12} className="text-slate-300" />
             <span className="text-blue-700 font-extrabold">{title}</span>
           </div>

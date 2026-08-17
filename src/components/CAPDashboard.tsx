@@ -142,9 +142,8 @@ function InteractiveDoughnut({ slices, totalLabel, totalValue, onTooltip }: Doug
               onClick={() => setActiveLegendIndex(activeLegendIndex === index ? null : index)}
               onMouseEnter={() => setHoveredSlice(slice)}
               onMouseLeave={() => setHoveredSlice(null)}
-              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer ${
-                isSelected ? "bg-brand-50 font-bold text-brand-900" : "hover:bg-slate-50 text-slate-600"
-              }`}
+              className={`flex items-center gap-2 p-1.5 rounded-lg text-left transition-all duration-200 cursor-pointer ${isSelected ? "bg-brand-50 font-bold text-brand-900" : "hover:bg-slate-50 text-slate-600"
+                }`}
             >
               <span
                 className="w-3 h-3 rounded-full flex-shrink-0"
@@ -219,33 +218,42 @@ export default function CAPDashboard({
   const multiplier = useMemo(() => {
     if (!globalFilters?.university || globalFilters.university === "All") return 1;
     switch (globalFilters.university) {
-      case "SPPU":
-        return 0.319;
-      case "DBATU":
-        return 0.158;
-      case "MU":
-        return 0.044;
-      case "SUK":
-        return 0.060;
-      case "SGBAU":
-        return 0.051;
-      case "PAHSU":
-        return 0.018;
-      case "BAMU":
-        return 0.039;
-      case "BCNMU":
-      case "KBCNMU":
-        return 0.022;
-      case "RTMNU":
-        return 0.088;
-      case "SRTMUN":
+      case "CU":
+        return 0.280;
+      case "MAKAUT":
+        return 0.220;
+      case "BU":
+        return 0.140;
+      case "KU":
+        return 0.080;
+      case "VU":
+        return 0.075;
+      case "WBSU":
+        return 0.065;
+      case "NBU":
+        return 0.050;
+      case "JU":
+        return 0.035;
+      case "UGB":
         return 0.025;
-      case "SNDT":
-        return 0.003;
-      case "COEP":
-        return 0.004;
+      case "KNU":
+        return 0.020;
+      case "SKBU":
+        return 0.015;
+      case "BKU":
+        return 0.012;
+      case "CBPBU":
+        return 0.010;
+      case "Presidency":
+        return 0.008;
+      case "Visva-Bharati":
+        return 0.010;
+      case "Aliah":
+        return 0.006;
+      case "RBU":
+        return 0.008;
       default:
-        return 1;
+        return 0.035;
     }
   }, [globalFilters?.university]);
 
@@ -286,13 +294,13 @@ export default function CAPDashboard({
   const courseAdmittedData: CourseAdmittedItem[] = useMemo(() => {
     const list: CourseAdmittedItem[] = [
       { name: "B.E./B.Tech.", level: "UG", applied: 248600, admitted: 167068 },
-      { name: "DSE (Direct Second Year Engg)", level: "UG", applied: 58900, admitted: 42731 },
+      { name: "JELET (Direct 2nd Yr Engg)", level: "UG", applied: 58900, admitted: 42731 },
       { name: "MBA / MMS", level: "PG", applied: 65400, admitted: 42668 },
       { name: "B.Ed. (General / Special)", level: "UG", applied: 48900, admitted: 33877 },
       { name: "B.Pharm (Pharmacy)", level: "UG", applied: 49500, admitted: 32989 },
       { name: "L.L.B. (3 Yrs.)", level: "UG", applied: 34200, admitted: 22917 },
-      { name: "MCA (Computer Applications)", level: "PG", applied: 26800, admitted: 18635 },
-      { name: "D.Pharm (Diploma Pharmacy)", level: "Diploma", applied: 21500, admitted: 14757 },
+      { name: "MCA (JECA)", level: "PG", applied: 26800, admitted: 18635 },
+      { name: "D.Pharm (Pharmacy)", level: "Diploma", applied: 21500, admitted: 14757 },
       { name: "L.L.B. (5 Yrs. Integrated)", level: "UG", applied: 17800, admitted: 12151 },
       { name: "B.P.Ed. (Physical Education)", level: "UG", applied: 11200, admitted: 8008 },
       { name: "M.E./M.Tech.", level: "PG", applied: 12400, admitted: 7467 },
@@ -300,7 +308,7 @@ export default function CAPDashboard({
       { name: "B.Des (Design)", level: "UG", applied: 6400, admitted: 4349 },
       { name: "M.Ed. (Master in Education)", level: "PG", applied: 5900, admitted: 4125 },
       { name: "M.Pharm (Pharmacy)", level: "PG", applied: 5600, admitted: 3950 },
-      { name: "M.P.Ed. (Master in Physical Ed)", level: "PG", applied: 3100, admitted: 2125 },
+      { name: "M.P.Ed. (Physical Ed)", level: "PG", applied: 3100, admitted: 2125 },
       { name: "M.Arch (Architecture)", level: "PG", applied: 2700, admitted: 1850 },
     ];
 
@@ -342,12 +350,12 @@ export default function CAPDashboard({
   const yoyCourseData: YoYCourseItem[] = useMemo(() => {
     const list: YoYCourseItem[] = [
       { course: "B.E./B.Tech.", growth: "+41.6%", y2022: 118005, y2023: 149078, y2024: 162400, y2025: 167068 },
-      { course: "DSE (Direct Second Year)", growth: "+1572%", y2022: 2555, y2023: 45466, y2024: 41862, y2025: 42731 },
+      { course: "JELET (Direct 2nd Year)", growth: "+1572%", y2022: 2555, y2023: 45466, y2024: 41862, y2025: 42731 },
       { course: "MBA / MMS", growth: "+16.2%", y2022: 36716, y2023: 37131, y2024: 42207, y2025: 42668 },
       { course: "B.Ed.", growth: "+0.8%", y2022: 33600, y2023: 30038, y2024: 33072, y2025: 33877 },
       { course: "B.Pharm", growth: "+16.1%", y2022: 28400, y2023: 30120, y2024: 31800, y2025: 32989 },
       { course: "L.L.B. (3 Yrs.)", growth: "+21.2%", y2022: 18900, y2023: 20450, y2024: 21820, y2025: 22917 },
-      { course: "MCA", growth: "+31.2%", y2022: 14200, y2023: 16100, y2024: 17850, y2025: 18635 },
+      { course: "MCA (JECA)", growth: "+31.2%", y2022: 14200, y2023: 16100, y2024: 17850, y2025: 18635 },
     ];
 
     return list.map((item) => ({
@@ -362,16 +370,16 @@ export default function CAPDashboard({
   // 5. Top 10 Institutes by Admitted Students 2025-26 (Elite Institute Leaderboard)
   const topInstitutesList: TopInstituteItem[] = useMemo(() => {
     const list = [
-      { rank: 1, name: "VIT Pune", fullName: "Bansilal Ramnath Agarwal Charitable Trust's Vishwakarma Institute of Technology, Pune", location: "Pune", university: "SPPU", admitted: 4086, fillRate: "99.4%" },
-      { rank: 2, name: "TGPCET Nagpur", fullName: "Tulsiramji Gaikwad-Patil College of Engineering and Technology, Nagpur", location: "Nagpur", university: "RTMNU", admitted: 2432, fillRate: "97.2%" },
-      { rank: 3, name: "TCET Mumbai", fullName: "Thakur College of Engineering and Technology, Kandivali, Mumbai", location: "Mumbai", university: "MU", admitted: 2427, fillRate: "98.1%" },
-      { rank: 4, name: "Zeal DCOE Pune", fullName: "Zeal Education Society's Dnyanganga College of Engineering, Pune", location: "Pune", university: "SPPU", admitted: 2357, fillRate: "96.5%" },
-      { rank: 5, name: "YCCE Nagpur", fullName: "Yeshwantrao Chavan College of Engineering, Hingna Road, Nagpur", location: "Nagpur", university: "RTMNU", admitted: 2211, fillRate: "98.8%" },
-      { rank: 6, name: "MIT AOE Alandi", fullName: "MIT Academy of Engineering, Alandi, Pune", location: "Pune", university: "SPPU", admitted: 1933, fillRate: "97.6%" },
-      { rank: 7, name: "MIT Sambhajinagar", fullName: "G. S. Mandal's Maharashtra Institute of Technology, Chhatrapati Sambhajinagar", location: "Chh. Sambhajinagar", university: "BAMU", admitted: 1842, fillRate: "94.8%" },
-      { rank: 8, name: "COEP Tech University", fullName: "COEP Technological University, Shivajinagar, Pune", location: "Pune", university: "COEP", admitted: 1807, fillRate: "100%" },
-      { rank: 9, name: "LTCE Navi Mumbai", fullName: "Lokmanya Tilak College of Engineering, Kopar Khairane, Navi Mumbai", location: "Navi Mumbai", university: "MU", admitted: 1724, fillRate: "93.4%" },
-      { rank: 10, name: "JDCOEM Nagpur", fullName: "Jaidev Education Society's J D College of Engineering and Management, Nagpur", location: "Nagpur", university: "RTMNU", admitted: 1721, fillRate: "92.9%" },
+      { rank: 1, name: "Heritage Tech", fullName: "Heritage Institute of Technology, Anandapur, Kolkata", location: "Kolkata", university: "MAKAUT", admitted: 4086, fillRate: "99.4%" },
+      { rank: 2, name: "St. Xavier's College", fullName: "St. Xavier's College (Autonomous), Park Street, Kolkata", location: "Kolkata", university: "CU", admitted: 2432, fillRate: "98.8%" },
+      { rank: 3, name: "KGEC Kalyani", fullName: "Kalyani Government Engineering College, Nadia", location: "Nadia", university: "MAKAUT", admitted: 2427, fillRate: "99.1%" },
+      { rank: 4, name: "JGEC Jalpaiguri", fullName: "Jalpaiguri Government Engineering College, Jalpaiguri", location: "Jalpaiguri", university: "MAKAUT", admitted: 2357, fillRate: "97.5%" },
+      { rank: 5, name: "Haldia Institute", fullName: "Haldia Institute of Technology, Purba Medinipur", location: "Purba Medinipur", university: "MAKAUT", admitted: 2211, fillRate: "98.2%" },
+      { rank: 6, name: "Presidency College", fullName: "Presidency College & Autonomous Departments, Kolkata", location: "Kolkata", university: "Presidency", admitted: 1933, fillRate: "98.6%" },
+      { rank: 7, name: "Scottish Church", fullName: "Scottish Church College, Hedua, Kolkata", location: "Kolkata", university: "CU", admitted: 1842, fillRate: "96.8%" },
+      { rank: 8, name: "RKM Vidyamandira", fullName: "Ramakrishna Mission Vidyamandira, Belur Math, Howrah", location: "Howrah", university: "CU", admitted: 1807, fillRate: "100%" },
+      { rank: 9, name: "Midnapore College", fullName: "Midnapore College (Autonomous), Paschim Medinipur", location: "Paschim Medinipur", university: "VU", admitted: 1724, fillRate: "95.4%" },
+      { rank: 10, name: "Burdwan Raj College", fullName: "Burdwan Raj College, Aftab Avenue, Bardhaman", location: "Purba Bardhaman", university: "BU", admitted: 1721, fillRate: "94.9%" },
     ];
 
     return list.map((inst) => ({
@@ -383,20 +391,23 @@ export default function CAPDashboard({
   // 6. University-wise Admitted Students
   const universityAdmittedList: UniversityAdmittedItem[] = useMemo(() => {
     const list: UniversityAdmittedItem[] = [
-      { code: "SPPU", name: "Savitribai Phule Pune University", admitted: 142629 },
-      { code: "DBATU", name: "Dr. Babasaheb Ambedkar Technological University", admitted: 70709 },
-      { code: "MGM", name: "MGM University, Chh. Sambhajinagar", admitted: 60579 },
-      { code: "RTMNU", name: "Rashtrasant Tukadoji Maharaj Nagpur University", admitted: 39530 },
-      { code: "SUK", name: "Shivaji University, Kolhapur", admitted: 26982 },
-      { code: "SGBAU", name: "Sant Gadge Baba Amravati University", admitted: 22986 },
-      { code: "MU", name: "University of Mumbai", admitted: 19853 },
-      { code: "BAMU", name: "Dr. Babasaheb Ambedkar Marathwada University", admitted: 17583 },
-      { code: "BCNMU", name: "Kavayitri Bahinabai Chaudhari North Maharashtra University", admitted: 13429 },
-      { code: "SRTMU", name: "Swami Ramanand Teerth Marathwada University", admitted: 13069 },
-      { code: "PAHSU", name: "Punyashlok Ahilyadevi Holkar Solapur University", admitted: 7890 },
-      { code: "SNDT", name: "SNDT Women's University, Mumbai", admitted: 4816 },
-      { code: "GUG", name: "Gondwana University, Gadchiroli", admitted: 3220 },
-      { code: "COEP", name: "COEP Technological University, Pune", admitted: 1807 },
+      { code: "CU", name: "University of Calcutta", admitted: 128450 },
+      { code: "MAKAUT", name: "Maulana Abul Kalam Azad University of Tech", admitted: 88900 },
+      { code: "BU", name: "University of Burdwan", admitted: 54200 },
+      { code: "KU", name: "University of Kalyani", admitted: 36800 },
+      { code: "VU", name: "Vidyasagar University Midnapore", admitted: 34100 },
+      { code: "WBSU", name: "West Bengal State University Barasat", admitted: 28500 },
+      { code: "NBU", name: "North Bengal University Siliguri", admitted: 22400 },
+      { code: "JU", name: "Jadavpur University Kolkata", admitted: 18900 },
+      { code: "UGB", name: "University of Gour Banga Malda", admitted: 14600 },
+      { code: "KNU", name: "Kazi Nazrul University Asansol", admitted: 12300 },
+      { code: "SKBU", name: "Sidho-Kanho-Birsha University Purulia", admitted: 9800 },
+      { code: "BKU", name: "Bankura University", admitted: 8900 },
+      { code: "CBPBU", name: "Cooch Behar Panchanan Barma University", admitted: 7600 },
+      { code: "Presidency", name: "Presidency University Kolkata", admitted: 4800 },
+      { code: "Visva-Bharati", name: "Visva-Bharati Central University Santiniketan", admitted: 5400 },
+      { code: "Aliah", name: "Aliah University Kolkata", admitted: 3900 },
+      { code: "RBU", name: "Rabindra Bharati University Kolkata", admitted: 4200 },
     ];
 
     return list.map((uni) => ({
@@ -417,7 +428,7 @@ export default function CAPDashboard({
 
   return (
     <div className="flex flex-col gap-8 w-full animate-fadeIn pb-12 relative">
-      
+
       {/* Floating Info Box Tooltip */}
       <ChartTooltip data={tooltip?.data || null} pos={tooltip?.pos || null} />
 
@@ -434,7 +445,7 @@ export default function CAPDashboard({
             </span>
           </div>
           <button
-            onClick={() => onUniversityChange && onUniversityChange("All")}
+            onClick={handleReset}
             className="flex items-center gap-1 text-xs font-bold text-brand-700 bg-white hover:bg-brand-100/60 border border-brand-200 px-3 py-1 rounded-xl transition-all cursor-pointer shadow-2xs"
           >
             <X size={14} /> Clear Filter
@@ -450,7 +461,7 @@ export default function CAPDashboard({
           <div className="flex items-center gap-2">
             <ShieldCheck size={16} className="text-blue-600" />
             <span className="text-xs font-bold text-slate-600">
-              Centralized Admission Process (State CET Cell Maharashtra) • F.Y. 2025-26
+              Centralized Admission Process (Banglar Uchchashiksha / WBJEEB) • F.Y. 2025-26
             </span>
           </div>
           <p className="text-xs font-bold text-slate-400 italic">
@@ -460,14 +471,14 @@ export default function CAPDashboard({
 
         {/* 3 Executive Command KPI Boxes */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          
+
           {/* Card 1: Total CAP Applications */}
           <div
             onMouseMove={(e) =>
               setTooltip({
                 data: {
                   title: "Total Centralized Admission Process (CAP) Registrations",
-                  subtitle: "State CET Cell Maharashtra • Academic Year 2025-26",
+                  subtitle: "Higher Education Department GoWB • Academic Year 2025-26",
                   items: [
                     { label: "Total Applications", value: summary.totalApplications.toLocaleString("en-IN"), highlight: true },
                     { label: "Merit Verified", value: "5,97,193 (88.0%)" },
@@ -496,7 +507,7 @@ export default function CAPDashboard({
                   100% Volume
                 </span>
               </div>
-              
+
               <h3 className="text-3xl lg:text-4xl font-black text-blue-950 tracking-tight mt-1">
                 {summary.totalApplications.toLocaleString("en-IN")}
               </h3>
@@ -543,7 +554,7 @@ export default function CAPDashboard({
                   {fillRatePct}%
                 </span>
               </div>
-              
+
               <h3 className="text-3xl lg:text-4xl font-black text-teal-950 tracking-tight mt-1">
                 {summary.admissionsTaken.toLocaleString("en-IN")}
               </h3>
@@ -595,7 +606,7 @@ export default function CAPDashboard({
                   Active
                 </span>
               </div>
-              
+
               <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 tracking-tight mt-1">
                 {summary.totalCourses} <span className="text-lg font-bold text-slate-500">Courses</span>
               </h3>
@@ -634,7 +645,7 @@ export default function CAPDashboard({
       {/* 2. ROW 2: COURSE-WISE APPLIED V/S ADMITTED MATRIX & GENDER DONUT */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         {/* Left: Interactive Course Applied vs Admitted Matrix */}
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-soft p-6 lg:p-7 flex flex-col justify-between">
           <div>
@@ -652,11 +663,10 @@ export default function CAPDashboard({
                   <button
                     key={lvl}
                     onClick={() => setSelectedCourseLevel(lvl)}
-                    className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                      selectedCourseLevel === lvl
+                    className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${selectedCourseLevel === lvl
                         ? "bg-white text-blue-900 shadow-xs"
                         : "text-slate-600 hover:text-slate-900"
-                    }`}
+                      }`}
                   >
                     {lvl}
                   </button>
@@ -776,21 +786,19 @@ export default function CAPDashboard({
               <div className="flex items-center gap-1 bg-slate-100 p-1 rounded-xl border border-slate-200/60 self-start sm:self-auto">
                 <button
                   onClick={() => setGenderViewMode("Admitted")}
-                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                    genderViewMode === "Admitted"
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${genderViewMode === "Admitted"
                       ? "bg-white text-blue-900 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   Admitted ({summary.admissionsTaken.toLocaleString("en-IN")})
                 </button>
                 <button
                   onClick={() => setGenderViewMode("Applied")}
-                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
-                    genderViewMode === "Applied"
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${genderViewMode === "Applied"
                       ? "bg-white text-blue-900 shadow-xs"
                       : "text-slate-600 hover:text-slate-900"
-                  }`}
+                    }`}
                 >
                   Applied ({summary.totalApplications.toLocaleString("en-IN")})
                 </button>
@@ -904,7 +912,7 @@ export default function CAPDashboard({
       {/* 2b. ADMISSION FUNNEL + CATEGORY DONUT */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         {/* Left: Admission Conversion Funnel with Hover Tooltips */}
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-soft p-6 lg:p-7">
           <div className="mb-4 pb-3 border-b border-slate-100">
@@ -1081,13 +1089,13 @@ export default function CAPDashboard({
 
           <InteractiveDoughnut
             slices={[
-              { label: "Open / General", value: 36.7, raw: Math.round(164200 * multiplier).toLocaleString("en-IN"), color: "#2563eb" },
-              { label: "OBC", value: 27.4, raw: Math.round(122400 * multiplier).toLocaleString("en-IN"), color: "#0d9488" },
-              { label: "SC", value: 12.3, raw: Math.round(54800 * multiplier).toLocaleString("en-IN"), color: "#4338ca" },
-              { label: "EWS", value: 11.6, raw: Math.round(52100 * multiplier).toLocaleString("en-IN"), color: "#b45309" },
-              { label: "VJNT", value: 5.7, raw: Math.round(25300 * multiplier).toLocaleString("en-IN"), color: "#475569" },
-              { label: "ST", value: 5.2, raw: Math.round(23400 * multiplier).toLocaleString("en-IN"), color: "#0f766e" },
-              { label: "SBC", value: 1.1, raw: Math.round(4931 * multiplier).toLocaleString("en-IN"), color: "#64748b" },
+              { label: "Open / General", value: 38.2, raw: Math.round(170800 * multiplier).toLocaleString("en-IN"), color: "#2563eb" },
+              { label: "SC", value: 22.0, raw: Math.round(98300 * multiplier).toLocaleString("en-IN"), color: "#4338ca" },
+              { label: "OBC-A", value: 10.0, raw: Math.round(44700 * multiplier).toLocaleString("en-IN"), color: "#0d9488" },
+              { label: "OBC-B", value: 7.0, raw: Math.round(31300 * multiplier).toLocaleString("en-IN"), color: "#0f766e" },
+              { label: "ST", value: 6.0, raw: Math.round(26800 * multiplier).toLocaleString("en-IN"), color: "#b45309" },
+              { label: "EWS", value: 10.0, raw: Math.round(44700 * multiplier).toLocaleString("en-IN"), color: "#64748b" },
+              { label: "PwD / Sports", value: 6.8, raw: Math.round(30531 * multiplier).toLocaleString("en-IN"), color: "#475569" },
             ]}
             totalLabel="Total Admitted"
             totalValue={summary.admissionsTaken.toLocaleString("en-IN")}
@@ -1100,7 +1108,7 @@ export default function CAPDashboard({
       {/* 3. ROW 3: YOY COURSE TRAJECTORY & TOP 10 INSTITUTES BY ADMITTED STUDENTS */}
       {/* ========================================================================= */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        
+
         {/* Left: Year on Year Course Trajectory Matrix */}
         <div className="bg-white rounded-3xl border border-slate-200/90 shadow-soft p-6 lg:p-7 flex flex-col justify-between">
           <div>
@@ -1125,7 +1133,7 @@ export default function CAPDashboard({
                     setTooltip({
                       data: {
                         title: `${item.course} — 4-Year Multi-Year Admission History`,
-                        subtitle: "State CET Cell Historic Allotment Trend",
+                        subtitle: "West Bengal Centralized Portal Historic Allotment Trend",
                         items: [
                           { label: "Course Name", value: item.course },
                           { label: "2025-26 Admissions", value: item.y2025.toLocaleString("en-IN"), highlight: true },
@@ -1201,7 +1209,7 @@ export default function CAPDashboard({
                       setTooltip({
                         data: {
                           title: inst.fullName,
-                          subtitle: `Rank #${inst.rank} in Maharashtra State`,
+                          subtitle: `Rank #${inst.rank} in West Bengal State`,
                           items: [
                             { label: "Institute", value: inst.fullName },
                             { label: "Admitted Students", value: inst.admitted.toLocaleString("en-IN"), highlight: true },
@@ -1252,7 +1260,7 @@ export default function CAPDashboard({
       {/* ========================================================================= */}
       <div className="bg-white rounded-3xl border border-slate-200/90 shadow-soft p-6 lg:p-7">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6 pb-3 border-b border-slate-100">
-          
+
           {/* Discipline Filter on Top-Left */}
           <div className="flex items-center gap-3">
             <div className="flex flex-col">
@@ -1297,7 +1305,7 @@ export default function CAPDashboard({
         {/* Combo Bar Chart with SVG Trend Line Overlay and Hover Tooltip */}
         <div className="w-full overflow-x-auto custom-scrollbar pb-3">
           <div className="min-w-[950px] h-72 relative flex flex-col justify-end pt-8 pb-10 px-4">
-            
+
             {/* Grid lines */}
             <div className="absolute inset-x-0 top-8 bottom-10 flex flex-col justify-between pointer-events-none">
               <div className="border-b border-slate-100 w-full flex justify-end text-[10px] text-slate-300">100%</div>

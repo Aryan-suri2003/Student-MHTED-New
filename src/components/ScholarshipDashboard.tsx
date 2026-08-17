@@ -728,24 +728,40 @@ export default function ScholarshipDashboard({
   const multiplier = useMemo(() => {
     if (!globalFilters?.university || globalFilters.university === "All") return 1;
     switch (globalFilters.university) {
-      case "SPPU":
-        return 0.245;
-      case "MU":
-        return 0.215;
-      case "DBATU":
-        return 0.072;
-      case "SUK":
-        return 0.081;
-      case "SGBAU":
-        return 0.086;
-      case "PAHSU":
-        return 0.024;
-      case "KBCNMU":
-        return 0.056;
-      case "BAMU":
-        return 0.134;
-      case "COEP":
-        return 0.006;
+      case "CU":
+        return 0.220;
+      case "MAKAUT":
+        return 0.165;
+      case "BU":
+        return 0.145;
+      case "KU":
+        return 0.095;
+      case "VU":
+        return 0.090;
+      case "WBSU":
+        return 0.080;
+      case "NBU":
+        return 0.065;
+      case "UGB":
+        return 0.055;
+      case "JU":
+        return 0.045;
+      case "KNU":
+        return 0.040;
+      case "SKBU":
+        return 0.035;
+      case "BKU":
+        return 0.030;
+      case "CBPBU":
+        return 0.025;
+      case "Presidency":
+        return 0.015;
+      case "Visva-Bharati":
+        return 0.018;
+      case "Aliah":
+        return 0.012;
+      case "RBU":
+        return 0.018;
       default:
         return 0.035;
     }
@@ -763,19 +779,19 @@ export default function ScholarshipDashboard({
   const genderData: DualBarItem[] = useMemo(() => {
     return [
       {
-        name: "Female (F)",
-        applicants: Math.round(1256238 * multiplier),
-        beneficiaries: Math.round(974316 * multiplier),
+        name: "Female",
+        applicants: Math.round(1350800 * multiplier),
+        beneficiaries: Math.round(1085000 * multiplier),
       },
       {
-        name: "Male (M)",
-        applicants: Math.round(1245292 * multiplier),
-        beneficiaries: Math.round(949909 * multiplier),
+        name: "Male",
+        applicants: Math.round(1150000 * multiplier),
+        beneficiaries: Math.round(839000 * multiplier),
       },
       {
-        name: "Other (O)",
-        applicants: Math.max(1, Math.round(6 * multiplier)),
-        beneficiaries: Math.max(1, Math.round(3 * multiplier)),
+        name: "Transgender",
+        applicants: Math.round(736 * multiplier),
+        beneficiaries: Math.round(228 * multiplier),
       },
     ];
   }, [multiplier]);
@@ -783,12 +799,12 @@ export default function ScholarshipDashboard({
   // Category Breakdown with Category Code & Color
   const categoryData = useMemo(() => {
     const list = [
-      { code: "OBC", name: "Other Backward Class", applicants: 964200, beneficiaries: 772340, color: "from-blue-600 to-indigo-600", badgeColor: "bg-blue-100 text-blue-800 border-blue-200" },
-      { code: "EBC", name: "Economically Backward", applicants: 521400, beneficiaries: 418120, color: "from-teal-600 to-emerald-600", badgeColor: "bg-teal-100 text-teal-800 border-teal-200" },
-      { code: "SC", name: "Scheduled Caste", applicants: 432100, beneficiaries: 345680, color: "from-indigo-600 to-violet-600", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200" },
-      { code: "ST", name: "Scheduled Tribe", applicants: 254200, beneficiaries: 198276, color: "from-amber-600 to-orange-600", badgeColor: "bg-amber-100 text-amber-800 border-amber-200" },
-      { code: "VJNT", name: "Vimukta Jati & Nomadic", applicants: 234100, beneficiaries: 187280, color: "from-cyan-600 to-blue-600", badgeColor: "bg-cyan-100 text-cyan-800 border-cyan-200" },
-      { code: "SBC", name: "Special Backward Class", applicants: 95536, beneficiaries: 2532, color: "from-slate-600 to-slate-800", badgeColor: "bg-slate-100 text-slate-800 border-slate-200" },
+      { code: "SC", name: "Scheduled Caste", applicants: 782400, beneficiaries: 642340, color: "from-blue-600 to-indigo-600", badgeColor: "bg-blue-100 text-blue-800 border-blue-200" },
+      { code: "OBC-A", name: "Other Backward Class (A)", applicants: 564200, beneficiaries: 458120, color: "from-teal-600 to-emerald-600", badgeColor: "bg-teal-100 text-teal-800 border-teal-200" },
+      { code: "OBC-B", name: "Other Backward Class (B)", applicants: 482100, beneficiaries: 385680, color: "from-indigo-600 to-violet-600", badgeColor: "bg-indigo-100 text-indigo-800 border-indigo-200" },
+      { code: "ST", name: "Scheduled Tribe", applicants: 284200, beneficiaries: 228276, color: "from-amber-600 to-orange-600", badgeColor: "bg-amber-100 text-amber-800 border-amber-200" },
+      { code: "EWS", name: "Economically Weaker Section", applicants: 234100, beneficiaries: 187280, color: "from-cyan-600 to-blue-600", badgeColor: "bg-cyan-100 text-cyan-800 border-cyan-200" },
+      { code: "GEN", name: "General / Merit", applicants: 154536, beneficiaries: 22532, color: "from-slate-600 to-slate-800", badgeColor: "bg-slate-100 text-slate-800 border-slate-200" },
     ];
     return list.map((item) => ({
       ...item,
@@ -801,12 +817,12 @@ export default function ScholarshipDashboard({
   const streamData = useMemo(() => {
     const list = [
       { name: "Engineering & Tech", icon: Cpu, applicants: 412000, beneficiaries: 389000, color: "bg-blue-50 text-blue-700 border-blue-200" },
-      { name: "Science", icon: FlaskConical, applicants: 320000, beneficiaries: 295000, color: "bg-teal-50 text-teal-700 border-teal-200" },
+      { name: "General Degree (Arts/Sc/Com)", icon: FlaskConical, applicants: 520000, beneficiaries: 495000, color: "bg-teal-50 text-teal-700 border-teal-200" },
       { name: "Commerce & Mgmt", icon: Briefcase, applicants: 295000, beneficiaries: 271000, color: "bg-indigo-50 text-indigo-700 border-indigo-200" },
-      { name: "Arts & Humanities", icon: Palette, applicants: 245000, beneficiaries: 218000, color: "bg-amber-50 text-amber-700 border-amber-200" },
-      { name: "Pharmacy", icon: Pill, applicants: 185000, beneficiaries: 172000, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
-      { name: "Management (MBA)", icon: BarChart3, applicants: 142000, beneficiaries: 133000, color: "bg-sky-50 text-sky-700 border-sky-200" },
-      { name: "Medical & Allied", icon: Stethoscope, applicants: 98000, beneficiaries: 92000, color: "bg-cyan-50 text-cyan-700 border-cyan-200" },
+      { name: "Humanities & Languages", icon: Palette, applicants: 245000, beneficiaries: 218000, color: "bg-amber-50 text-amber-700 border-amber-200" },
+      { name: "Pharmacy & Paramedical", icon: Pill, applicants: 185000, beneficiaries: 172000, color: "bg-emerald-50 text-emerald-700 border-emerald-200" },
+      { name: "Management (MBA/MCA)", icon: BarChart3, applicants: 142000, beneficiaries: 133000, color: "bg-sky-50 text-sky-700 border-sky-200" },
+      { name: "Medical & Nursing", icon: Stethoscope, applicants: 98000, beneficiaries: 92000, color: "bg-cyan-50 text-cyan-700 border-cyan-200" },
     ];
     return list.map((item) => ({
       ...item,
@@ -818,11 +834,11 @@ export default function ScholarshipDashboard({
   // Department Breakdown (Ranked)
   const departmentData = useMemo(() => {
     const list = [
-      { rank: 1, name: "Social Justice & Special Assistance", applicants: 985000, beneficiaries: 788000, outlayCr: 2140.5, efficiency: "98.4%" },
-      { rank: 2, name: "Tribal Development Department", applicants: 540000, beneficiaries: 421000, outlayCr: 1250.2, efficiency: "96.2%" },
-      { rank: 3, name: "OBC, SEBC, VJNT & SBC Welfare", applicants: 485000, beneficiaries: 382000, outlayCr: 980.8, efficiency: "95.1%" },
-      { rank: 4, name: "Directorate of Higher Education (DHE)", applicants: 320000, beneficiaries: 241000, outlayCr: 620.4, efficiency: "91.8%" },
-      { rank: 5, name: "Directorate of Technical Education (DTE)", applicants: 171536, beneficiaries: 92228, outlayCr: 358.4, efficiency: "88.5%" },
+      { rank: 1, name: "Higher Education Department (DHE)", applicants: 1085000, beneficiaries: 888000, outlayCr: 2440.5, efficiency: "98.4%" },
+      { rank: 2, name: "Backward Classes Welfare Department", applicants: 640000, beneficiaries: 521000, outlayCr: 1450.2, efficiency: "96.2%" },
+      { rank: 3, name: "Minority Affairs & Madrasah Education", applicants: 485000, beneficiaries: 382000, outlayCr: 980.8, efficiency: "95.1%" },
+      { rank: 4, name: "Tribal Development Department", applicants: 180000, beneficiaries: 141000, outlayCr: 320.4, efficiency: "91.8%" },
+      { rank: 5, name: "Technical Education & Skill Dev.", applicants: 111536, beneficiaries: 82228, outlayCr: 158.4, efficiency: "88.5%" },
     ];
     return list.map((item) => ({
       ...item,
@@ -835,12 +851,12 @@ export default function ScholarshipDashboard({
   // Scheme-wise Scholarship (₹ Cr)
   const schemeData: SchemeItem[] = useMemo(() => {
     const list: SchemeItem[] = [
-      { name: "Rajarshi Chhatrapati Shahu Maharaj Shikshan Shulkh Shishyavrutti Yojna", allotted: 1420.5, disbursed: 1398.2 },
-      { name: "Post Matric Scholarship to SC Students (Centrally Sponsored)", allotted: 1180.0, disbursed: 1145.6 },
-      { name: "State Post Matric Scholarship for OBC Students", allotted: 980.4, disbursed: 924.8 },
-      { name: "Dr. Panjabrao Deshmukh Vasatigruh Nirvah Bhatta Yojna (Hostel)", allotted: 450.0, disbursed: 385.4 },
-      { name: "Pandit Deendayal Upadhyay Swayam Yojna for Tribal Students", allotted: 320.0, disbursed: 298.1 },
-      { name: "Scholarship for Students of Minority Communities Pursuing Higher Education", allotted: 210.0, disbursed: 188.7 },
+      { name: "Swami Vivekananda Merit-cum-Means Scholarship (SVMCM)", allotted: 1620.5, disbursed: 1598.2 },
+      { name: "Oasis Post-Matric Scholarship for SC/ST Students", allotted: 1280.0, disbursed: 1245.6 },
+      { name: "Aikyashree State Scholarship for Minority Students", allotted: 1080.4, disbursed: 1024.8 },
+      { name: "Kanyashree Prakalpa (K3 Higher Education Support)", allotted: 550.0, disbursed: 485.4 },
+      { name: "West Bengal Student Credit Card Support Scheme", allotted: 420.0, disbursed: 398.1 },
+      { name: "Chief Minister Relief Fund Higher Education Grant", allotted: 210.0, disbursed: 188.7 },
     ];
 
     return list.map((item) => ({
@@ -855,10 +871,9 @@ export default function ScholarshipDashboard({
     const list: ApplicationStatusItem[] = [
       { status: "Disbursed to Bank (APBS)", count: 1845200, color: "#0d9488" },
       { status: "Allotted / Approved", count: 79028, color: "#2563eb" },
-      { status: "Under Scrutiny (Clerk)", count: 245000, color: "#4338ca" },
-      { status: "Pending College Verification", count: 185000, color: "#b45309" },
-      { status: "Sent Back / Incomplete", count: 98000, color: "#64748b" },
-      { status: "Rejected Applications", count: 49308, color: "#dc2626" },
+      { status: "Under Scrutiny (Institute)", count: 245000, color: "#4338ca" },
+      { status: "Pending District Verification", count: 185000, color: "#b45309" },
+      { status: "Sent Back / Correction Required", count: 98000, color: "#64748b" },
     ];
     return list.map((item) => ({
       ...item,
@@ -884,9 +899,9 @@ export default function ScholarshipDashboard({
   // Year on Year Disbursed Amount (₹ Cr)
   const yoyDisbursedData = useMemo(() => {
     const list = [
-      { year: "2021-22", amount: 3845.2 },
-      { year: "2022-23", amount: 4210.8 },
-      { year: "2023-24", amount: 4890.5 },
+      { year: "2021-22", amount: 3410.2 },
+      { year: "2022-23", amount: 4120.8 },
+      { year: "2023-24", amount: 4890.6 },
       { year: "2024-25", amount: 5350.3 },
     ];
     return list.map((item) => ({
@@ -898,18 +913,24 @@ export default function ScholarshipDashboard({
   // District Table Data
   const districtData: DistrictItem[] = useMemo(() => {
     const list: DistrictItem[] = [
-      { district: "Pune", applicants: 245000, beneficiaries: 198000, disbursedCr: 580.4, rate: 80.8 },
-      { district: "Mumbai Suburban", applicants: 215000, beneficiaries: 172000, disbursedCr: 512.2, rate: 80.0 },
-      { district: "Nagpur", applicants: 185000, beneficiaries: 146000, disbursedCr: 410.8, rate: 78.9 },
-      { district: "Nashik", applicants: 165000, beneficiaries: 131000, disbursedCr: 362.5, rate: 79.4 },
-      { district: "Chhatrapati Sambhajinagar", applicants: 154000, beneficiaries: 121000, disbursedCr: 338.0, rate: 78.6 },
-      { district: "Kolhapur", applicants: 142000, beneficiaries: 114000, disbursedCr: 310.2, rate: 80.3 },
-      { district: "Amravati", applicants: 128000, beneficiaries: 99000, disbursedCr: 275.4, rate: 77.3 },
-      { district: "Solapur", applicants: 119000, beneficiaries: 94000, disbursedCr: 254.1, rate: 79.0 },
-      { district: "Thane", applicants: 115000, beneficiaries: 89000, disbursedCr: 248.6, rate: 77.4 },
-      { district: "Nanded", applicants: 108000, beneficiaries: 82000, disbursedCr: 228.3, rate: 75.9 },
-      { district: "Jalgaon", applicants: 98000, beneficiaries: 77000, disbursedCr: 212.0, rate: 78.6 },
-      { district: "Latur", applicants: 92000, beneficiaries: 71000, disbursedCr: 198.4, rate: 77.2 },
+      { district: "Kolkata", applicants: 285000, beneficiaries: 242000, disbursedCr: 680.4, rate: 84.9 },
+      { district: "North 24 Parganas", applicants: 265000, beneficiaries: 218000, disbursedCr: 612.2, rate: 82.3 },
+      { district: "South 24 Parganas", applicants: 225000, beneficiaries: 184000, disbursedCr: 510.8, rate: 81.8 },
+      { district: "Howrah", applicants: 185000, beneficiaries: 151000, disbursedCr: 422.5, rate: 81.6 },
+      { district: "Hooghly", applicants: 174000, beneficiaries: 141000, disbursedCr: 398.0, rate: 81.0 },
+      { district: "Purba Bardhaman", applicants: 162000, beneficiaries: 132000, disbursedCr: 370.2, rate: 81.5 },
+      { district: "Paschim Bardhaman", applicants: 158000, beneficiaries: 129000, disbursedCr: 365.4, rate: 81.6 },
+      { district: "Paschim Medinipur", applicants: 149000, beneficiaries: 121000, disbursedCr: 344.1, rate: 81.2 },
+      { district: "Purba Medinipur", applicants: 145000, beneficiaries: 119000, disbursedCr: 338.6, rate: 82.1 },
+      { district: "Nadia", applicants: 138000, beneficiaries: 112000, disbursedCr: 318.3, rate: 81.2 },
+      { district: "Murshidabad", applicants: 168000, beneficiaries: 135000, disbursedCr: 382.0, rate: 80.4 },
+      { district: "Malda", applicants: 132000, beneficiaries: 105000, disbursedCr: 298.4, rate: 79.5 },
+      { district: "Darjeeling", applicants: 72000, beneficiaries: 59000, disbursedCr: 168.0, rate: 81.9 },
+      { district: "Jalpaiguri", applicants: 85000, beneficiaries: 69000, disbursedCr: 195.4, rate: 81.2 },
+      { district: "Bankura", applicants: 98000, beneficiaries: 79000, disbursedCr: 224.0, rate: 80.6 },
+      { district: "Purulia", applicants: 92000, beneficiaries: 73000, disbursedCr: 208.5, rate: 79.3 },
+      { district: "Birbhum", applicants: 112000, beneficiaries: 91000, disbursedCr: 258.0, rate: 81.3 },
+      { district: "Cooch Behar", applicants: 88000, beneficiaries: 71000, disbursedCr: 201.2, rate: 80.7 },
     ];
 
     return list
@@ -960,7 +981,7 @@ export default function ScholarshipDashboard({
           <div className="flex items-center gap-2">
             <ShieldCheck size={16} className="text-emerald-600" />
             <span className="text-xs font-bold text-slate-600">
-              Maharashtra DBT Portal Integrated • Aadhaar Seeded Bank Compliant
+              West Bengal DBT & Scholarship Portal (SVMCM / Oasis / Aikyashree) Integrated • Aadhaar Seeded Bank Compliant
             </span>
           </div>
           <p className="text-xs font-bold text-slate-400 italic">
@@ -1733,14 +1754,14 @@ export default function ScholarshipDashboard({
                 <h3 className="text-base md:text-lg font-extrabold text-brand-900">
                   District-wise Applicants vs Beneficiaries
                 </h3>
-                <p className="text-xs text-slate-400 font-semibold">Maharashtra Administrative Districts</p>
+                <p className="text-xs text-slate-400 font-semibold">West Bengal Administrative Districts</p>
               </div>
 
               {/* District Search */}
               <div className="relative w-full sm:w-56">
                 <input
                   type="text"
-                  placeholder="Search district..."
+                  placeholder="Search West Bengal district..."
                   value={districtSearch}
                   onChange={(e) => setDistrictSearch(e.target.value)}
                   className="w-full bg-slate-50 border border-slate-200 text-slate-800 text-xs font-semibold rounded-xl pl-8 pr-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-brand-500"
@@ -1769,7 +1790,7 @@ export default function ScholarshipDashboard({
                         setTooltip({
                           data: {
                             title: `District: ${d.district}`,
-                            subtitle: "Maharashtra Administrative Division",
+                            subtitle: "West Bengal Administrative Division",
                             items: [
                               { label: "District Name", value: d.district },
                               { label: "Applicants", value: d.applicants.toLocaleString("en-IN") },
