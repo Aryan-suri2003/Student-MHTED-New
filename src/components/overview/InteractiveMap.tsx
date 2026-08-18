@@ -26,6 +26,23 @@ export default function InteractiveMap() {
   const [selectedDistrictId, setSelectedDistrictId] = useState<string | null>(null);
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
 
+  const [zoomLevel, setZoomLevel] = useState(1.1);
+  const eChartsRef = useRef<ReactECharts>(null);
+
+  useEffect(() => {
+    const loadMap = async () => {
+      try {
+        const res = await fetch("/data/wb_districts.geojson");
+        const geoJson = await res.json();
+        echarts.registerMap("WB", geoJson as any);
+        setGeoJsonLoaded(true);
+      } catch (e) {
+        console.error("Failed to load map geojson", e);
+      }
+    };
+    loadMap();
+  }, []);
+
   // Sort districts based on mode for the District Leaders list
   const sortedDistricts = useMemo(() => {
     return [...districts].sort((a, b) => {
@@ -37,6 +54,107 @@ export default function InteractiveMap() {
     }).slice(0, 7);
   }, [districts, mode]);
 
+  const getMapOption = () => {
+    if (!geoJsonLoaded) return {};
+
+    const baseOption: any = {
+      tooltip: { show: false },
+      geo: {
+        map: "WB",
+        roam: true, // Allow mouse drag/zoom
+        zoom: zoomLevel,
+        itemStyle: {
+          areaColor: "#F7F9FC",
+          borderColor: "#E6EAF0",
+          borderWidth: 1.5,
+        },
+        emphasis: {
+          itemStyle: { areaColor: "#EAF2FF", borderColor: "#2563EB" },
+          label: { show: false }
+        },
+      },
+      series: []
+    };
+
+    let seriesData: any[] = [];
+    let bubbleData: any[] = [];
+    let visualMapRange = { min: 0, max: 100, color: ["#FFFFFF", "#2563EB"] };
+
+    if (mode === "Institutions") {
+      seriesData = districts.map(d => ({ name: d.name, value: d.institutions }));
+      bubbleData = districts.map(d => ({ name: d.name, value: [...d.coords, d.institutions] }));
+      visualMapRange = { min: 0, max: 200, color: ["#EAF2FF", "#2563EB", "#1E3A8A"] };
+    } else if (mode === "Growth") {
+      seriesData = districts.map(d => ({ name: d.name, value: parseFloat(d.growth) }));
+      bubbleData = districts.map(d => ({ name: d.name, value: [...d.coords, parseFloat(d.growth) * 10] }));
+      visualMapRange = { min: 0, max: 15, color: ["#E2F8F0", "#25B98A", "#047857"] };
+    } else if (mode === "Students") {
+      seriesData = districts.map(d => ({ name: d.name, value: d.students }));
+      bubbleData = districts.map(d => ({ name: d.name, value: [...d.coords, d.students / 10000] }));
+      visualMapRange = { min: 0, max: 200000, color: ["#F0EBFF", "#8B6FE8", "#5B21B6"] };
+    } else if (mode === "Enrolment") {
+      seriesData = districts.map(d => ({ name: d.name, value: d.enrolment }));
+      bubbleData = districts.map(d => ({ name: d.name, value: [...d.coords, d.enrolment] }));
+      visualMapRange = { min: 50, max: 100, color: ["#E3F6FB", "#48B9D9", "#0369A1"] };
+    }
+
+    baseOption.visualMap = {
+      min: visualMapRange.min, 
+      max: visualMapRange.max,
+      inRange: { color: visualMapRange.color },
+      show: false
+    };
+
+    // Choropleth layer
+    baseOption.series.push({
+      name: mode,
+      type: "map",
+      geoIndex: 0,
+      data: seriesData,
+    });
+
+    // Bubble layer on top
+    baseOption.series.push({
+      name: "Bubble",
+      type: "scatter",
+      coordinateSystem: "geo",
+      data: bubbleData,
+      symbolSize: (val: any) => Math.max(4, val[2] / 5),
+      itemStyle: {
+        color: "#172033",
+        opacity: 0.8,
+        borderColor: '#fff',
+        borderWidth: 1.5,
+        shadowBlur: 10,
+        shadowColor: 'rgba(0,0,0,0.3)'
+      },
+      emphasis: { itemStyle: { opacity: 1, borderColor: '#F2A93B' } }
+    });
+
+    return baseOption;
+  };
+
+  const handleMapEvents = {
+    mouseover: (params: any) => {
+      if (params.name) {
+        const dist = districts.find(d => d.name === params.name);
+        if (dist) setHoveredDistrict(dist);
+      }
+    },
+    mouseout: () => setHoveredDistrict(null),
+    georoam: (params: any) => {
+      // Sync React state if user zooms with scroll wheel so buttons stay in sync
+      if (params.zoom != null && eChartsRef.current) {
+        const instance = eChartsRef.current.getEchartsInstance();
+        const option = instance.getOption() as any;
+        if (option && option.geo && option.geo[0]) {
+          setZoomLevel(option.geo[0].zoom);
+        }
+      }
+    }
+  };
+
+>>>>>>> 00ff3b399296f54a6b98965fd695bf4bd7b49146
   const getLeaderValue = (dist: DistrictData) => {
     if (mode === "Growth") return `${dist.growth}`;
     if (mode === "Institutions") return dist.institutions;

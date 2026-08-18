@@ -54,8 +54,9 @@ export default function StateSnapshot() {
   useEffect(() => {
     const loadMap = async () => {
       try {
-        const geoJson = await import("@/data/geo/wb_dummy.json");
-        echarts.registerMap("WB", geoJson.default as any);
+        const res = await fetch("/data/wb_districts.geojson");
+        const geoJson = await res.json();
+        echarts.registerMap("WB", geoJson as any);
         setGeoJsonLoaded(true);
       } catch (e) {
         console.error("Failed to load map geojson", e);

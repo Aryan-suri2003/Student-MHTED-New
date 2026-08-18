@@ -1,11 +1,11 @@
 "use client";
 
-import React from "react";
+import React, { Suspense } from "react";
 import { Search, Bell, User, RotateCcw } from "lucide-react";
 import { useYear } from "@/contexts/YearContext";
 import { usePathname } from "next/navigation";
 
-export default function Header() {
+function HeaderContent() {
   const { 
     academicYear, setAcademicYear,
     instType, setInstType,
@@ -31,7 +31,7 @@ export default function Header() {
   const pageTitle = routeTitles[pathname] || "Dashboard";
 
   return (
-    <header className="h-20 bg-[#F7F9FC] flex items-center justify-between px-8 sticky top-0 z-10">
+    <header className="h-20 bg-[#F7F9FC] flex items-center justify-between px-8 sticky top-0 z-10 border-b border-slate-200/80 shrink-0">
       
       {/* Left */}
       <div className="flex flex-col">
@@ -87,7 +87,7 @@ export default function Header() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1.5 border-r border-[#E2E8F0]">
+          <div className="flex items-center gap-2 px-3 py-1.5">
             <span className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider">College</span>
             <select 
               className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[110px] truncate"
@@ -109,7 +109,6 @@ export default function Header() {
             <RotateCcw size={14} />
             Reset
           </button>
-
         </div>
 
         <div className="flex items-center gap-2">
@@ -127,5 +126,13 @@ export default function Header() {
 
       </div>
     </header>
+  );
+}
+
+export default function Header() {
+  return (
+    <Suspense fallback={<header className="h-20 bg-[#F7F9FC] border-b border-slate-200/80" />}>
+      <HeaderContent />
+    </Suspense>
   );
 }
