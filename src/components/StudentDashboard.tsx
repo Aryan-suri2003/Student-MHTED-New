@@ -40,7 +40,7 @@ export const StudentDashboard: React.FC<StudentDashboardProps> = () => {
       {/* Dashboard Body */}
       <div className="flex-1 flex flex-col lg:flex-row overflow-hidden min-h-[850px]">
         {/* Sidebar Section */}
-        <Sidebar activeTab={activeTab} setActiveTab={setActiveTab} />
+        <Sidebar />
 
         {/* Right Column: Content Area */}
         <div className="flex-1 flex flex-col overflow-y-auto p-6 lg:p-8 gap-6 bg-background">

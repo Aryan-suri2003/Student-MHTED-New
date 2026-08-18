@@ -3,29 +3,36 @@
 import React from "react";
 import { Search, Bell, User } from "lucide-react";
 import { useYear } from "@/contexts/YearContext";
-import { usePathname } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 
-export default function Header() {
+const routeTitles: Record<string, string> = {
+  "/": "Overview",
+  "/students": "Students",
+  "/universities": "Universities",
+  "/libraries": "Public Libraries",
+};
+
+const studentTabTitles: Record<string, string> = {
+  admission: "Students — Admission",
+  examination: "Students — Examination & Result",
+  scholarship: "Students — Scholarship",
+  fra: "Students — Fee Regulating Authority (FRA)",
+  cap: "Students — Centralized Admission Process (CAP)",
+};
+
+function HeaderContent() {
   const { academicYear, setAcademicYear } = useYear();
   const pathname = usePathname();
+  const searchParams = useSearchParams();
+  const tab = searchParams?.get("tab");
 
-  // Very basic route-to-title mapping
-  const routeTitles: Record<string, string> = {
-    "/": "Overview",
-    "/students": "Students",
-    "/universities": "Universities",
-    "/colleges": "Colleges",
-    "/libraries": "Public Libraries",
-    "/districts": "Districts",
-    "/research": "Research",
-    "/scholarships": "Scholarships",
-    "/reports": "Reports",
-  };
-  
-  const pageTitle = routeTitles[pathname] || "Dashboard";
+  let pageTitle = routeTitles[pathname] || "Dashboard";
+  if (pathname === "/students" && tab && studentTabTitles[tab]) {
+    pageTitle = studentTabTitles[tab];
+  }
 
   return (
-    <header className="h-20 bg-[#F7F9FC] flex items-center justify-between px-8 sticky top-0 z-10 border-b border-slate-200/80">
+    <header className="h-20 bg-[#F7F9FC] flex items-center justify-between px-8 sticky top-0 z-10 border-b border-slate-200/80 shrink-0">
       <div className="flex flex-col">
         <h2 className="text-xl font-bold text-[#172033] tracking-tight">{pageTitle}</h2>
         <p className="text-[13px] font-medium text-[#667085]">West Bengal Higher Education Intelligence</p>
@@ -44,5 +51,13 @@ export default function Header() {
         </button>
       </div>
     </header>
+  );
+}
+
+export default function Header() {
+  return (
+    <React.Suspense fallback={<header className="h-20 bg-[#F7F9FC] border-b border-slate-200/80" />}>
+      <HeaderContent />
+    </React.Suspense>
   );
 }

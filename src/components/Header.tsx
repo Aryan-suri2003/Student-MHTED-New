@@ -158,23 +158,23 @@ export const Header: React.FC<HeaderProps> = ({
   };
 
   return (
-    <header className="mb-4">
+    <header className="mb-2">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div>
-          <div className="flex items-center gap-1.5 text-xs font-bold text-slate-400 mb-1.5">
-            <Landmark size={13} className="text-blue-600" />
+          <div className="flex items-center gap-1.5 text-xs font-bold text-[#64748B] mb-1.5">
+            <Landmark size={13} className="text-[#2563EB]" />
             <span>Govt. of West Bengal</span>
             <ChevronRight size={12} className="text-slate-300" />
             <span>Higher Education Department</span>
             <ChevronRight size={12} className="text-slate-300" />
-            <span className="text-blue-700 font-extrabold">{legacyTitle.title}</span>
+            <span className="text-[#2563EB] font-extrabold">{legacyTitle.title}</span>
           </div>
-          <h1 className="text-2xl md:text-3xl font-black text-brand-900 tracking-tight">{legacyTitle.title}</h1>
-          <p className="text-slate-500 text-xs md:text-sm mt-1 max-w-3xl font-medium">{legacyTitle.subtitle}</p>
+          <h1 className="text-2xl md:text-3xl font-bold text-[#172033] tracking-tight">{legacyTitle.title}</h1>
+          <p className="text-[#667085] text-xs md:text-sm mt-1 max-w-3xl font-medium">{legacyTitle.subtitle}</p>
         </div>
 
         <div className="self-start md:self-center">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-extrabold bg-blue-50 border border-blue-200/80 text-blue-900 shadow-2xs">
+          <span className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-xs font-bold bg-[#EAF2FF] border border-[#4F7FEF]/25 text-[#2563EB] shadow-2xs">
             {legacyTitle.tag}
           </span>
         </div>
