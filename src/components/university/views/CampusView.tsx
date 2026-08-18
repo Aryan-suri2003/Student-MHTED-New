@@ -258,7 +258,7 @@ export const CampusView: React.FC<CampusViewProps> = ({
         <div className="xl:col-span-5 flex flex-col bg-white rounded-2xl border border-slate-200/90 shadow-sm p-6">
           <div className="border-b border-slate-100 pb-4 mb-6">
             <h3 className="text-[11px] font-bold text-slate-500 uppercase tracking-widest">
-              Top NIRF Ranked (State)
+              Universities Directory
             </h3>
           </div>
           
