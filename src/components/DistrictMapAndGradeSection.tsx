@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { westBengalDistricts } from '../data/mockData';
 import { DistrictData, Language, GradeFilter } from '../types';
+import { DistrictMap } from './DistrictMap';
 
 interface DistrictMapAndGradeSectionProps {
   selectedDistrict: string;
@@ -90,9 +91,15 @@ export const DistrictMapAndGradeSection: React.FC<DistrictMapAndGradeSectionProp
     mapInstanceRef.current = map;
     markersGroupRef.current = markersGroup;
 
+    requestAnimationFrame(() => {
+      map.invalidateSize();
+      map.setView([23.6, 87.8], defaultZoom);
+    });
+
     setTimeout(() => {
       map.invalidateSize();
-    }, 100);
+      map.setView([23.6, 87.8], defaultZoom);
+    }, 150);
 
     return () => {
       map.remove();
@@ -320,189 +327,16 @@ export const DistrictMapAndGradeSection: React.FC<DistrictMapAndGradeSectionProp
 
   return (
     <div className="w-full grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 pt-2">
-      {/* Left Panel: District-wise Public Libraries Map (Open Layout) */}
-      <div
-        id="district-map-card"
-        className="lg:col-span-6 flex flex-col justify-between"
-      >
-        {/* Open Header */}
-        <div className="pb-3 border-b border-slate-100 flex items-center justify-between gap-3 mb-3">
-          <div className="flex items-center gap-2.5 min-w-0">
-            <div className="w-8 h-8 rounded-xl bg-blue-50 text-blue-700 border border-blue-100 flex items-center justify-center shrink-0">
-              <MapPin className="w-4 h-4" />
-            </div>
-            <div className="min-w-0">
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm sm:text-base font-bold text-slate-900 tracking-tight truncate">
-                  {language === 'bn' ? 'জেলাভিত্তিক পাবলিক লাইব্রেরি' : 'District-wise Public Libraries'}
-                </h2>
-                <span className="hidden sm:inline-flex items-center gap-1 text-[10px] font-semibold text-blue-600 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-100">
-                  <Sparkles className="w-2.5 h-2.5" />
-                  Synced
-                </span>
-              </div>
-            </div>
-            {selectedGrade && (
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-950 font-bold hidden sm:inline-flex items-center gap-1 shrink-0 border border-blue-200">
-                <Filter className="w-3 h-3 text-blue-700" />
-                Grade {selectedGrade === 'noClass' ? 'No Class' : selectedGrade}
-              </span>
-            )}
-            {selectedDistrict !== 'all' && (
-              <span className="text-[11px] px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-950 font-bold shrink-0 border border-blue-200">
-                {districtDataMap.get(selectedDistrict)?.name}
-              </span>
-            )}
-          </div>
-
-          {/* Map Controls */}
-          <div className="flex items-center gap-1.5">
-            <div className="flex items-center bg-slate-100/90 rounded-xl p-0.5 border border-slate-200/80 text-[11px] shadow-2xs">
-              <button
-                onClick={() => setMapStyle('azure')}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                  mapStyle === 'azure' ? 'bg-white text-blue-950 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Map View"
-              >
-                Map
-              </button>
-              <button
-                onClick={() => setMapStyle('satellite')}
-                className={`px-2.5 py-1 rounded-lg font-bold transition-all cursor-pointer ${
-                  mapStyle === 'satellite' ? 'bg-white text-blue-950 shadow-2xs' : 'text-slate-600 hover:text-slate-900'
-                }`}
-                title="Satellite View"
-              >
-                Satellite
-              </button>
-            </div>
-
-            <div className="flex items-center bg-slate-100/90 rounded-xl p-0.5 border border-slate-200/80">
-              <button
-                onClick={() => handleZoom(1)}
-                title="Zoom In"
-                className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-blue-900 transition-colors cursor-pointer"
-              >
-                <ZoomIn className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={() => handleZoom(-1)}
-                title="Zoom Out"
-                className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-blue-900 transition-colors cursor-pointer"
-              >
-                <ZoomOut className="w-3.5 h-3.5" />
-              </button>
-              <button
-                onClick={resetView}
-                title="Reset View"
-                className="p-1 hover:bg-white rounded-lg text-slate-600 hover:text-blue-900 transition-colors cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-            </div>
-          </div>
-        </div>
-
-        {/* Map Canvas */}
-        <div className="relative w-full h-[280px] sm:h-[310px] bg-[#dbeafe] rounded-2xl border border-slate-200/90 overflow-hidden shadow-2xs">
-          <div ref={mapContainerRef} className="w-full h-full z-0" />
-
-          {/* Azure branding */}
-          <div className="absolute bottom-2.5 left-2.5 z-10 flex items-center gap-1.5 bg-white/95 backdrop-blur-md px-2.5 py-1 rounded-lg shadow-xs text-[9px] text-slate-700 pointer-events-none border border-slate-200">
-            <svg className="w-3 h-3 text-[#0078d4]" viewBox="0 0 24 24" fill="currentColor">
-              <path d="M11.4 24H0L12.6 0h11.4L11.4 24z M13.5 13.5L8.4 24h15.6L19 13.5h-5.5z" />
-            </svg>
-            <span className="font-bold text-slate-800">Microsoft Azure Maps</span>
-          </div>
-
-          <div className="absolute bottom-2.5 right-2.5 z-10 bg-white/95 backdrop-blur-md px-2 py-0.5 rounded text-[8px] text-slate-500 shadow-2xs pointer-events-none border border-slate-200">
-            ©2026 OSM ©TomTom
-          </div>
-
-          {/* Floating Selected District Card */}
-          <AnimatePresence>
-            {activeDistrictObj && (
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9, y: 10 }}
-                animate={{ opacity: 1, scale: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.9, y: 10 }}
-                className="absolute top-3 right-3 z-10 max-w-[220px] bg-white/95 backdrop-blur-md p-3.5 rounded-2xl border border-slate-200/90 shadow-xl text-[11px]"
-              >
-                <div className="flex items-center justify-between border-b border-slate-100 pb-2 mb-2">
-                  <span className="font-bold text-slate-900">{activeDistrictObj.name}</span>
-                  <span className="text-[9px] px-1.5 py-0.5 rounded-md bg-blue-100 text-blue-900 font-bold">
-                    {activeDistrictObj.division}
-                  </span>
-                </div>
-                <div className="space-y-1 text-slate-600">
-                  <div className="flex justify-between">
-                    <span>Libraries:</span>
-                    <strong className="text-slate-950 font-mono">{activeDistrictObj.totalLibraries}</strong>
-                  </div>
-                  {selectedGrade && (
-                    <div className="flex justify-between">
-                      <span>Grade {selectedGrade === 'noClass' ? 'No Class' : selectedGrade}:</span>
-                      <strong className="text-blue-700 font-bold font-mono">
-                        {selectedGrade === 'noClass' ? activeDistrictObj.grades.noClass : activeDistrictObj.grades[selectedGrade]} libs
-                      </strong>
-                    </div>
-                  )}
-                  <div className="flex justify-between">
-                    <span>Members:</span>
-                    <strong className="text-slate-950 font-mono">
-                      {activeDistrictObj.totalMembers.toLocaleString('en-IN')}
-                    </strong>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Stock:</span>
-                    <strong className="text-emerald-700 font-mono">
-                      {activeDistrictObj.booksInLac.toFixed(1)} Lac
-                    </strong>
-                  </div>
-                </div>
-                <div className="mt-2.5 pt-2 border-t border-slate-100 flex items-center justify-between">
-                  <motion.button
-                    whileHover={{ scale: 1.04 }}
-                    whileTap={{ scale: 0.96 }}
-                    onClick={() => onOpenDistrictModal(activeDistrictObj)}
-                    className="text-[10px] font-bold text-blue-700 hover:text-blue-900 flex items-center gap-1 cursor-pointer"
-                  >
-                    <ExternalLink className="w-3 h-3" />
-                    <span>District Details</span>
-                  </motion.button>
-                  <button
-                    onClick={() => onSelectDistrict('all')}
-                    className="text-[10px] text-slate-500 hover:text-slate-800 underline cursor-pointer"
-                  >
-                    Clear
-                  </button>
-                </div>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-
-        {/* Footer info */}
-        <div className="px-4 py-2.5 bg-slate-50/80 border-t border-slate-100 flex items-center justify-between text-[11px] text-slate-600">
-          <span className="flex items-center gap-2 truncate">
-            <span className="w-2.5 h-2.5 rounded-full bg-gradient-to-r from-sky-400 to-blue-600 inline-block shrink-0 shadow-2xs" />
-            <span className="truncate">
-              {selectedGrade
-                ? `Circles scaled to Grade ${selectedGrade === 'noClass' ? 'No Class' : selectedGrade} libraries.`
-                : 'Interactive bubble size reflects registered public library density.'}
-            </span>
-          </span>
-          {selectedDistrict !== 'all' && (
-            <button
-              onClick={() => onSelectDistrict('all')}
-              className="text-blue-700 hover:text-blue-900 font-bold underline cursor-pointer shrink-0 ml-2"
-            >
-              Reset
-            </button>
-          )}
-        </div>
-      </div>
+      <DistrictMap
+        selectedDistrict={selectedDistrict}
+        onSelectDistrict={onSelectDistrict}
+        onOpenDistrictModal={onOpenDistrictModal}
+        selectedGrade={selectedGrade}
+        selectedDivision={selectedDivision}
+        language={language}
+        filteredDistricts={filteredDistricts}
+        westBengalDistricts={westBengalDistricts}
+      />
 
       {/* Right Panel: Grade-wise Public Libraries Donut (Open Layout) */}
       <div

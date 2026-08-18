@@ -1,5 +1,14 @@
 import { DistrictData, FinancialYearData, UniversityData, StreamData, DivisionPerformance } from '../types';
 
+const formatDisclaimerDate = (date: Date = new Date()) =>
+  new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(date);
+
+export const liveDisclaimerDate = formatDisclaimerDate();
+
 export const financialYears: FinancialYearData[] = [
   {
     year: '2025-2026',
@@ -9,7 +18,7 @@ export const financialYears: FinancialYearData[] = [
     totalColleges: 1870,
     totalStudents: 2240000,
     totalUniversities: 25,
-    disclaimerDate: '15-Aug-2026',
+    disclaimerDate: liveDisclaimerDate,
     multiplier: 1.025,
   },
   {
