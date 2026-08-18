@@ -44,26 +44,26 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
   const isCollegeDisabled = currentFilters.university !== "All";
 
   return (
-    <div className="w-full bg-brand-900 p-4 md:p-5 rounded-2xl md:rounded-3xl border border-brand-800 shadow-glow mb-6">
-      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3.5 md:gap-4">
+    <div className="w-full bg-white p-5 rounded-2xl border border-slate-200/80 shadow-sm mb-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         
         {/* 1. Academic Year */}
         <div className="flex flex-col">
-          <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase">
+          <label className="text-xs font-bold text-slate-500 mb-1.5 tracking-wide uppercase">
             Academic Year
           </label>
           <div className="relative">
             <select
               value={currentFilters.academicYear}
               onChange={(e) => handleChange("academicYear", e.target.value)}
-              className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full bg-[#F8FAFC] hover:bg-slate-100 text-slate-800 font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-slate-200 shadow-2xs cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             >
               <option className="text-slate-900" value="2025-26">2025-26 (Current)</option>
               <option className="text-slate-900" value="2024-25">2024-25</option>
               <option className="text-slate-900" value="2023-24">2023-24</option>
               <option className="text-slate-900" value="2022-23">2022-23</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-white/80">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
               <ChevronDown size={15} />
             </div>
           </div>
@@ -71,14 +71,14 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
 
         {/* 2. University */}
         <div className="flex flex-col">
-          <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase truncate">
+          <label className="text-xs font-bold text-slate-500 mb-1.5 tracking-wide uppercase truncate">
             University
           </label>
           <div className="relative">
             <select
               value={currentFilters.university}
               onChange={(e) => handleChange("university", e.target.value)}
-              className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full bg-[#F8FAFC] hover:bg-slate-100 text-slate-800 font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-slate-200 shadow-2xs cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             >
               <option className="text-slate-900" value="All">All Universities (West Bengal)</option>
               <option className="text-slate-900" value="CU">CU - University of Calcutta</option>
@@ -99,7 +99,7 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
               <option className="text-slate-900" value="Aliah">Aliah University Kolkata</option>
               <option className="text-slate-900" value="RBU">RBU - Rabindra Bharati University</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-white/80">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
               <ChevronDown size={15} />
             </div>
           </div>
@@ -107,14 +107,14 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
 
         {/* 3. District */}
         <div className="flex flex-col">
-          <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase truncate">
+          <label className="text-xs font-bold text-slate-500 mb-1.5 tracking-wide uppercase truncate">
             District
           </label>
           <div className="relative">
             <select
               value={currentFilters.district}
               onChange={(e) => handleChange("district", e.target.value)}
-              className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full bg-[#F8FAFC] hover:bg-slate-100 text-slate-800 font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-slate-200 shadow-2xs cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             >
               <option className="text-slate-900" value="All">All Districts</option>
               <option className="text-slate-900" value="Kolkata">Kolkata</option>
@@ -141,7 +141,7 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
               <option className="text-slate-900" value="Kalimpong">Kalimpong</option>
               <option className="text-slate-900" value="Jhargram">Jhargram</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-white/80">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
               <ChevronDown size={15} />
             </div>
           </div>
@@ -149,14 +149,14 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
 
         {/* 4. Institution Type / Stream */}
         <div className="flex flex-col">
-          <label className="text-xs font-bold text-brand-100 mb-1.5 tracking-wide uppercase truncate">
+          <label className="text-xs font-bold text-slate-500 mb-1.5 tracking-wide uppercase truncate">
             Institution Type
           </label>
           <div className="relative">
             <select
               value={currentFilters.universityType}
               onChange={(e) => handleChange("universityType", e.target.value)}
-              className="w-full bg-white/10 hover:bg-white/15 text-white font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-white/10 hover:border-white/20 shadow-soft cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-white/20"
+              className="w-full bg-[#F8FAFC] hover:bg-slate-100 text-slate-800 font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border border-slate-200 shadow-2xs cursor-pointer appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
             >
               <option className="text-slate-900" value="All">All Types & Streams</option>
               <option className="text-slate-900" value="State-Aided">State-Aided & Affiliated (84.2%)</option>
@@ -168,7 +168,7 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
               <option className="text-slate-900" value="Pharmacy">Pharmacy</option>
               <option className="text-slate-900" value="Management">Management (MBA/MCA)</option>
             </select>
-            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-white/80">
+            <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-slate-400">
               <ChevronDown size={15} />
             </div>
           </div>
@@ -177,11 +177,11 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
         {/* 5. College */}
         <div className="flex flex-col">
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-xs font-bold text-brand-100 tracking-wide uppercase truncate">
+            <label className="text-xs font-bold text-slate-500 tracking-wide uppercase truncate">
               Colleges & Schools
             </label>
             {isCollegeDisabled && (
-              <span className="text-[9px] text-amber-300 font-semibold truncate ml-1">(When Uni is &apos;All&apos;)</span>
+              <span className="text-[10px] text-amber-600 font-semibold truncate ml-1">(When Uni is &apos;All&apos;)</span>
             )}
           </div>
           <div className="relative">
@@ -189,10 +189,10 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
               disabled={isCollegeDisabled}
               value={isCollegeDisabled ? "All" : currentFilters.college}
               onChange={(e) => handleChange("college", e.target.value)}
-              className={`w-full text-white font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border shadow-soft appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-white/20 ${
+              className={`w-full font-semibold py-2.5 pl-3.5 pr-8 rounded-xl border shadow-2xs appearance-none transition-colors duration-200 text-xs md:text-sm truncate focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 ${
                 isCollegeDisabled
-                  ? "bg-white/5 border-white/5 opacity-50 cursor-not-allowed text-white/50"
-                  : "bg-white/10 hover:bg-white/15 border-white/10 hover:border-white/20 cursor-pointer"
+                  ? "bg-slate-100 border-slate-200 opacity-60 cursor-not-allowed text-slate-400"
+                  : "bg-[#F8FAFC] hover:bg-slate-100 text-slate-800 border-slate-200 cursor-pointer"
               }`}
             >
               <option className="text-slate-900" value="All">All Colleges & Schools</option>
@@ -220,7 +220,7 @@ export default function Filters({ filters, onFilterChange }: FiltersProps) {
               <option className="text-slate-900" value="Hare School">Hare School Kolkata</option>
             </select>
             <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 ${
-              isCollegeDisabled ? "text-white/30" : "text-white/80"
+              isCollegeDisabled ? "text-slate-300" : "text-slate-400"
             }`}>
               <ChevronDown size={15} />
             </div>

@@ -1,0 +1,6 @@
+{
+  "name": "WBHED Public Library & Higher Education Dashboard",
+  "description": "Department of Higher Education & Directorate of Library Services, Government of West Bengal Analytics & e-Samarth Portal Dashboard",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
