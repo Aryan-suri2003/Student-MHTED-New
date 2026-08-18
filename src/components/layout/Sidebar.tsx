@@ -24,13 +24,10 @@ const navigation = [
     { name: 'Dashboard', href: '/', icon: LayoutDashboard },
     { name: 'Students', href: '/students', icon: Users },
     { name: 'Universities', href: '/universities', icon: Building2 },
-    { name: 'Colleges', href: '/colleges', icon: GraduationCap },
     { name: 'Public Libraries', href: '/libraries', icon: Library },
   ]},
   { group: "ANALYTICS & DOCS", items: [
-    { name: 'Districts', href: '/districts', icon: Map },
-    { name: 'Research', href: '/research', icon: Microscope },
-    { name: 'Scholarships', href: '/scholarships', icon: Award },
+   
     { name: 'Reports', href: '/reports', icon: FileText },
   ]}
 ];

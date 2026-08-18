@@ -35,11 +35,21 @@ const Sparkline = ({ color, data }: { color: string, data: number[] }) => {
 };
 
 export default function StateSnapshot() {
-  const { academicYear } = useYear();
+  const { academicYear, getOverviewScale } = useYear();
+  const scale = getOverviewScale();
   const overview = stateOverviewData[academicYear] || stateOverviewData["2025–26"];
   const districts = useMemo(() => districtsData[academicYear] || districtsData["2025–26"], [academicYear]);
   
   const [geoJsonLoaded, setGeoJsonLoaded] = useState(false);
+
+  // Helper to scale string values like "2,450", "12.4 Lakh", "48.2K", "84.5%"
+  const scaleValue = (valStr: string, scaleFactor: number) => {
+    if (scaleFactor === 1.0) return valStr;
+    if (valStr.includes("Lakh")) return (parseFloat(valStr) * scaleFactor).toFixed(1) + " Lakh";
+    if (valStr.includes("K")) return (parseFloat(valStr) * scaleFactor).toFixed(1) + "K";
+    if (valStr.includes("%")) return (parseFloat(valStr) * scaleFactor).toFixed(1) + "%";
+    return Math.max(1, Math.round(parseFloat(valStr.replace(/,/g, '')) * scaleFactor)).toLocaleString();
+  };
 
   useEffect(() => {
     const loadMap = async () => {
@@ -138,7 +148,7 @@ export default function StateSnapshot() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}>
             <div className="flex justify-between items-end mb-2">
               <div>
-                <div className="text-4xl font-black text-[#2563EB] tracking-tighter">{overview.institutions.value}</div>
+                <div className="text-4xl font-black text-[#2563EB] tracking-tighter">{scaleValue(overview.institutions.value, scale)}</div>
                 <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mt-1">Institutions</div>
               </div>
               <Sparkline color="#2563EB" data={sparklineData.institutions} />
@@ -152,7 +162,7 @@ export default function StateSnapshot() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}>
             <div className="flex justify-between items-end mb-2">
               <div>
-                <div className="text-4xl font-black text-[#8B5CF6] tracking-tighter">{overview.students.value.replace(" Lakh", "L")}</div>
+                <div className="text-4xl font-black text-[#9333EA] tracking-tighter">{scaleValue(overview.students.value, scale)}</div>
                 <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mt-1">Students</div>
               </div>
               <Sparkline color="#8B5CF6" data={sparklineData.students} />
@@ -166,7 +176,7 @@ export default function StateSnapshot() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.6 }}>
             <div className="flex justify-between items-end mb-2">
               <div>
-                <div className="text-4xl font-black text-[#38BDF8] tracking-tighter">{overview.faculty.value}</div>
+                <div className="text-4xl font-black text-[#10B981] tracking-tighter">{scaleValue(overview.faculty.value, scale)}</div>
                 <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mt-1">Faculty</div>
               </div>
               <Sparkline color="#38BDF8" data={sparklineData.faculty} />
@@ -180,7 +190,7 @@ export default function StateSnapshot() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.7 }}>
             <div className="flex justify-between items-end mb-2">
               <div>
-                <div className="text-4xl font-black text-[#10B981] tracking-tighter">78.4%</div>
+                <div className="text-4xl font-black text-[#10B981] tracking-tighter">{scaleValue(overview.enrolment.value, scale)}</div>
                 <div className="text-sm font-bold text-slate-500 uppercase tracking-wider mt-1">Enrolment</div>
               </div>
               <Sparkline color="#10B981" data={sparklineData.enrolment} />

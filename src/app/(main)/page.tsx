@@ -8,8 +8,7 @@ import GrowthJourney from "@/components/overview/GrowthJourney";
 import StateRadar from "@/components/overview/StateRadar";
 import StateSignals from "@/components/overview/StateSignals";
 import EcosystemFlow from "@/components/overview/EcosystemFlow";
-import SnapshotTicker from "@/components/overview/SnapshotTicker";
-import ExplorePortal from "@/components/overview/ExplorePortal";
+import Footer from "@/components/layout/Footer";
 
 export default function OverviewPage() {
   return (
@@ -23,8 +22,7 @@ export default function OverviewPage() {
       <StateRadar />
       <StateSignals />
       <EcosystemFlow />
-      <SnapshotTicker />
-      <ExplorePortal />
+      <Footer />
     </div>
   );
 }

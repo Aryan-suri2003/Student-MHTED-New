@@ -1,12 +1,18 @@
 "use client";
 
 import React from "react";
-import { Search, Bell, User } from "lucide-react";
+import { Search, Bell, User, RotateCcw } from "lucide-react";
 import { useYear } from "@/contexts/YearContext";
 import { usePathname } from "next/navigation";
 
 export default function Header() {
-  const { academicYear, setAcademicYear } = useYear();
+  const { 
+    academicYear, setAcademicYear,
+    instType, setInstType,
+    university, setUniversity,
+    college, setCollege,
+    resetFilters
+  } = useYear();
   const pathname = usePathname();
 
   // Very basic route-to-title mapping
@@ -55,7 +61,11 @@ export default function Header() {
 
           <div className="flex items-center gap-2 px-3 py-1.5 border-r border-[#E2E8F0]">
             <span className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider">Type</span>
-            <select className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[110px]">
+            <select 
+              className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[110px]"
+              value={instType}
+              onChange={(e) => setInstType(e.target.value)}
+            >
               <option value="All">All Types</option>
               <option value="State Public">State Public</option>
               <option value="State Private">State Private</option>
@@ -65,7 +75,11 @@ export default function Header() {
 
           <div className="flex items-center gap-2 px-3 py-1.5 border-r border-[#E2E8F0]">
             <span className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider">Univ</span>
-            <select className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[120px] truncate">
+            <select 
+              className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[120px] truncate"
+              value={university}
+              onChange={(e) => setUniversity(e.target.value)}
+            >
               <option value="All">All Universities</option>
               <option value="Calcutta University">Calcutta University</option>
               <option value="Jadavpur University">Jadavpur University</option>
@@ -73,15 +87,28 @@ export default function Header() {
             </select>
           </div>
 
-          <div className="flex items-center gap-2 px-3 py-1.5">
+          <div className="flex items-center gap-2 px-3 py-1.5 border-r border-[#E2E8F0]">
             <span className="text-[12px] font-bold text-[#64748B] uppercase tracking-wider">College</span>
-            <select className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[110px] truncate">
+            <select 
+              className="bg-transparent text-[13px] font-bold text-[#0F172A] outline-none cursor-pointer w-[110px] truncate"
+              value={college}
+              onChange={(e) => setCollege(e.target.value)}
+            >
               <option value="All">All Colleges</option>
               <option value="Presidency College">Presidency College</option>
               <option value="St. Xavier's">St. Xavier's</option>
               <option value="Bethune College">Bethune College</option>
             </select>
           </div>
+
+          <button 
+            onClick={resetFilters}
+            className="flex items-center gap-1.5 px-3 py-1 text-[12px] font-bold text-red-500 hover:text-red-600 hover:bg-red-50 rounded-full transition-colors ml-1"
+            title="Reset Filters"
+          >
+            <RotateCcw size={14} />
+            Reset
+          </button>
 
         </div>
 
