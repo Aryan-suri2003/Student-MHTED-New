@@ -11,7 +11,7 @@ interface TrendCardProps {
 
 export const TrendCard: React.FC<TrendCardProps> = ({ title, value, deltaPercent, icon: Icon }) => {
   return (
-    <div className="p-5 flex flex-col h-full relative overflow-hidden group min-h-[160px]">
+    <div className="p-5 flex flex-col h-full relative overflow-hidden group min-h-[160px] bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
       {/* Background SVG Line */}
       <svg 
         className="absolute bottom-0 left-0 w-full h-[60%] pointer-events-none" 

@@ -81,7 +81,7 @@ export const UniversityDashboard: React.FC<UniversityDashboardProps> = () => {
   };
 
   return (
-    <div className="w-full min-h-screen bg-[#f4f7fe] text-slate-800 font-sans flex flex-col antialiased rounded-3xl overflow-hidden border border-slate-200/80 shadow-soft">
+    <div className="w-full min-h-[calc(100vh-8rem)] bg-white/80 backdrop-blur-xl text-slate-800 font-sans flex flex-col antialiased rounded-[2.5rem] overflow-hidden border-[1.5px] border-slate-200/70 shadow-sm">
       <div className="flex-1 flex max-w-[1920px] w-full mx-auto relative">
         <main className="flex-1 flex flex-col min-w-0 bg-white overflow-x-hidden">
           {/* Dynamic Top Filter Bar */}
