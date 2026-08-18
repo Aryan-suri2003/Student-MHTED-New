@@ -260,8 +260,9 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
             </h2>
           </div>
 
-          <div className="h-[460px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="overflow-x-auto w-full">
+            <div className="h-[460px] min-w-[500px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={UNIVERSITY_OUTPUT_DATA}
                 margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
@@ -334,6 +335,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                 <Bar dataKey="researchGrants" stackId="a" fill="#4fd1c5" radius={[0, 4, 4, 0]} name="researchGrants" />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
@@ -355,7 +357,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                     className="flex items-center gap-4 text-[12px] group hover:bg-slate-50 p-1.5 rounded-md transition-colors"
                   >
                     {/* Grantee Name */}
-                    <div className="w-40 lg:w-48 font-medium text-slate-700 truncate group-hover:text-indigo-700" title={grantee.name}>
+                    <div className="w-24 sm:w-40 lg:w-48 font-medium text-slate-700 truncate group-hover:text-indigo-700" title={grantee.name}>
                       {grantee.name}
                     </div>
 

@@ -139,7 +139,7 @@ export const CampusView: React.FC<CampusViewProps> = ({
             <Building className="w-4 h-4 text-indigo-600" />
             Campus Infrastructure
           </h3>
-          <div className="grid grid-cols-2 gap-3 flex-1 items-stretch">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 items-stretch">
             {/* Card 3: Colleges and Centers */}
             <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
               <div className="flex items-center gap-2 mb-3">

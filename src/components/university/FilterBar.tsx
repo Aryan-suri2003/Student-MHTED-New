@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from 'react';
-import { Search, FileSpreadsheet, Printer, MapPin, Building2 } from 'lucide-react';
+import { Search, MapPin, Building2 } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ActiveTab, FilterState } from '@/types/university';
 import { MinimalistCalendarYearPicker } from '@/components/MinimalistCalendarYearPicker';
@@ -114,26 +114,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
           {/* Right Action Tools */}
           <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap xl:ml-auto">
-            <div className="flex items-center gap-1.5">
-              <motion.button
-                whileHover={{ y: -1, scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-b from-white to-slate-50 hover:to-slate-100 text-slate-800 border border-slate-200/90 rounded-xl text-xs font-bold shadow-xs hover:shadow-sm hover:border-slate-300 transition-all cursor-pointer group"
-              >
-                <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600 group-hover:scale-110 transition-transform" />
-                <span className="hidden sm:inline">Export CSV</span>
-              </motion.button>
-              <motion.button
-                whileHover={{ y: -1, scale: 1.02 }}
-                whileTap={{ scale: 0.97 }}
-                onClick={() => window.print()}
-                className="flex items-center gap-1.5 px-3 py-2 bg-gradient-to-b from-white to-slate-50 hover:to-slate-100 text-slate-800 border border-slate-200/90 rounded-xl text-xs font-bold shadow-xs hover:shadow-sm hover:border-slate-300 transition-all cursor-pointer group"
-              >
-                <Printer className="w-3.5 h-3.5 text-blue-600 group-hover:scale-110 transition-transform" />
-                <span className="hidden sm:inline">Print</span>
-              </motion.button>
-            </div>
-            
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs shrink-0 ml-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>
@@ -145,7 +125,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
         {/* Main Switcher Row */}
         <div className="flex flex-wrap items-center justify-between gap-3 border-t border-slate-200/60 mt-1 pt-1">
-          <div className="flex items-center gap-4 p-1.5 overflow-hidden">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-4 p-1.5">
             <button
               onClick={() => onSelectTab('affiliation')}
               className={`py-1.5 text-[12px] font-semibold transition-all cursor-pointer ${activeTab === 'affiliation' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
