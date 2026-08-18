@@ -15,6 +15,13 @@ interface FilterBarProps {
   onResetFilters: () => void;
 }
 
+const getLiveUpdatedDate = () =>
+  new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date());
+
 export const FilterBar: React.FC<FilterBarProps> = ({
   activeTab,
   onSelectTab,
@@ -117,7 +124,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
             <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs shrink-0 ml-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>
-                Updated: <strong className="text-slate-800">14-Aug-2026</strong>
+                Updated: <strong className="text-slate-800">{getLiveUpdatedDate()}</strong>
               </span>
             </div>
           </div>

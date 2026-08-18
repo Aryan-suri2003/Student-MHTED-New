@@ -118,7 +118,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
         {/* Main Filters Controls Row */}
         <div className="flex flex-col xl:flex-row items-stretch xl:items-center justify-between gap-3 w-full">
           {/* Grouped Modern Selectors with Animated Dropdowns & Minimalist Calendar */}
-          <div className="flex flex-wrap lg:flex-nowrap items-center gap-2 sm:gap-2.5 shrink-0">
+          <div className="flex flex-wrap items-center gap-2 sm:gap-2.5 flex-1 min-w-0">
             {/* 1. Minimalist Modern Calendar Financial Year Picker (Supporting 2026 Current Year) */}
             <MinimalistCalendarYearPicker
               selectedYear={selectedYear}
@@ -222,22 +222,8 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           </div>
 
           {/* Right Action Tools: Shifted to right with space */}
-          <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap xl:ml-auto">
-            {/* Districts Count Indicator Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="flex items-center gap-1.5 px-2.5 py-1.5 bg-blue-50/90 border border-blue-200/90 rounded-xl text-[11px] font-bold text-blue-950 shadow-2xs"
-            >
-              <span className="w-2 h-2 rounded-full bg-blue-600 shrink-0" />
-              <span className="font-mono">
-                {selectedDivision === 'all'
-                  ? '23 of 23 districts'
-                  : `${matchingCount ?? 23} of 23 districts (${selectedDivision})`}
-              </span>
-            </motion.div>
-
-            <div className="flex items-center gap-1.5">
+          <div className="flex flex-wrap items-center justify-end gap-2 w-full xl:w-auto xl:ml-auto">
+            <div className="flex items-center gap-1.5 flex-wrap">
               <motion.button
                 whileHover={{ y: -1, scale: 1.02 }}
                 whileTap={{ scale: 0.97 }}
