@@ -538,7 +538,7 @@ export default function AdmissionDashboard({
 
   // Card 2: Courses Data
   const coursesSlices: Slice[] = [
-    { label: "UG Programs", value: Math.round((coursesUG / totalCourses) * 100), raw: String(coursesUG), color: "#10b981" },
+    { label: "UG Programs", value: Math.round((coursesUG / totalCourses) * 100), raw: String(coursesUG), color: "#4ade80" },
     { label: "PG Programs", value: Math.round((coursesPG / totalCourses) * 100), raw: String(coursesPG), color: "#8b5cf6" },
     { label: "Diploma / Poly", value: Math.round((coursesDip / totalCourses) * 100), raw: String(coursesDip), color: "#ec4899" },
     { label: "PhD / Research", value: Math.round((coursesPhD / totalCourses) * 100), raw: String(coursesPhD), color: "#2563eb" },

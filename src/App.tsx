@@ -155,7 +155,7 @@ export default function App() {
       {/* 1. Official e-Samarth Header with Tabs & Language */}
       <Header
         activeTab={activeTab}
-        setActiveTab={setActiveTab}
+        setActiveTab={setActiveTab as (tab: any) => void}
         language={language}
         setLanguage={setLanguage}
       />

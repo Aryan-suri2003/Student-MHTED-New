@@ -233,8 +233,8 @@ export const DASHBOARD_METRICS: Record<string, GroupedMetricData | MetricData> =
     metric: 'hostels',
     total: 9444,
     parts: [
-      { label: 'Female Hostels', value: 5650, deltaPercent: 4.6 },
-      { label: 'Male Hostels', value: 3794, deltaPercent: 1.2 }
+      { metric: 'femaleHostels', label: 'Female Hostels', value: 5650, deltaPercent: 4.6 },
+      { metric: 'maleHostels', label: 'Male Hostels', value: 3794, deltaPercent: 1.2 }
     ]
   },
   mousCampus: {

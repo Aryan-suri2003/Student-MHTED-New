@@ -294,9 +294,9 @@ export const BuildingAndBookUsageSection: React.FC<BuildingAndBookUsageSectionPr
                   })}
                 </Pie>
                 <RechartsTooltip
-                  formatter={(val: number, name: string, item: any) => [
-                    `${val}% (${item.payload.count.toLocaleString('en-IN')} premises)`,
-                    item.payload.name,
+                  formatter={(val: any, _name: any, item: any) => [
+                    `${val}% (${item?.payload?.count?.toLocaleString('en-IN') || 0} premises)`,
+                    item?.payload?.name || '',
                   ]}
                   contentStyle={{
                     backgroundColor: '#ffffff',

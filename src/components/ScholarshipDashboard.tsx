@@ -319,7 +319,7 @@ function StreamRadarChart({
             const bCoord = beneficiaryCoords[i];
             const aCoord = applicantCoords[i];
             const isHovered = hoveredIndex === i;
-            const rate = ((d.beneficiaries / d.applicants) * 100).toFixed(1);
+            const rate = ((d.beneficiaries / d.applicants) * 100).toFixed(0);
 
             // Label Position
             const angle = (2 * Math.PI * i) / count - Math.PI / 2;
@@ -417,6 +417,15 @@ function StreamRadarChart({
 }
 
 // ─── Clustered Column Chart Component ──────────────────────────────────────────
+const SCHEME_SHORT_NAMES: Record<string, { short: string; full: string }> = {
+  "Swami Vivekananda Merit-cum-Means Scholarship (SVMCM)": { short: "SVMCM", full: "Swami Vivekananda (SVMCM)" },
+  "Oasis Post-Matric Scholarship for SC/ST Students": { short: "OASIS", full: "Oasis Post-Matric (SC/ST)" },
+  "Aikyashree State Scholarship for Minority Students": { short: "Aikyashree", full: "Aikyashree Minority Support" },
+  "Kanyashree Prakalpa (K3 Higher Education Support)": { short: "Kanyashree", full: "Kanyashree Prakalpa (K3)" },
+  "West Bengal Student Credit Card Support Scheme": { short: "WBSCC", full: "WB Student Credit Card" },
+  "Chief Minister Relief Fund Higher Education Grant": { short: "CMRF", full: "CM Relief Fund Grant" },
+};
+
 function ClusteredSchemeChart({
   schemes,
   onTooltip,
@@ -426,29 +435,30 @@ function ClusteredSchemeChart({
 }) {
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
 
-  const maxVal = 1600; // max ₹ Cr scale
-  const chartHeight = 160;
+  const maxVal = 1800; // max ₹ Cr scale
+  const chartHeight = 150;
 
   return (
-    <div className="w-full flex flex-col justify-between h-full">
-      <div className="flex items-center justify-between text-xs font-semibold px-2 mb-2 text-slate-500">
+    <div className="w-full flex flex-col justify-between">
+      {/* Top Header Legend */}
+      <div className="flex items-center justify-between text-xs font-semibold px-1 mb-3 text-slate-500">
         <div className="flex items-center gap-4">
-          <span className="flex items-center gap-1.5 text-blue-800">
-            <span className="w-2.5 h-2.5 rounded-sm bg-blue-600" /> Allotted Budget (₹ Cr)
+          <span className="flex items-center gap-1.5 text-blue-700 font-bold">
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#2563EB]" /> Allotted Budget (₹ Cr)
           </span>
-          <span className="flex items-center gap-1.5 text-teal-800 font-bold">
-            <span className="w-2.5 h-2.5 rounded-sm bg-teal-600" /> Disbursed Amount (₹ Cr)
+          <span className="flex items-center gap-1.5 text-emerald-700 font-bold">
+            <span className="w-2.5 h-2.5 rounded-sm bg-[#059669]" /> Disbursed Amount (₹ Cr)
           </span>
         </div>
-        <span className="text-[11px] text-slate-400">Utilization %</span>
+        <span className="text-[11px] font-bold text-slate-400">Utilization Rate</span>
       </div>
 
-      {/* SVG Clustered Column Bars */}
-      <div className="grid grid-cols-6 gap-2 sm:gap-3 items-end h-[175px] pt-4 px-2 border-b border-slate-200">
+      {/* Clustered Columns Plot Area (Bars rest directly on baseline) */}
+      <div className="grid grid-cols-6 gap-2 sm:gap-4 items-end h-[165px] pt-4 px-2 border-b border-slate-200">
         {schemes.map((sc, idx) => {
-          const allottedH = (sc.allotted / maxVal) * chartHeight;
-          const disbursedH = (sc.disbursed / maxVal) * chartHeight;
-          const utilRate = ((sc.disbursed / sc.allotted) * 100).toFixed(1);
+          const allottedH = Math.max(12, (sc.allotted / maxVal) * chartHeight);
+          const disbursedH = Math.max(10, (sc.disbursed / maxVal) * chartHeight);
+          const utilRate = ((sc.disbursed / sc.allotted) * 100).toFixed(0);
           const isHovered = hoveredIdx === idx;
 
           return (
@@ -473,43 +483,90 @@ function ClusteredSchemeChart({
               }}
             >
               {/* Top Rate Badge */}
-              <span className={`text-[10px] font-black mb-1.5 px-1 rounded transition-all ${
-                isHovered ? "bg-teal-600 text-white scale-105" : "text-teal-800 bg-teal-50"
+              <span className={`text-[10px] font-black mb-2 px-1.5 py-0.5 rounded-full transition-all whitespace-nowrap ${
+                isHovered
+                  ? "bg-emerald-600 text-white scale-105 shadow-sm"
+                  : "text-emerald-700 bg-emerald-50 border border-emerald-200/70"
               }`}>
                 {utilRate}%
               </span>
 
               {/* Clustered Columns */}
-              <div className="flex items-end gap-1 w-full justify-center">
+              <div className="flex items-end gap-1 sm:gap-1.5 w-full justify-center">
                 {/* Allotted Bar */}
                 <div
                   style={{ height: `${allottedH}px` }}
-                  className="w-3.5 sm:w-4 bg-gradient-to-t from-blue-700 to-blue-500 rounded-t-md shadow-xs transition-all duration-500 group-hover:brightness-110"
+                  className={`w-3 sm:w-4 rounded-t-md shadow-2xs transition-all duration-300 ${
+                    isHovered
+                      ? "bg-blue-600 brightness-110"
+                      : "bg-gradient-to-t from-blue-700 to-blue-500"
+                  }`}
                 />
                 {/* Disbursed Bar */}
                 <div
                   style={{ height: `${disbursedH}px` }}
-                  className="w-3.5 sm:w-4 bg-gradient-to-t from-teal-700 to-emerald-400 rounded-t-md shadow-xs transition-all duration-500 group-hover:brightness-110"
+                  className={`w-3 sm:w-4 rounded-t-md shadow-2xs transition-all duration-300 ${
+                    isHovered
+                      ? "bg-emerald-500 brightness-110"
+                      : "bg-gradient-to-t from-emerald-700 to-emerald-400"
+                  }`}
                 />
               </div>
+            </div>
+          );
+        })}
+      </div>
 
-              {/* Scheme Short Label */}
-              <span className="text-[10px] font-extrabold text-slate-500 truncate w-full text-center mt-2 group-hover:text-blue-900">
-                S{idx + 1}
+      {/* X-Axis Category Labels Row (Sitting cleanly below the baseline) */}
+      <div className="grid grid-cols-6 gap-2 sm:gap-4 px-2 pt-2.5">
+        {schemes.map((sc, idx) => {
+          const schemeInfo = SCHEME_SHORT_NAMES[sc.name] || { short: `S${idx + 1}`, full: sc.name };
+          const isHovered = hoveredIdx === idx;
+
+          return (
+            <div
+              key={sc.name}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              className="flex justify-center"
+            >
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-md transition-all text-center cursor-pointer select-none ${
+                isHovered
+                  ? "bg-blue-600 text-white font-extrabold shadow-2xs scale-105"
+                  : "bg-slate-100 text-slate-600 hover:text-blue-900 hover:bg-blue-50"
+              }`}>
+                {schemeInfo.short}
               </span>
             </div>
           );
         })}
       </div>
 
-      {/* Scheme Legend Footnotes */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5 text-[10px] font-semibold text-slate-500 mt-2.5">
-        {schemes.map((sc, idx) => (
-          <div key={sc.name} className="truncate" title={sc.name}>
-            <b className="text-blue-900 mr-1">S{idx + 1}:</b>
-            <span>{sc.name.split(" ")[0]} {sc.name.split(" ")[1] || ""}...</span>
-          </div>
-        ))}
+      {/* Scheme Legend Footnotes (Clean 2-Column Grid) */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2 text-[11px] font-medium text-slate-600 mt-4 pt-3 border-t border-slate-100">
+        {schemes.map((sc, idx) => {
+          const schemeInfo = SCHEME_SHORT_NAMES[sc.name] || { short: `S${idx + 1}`, full: sc.name };
+          const isHovered = hoveredIdx === idx;
+
+          return (
+            <div
+              key={sc.name}
+              onMouseEnter={() => setHoveredIdx(idx)}
+              onMouseLeave={() => setHoveredIdx(null)}
+              className={`flex items-center gap-2 p-1.5 rounded-lg transition-colors cursor-pointer ${
+                isHovered ? "bg-blue-50/80 text-blue-900 font-bold" : "hover:bg-slate-50"
+              }`}
+              title={sc.name}
+            >
+              <span className={`px-1.5 py-0.5 rounded text-[10px] font-extrabold shrink-0 ${
+                isHovered ? "bg-blue-600 text-white" : "bg-blue-100 text-blue-800"
+              }`}>
+                {schemeInfo.short}
+              </span>
+              <span className="truncate">{schemeInfo.full}</span>
+            </div>
+          );
+        })}
       </div>
     </div>
   );
@@ -540,7 +597,7 @@ function SteppedFunnelChart({
   return (
     <div className="flex flex-col justify-between h-full space-y-2.5 w-full">
       {tiers.map((t, idx) => {
-        const convRate = ((t.beneficiaries / t.applicants) * 100).toFixed(1);
+        const convRate = ((t.beneficiaries / t.applicants) * 100).toFixed(0);
         const isHovered = hoveredIdx === idx;
         const widthPct = widths[idx];
 
@@ -782,48 +839,60 @@ export default function ScholarshipDashboard({
     disbursedCr: 5350.3,
   };
 
-  // Adjust metrics if a specific university is filtered in top bar
+  // Adjust metrics based on selected global filters
   const multiplier = useMemo(() => {
-    if (!globalFilters?.university || globalFilters.university === "All") return 1;
-    switch (globalFilters.university) {
-      case "CU":
-        return 0.220;
-      case "MAKAUT":
-        return 0.165;
-      case "BU":
-        return 0.145;
-      case "KU":
-        return 0.095;
-      case "VU":
-        return 0.090;
-      case "WBSU":
-        return 0.080;
-      case "NBU":
-        return 0.065;
-      case "UGB":
-        return 0.055;
-      case "JU":
-        return 0.045;
-      case "KNU":
-        return 0.040;
-      case "SKBU":
-        return 0.035;
-      case "BKU":
-        return 0.030;
-      case "CBPBU":
-        return 0.025;
-      case "Presidency":
-        return 0.015;
-      case "Visva-Bharati":
-        return 0.018;
-      case "Aliah":
-        return 0.012;
-      case "RBU":
-        return 0.018;
-      default:
-        return 0.035;
+    let scale = 1.0;
+    
+    if (globalFilters?.academicYear) {
+      if (globalFilters.academicYear === "2024-25") scale *= 0.88;
+      else if (globalFilters.academicYear === "2023-24") scale *= 0.76;
+      else if (globalFilters.academicYear === "2022-23") scale *= 0.65;
     }
-  }, [globalFilters?.university]);
+    
+    if (globalFilters?.district && globalFilters.district !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.district.length; i++) {
+        hash = globalFilters.district.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.05 + (Math.abs(hash) % 100) / 1000); // Unique scale between 0.05 and 0.15
+    }
+    
+    if (globalFilters?.universityType && globalFilters.universityType !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.universityType.length; i++) {
+        hash = globalFilters.universityType.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.1 + (Math.abs(hash) % 50) / 100);
+    }
+    
+    if (globalFilters?.college && globalFilters.college !== "All") {
+      scale *= 0.05;
+    }
+
+    if (globalFilters?.university && globalFilters.university !== "All") {
+      switch (globalFilters.university) {
+        case "CU": scale *= 0.220; break;
+        case "MAKAUT": scale *= 0.165; break;
+        case "BU": scale *= 0.145; break;
+        case "KU": scale *= 0.095; break;
+        case "VU": scale *= 0.090; break;
+        case "WBSU": scale *= 0.080; break;
+        case "NBU": scale *= 0.065; break;
+        case "UGB": scale *= 0.055; break;
+        case "JU": scale *= 0.045; break;
+        case "KNU": scale *= 0.040; break;
+        case "SKBU": scale *= 0.035; break;
+        case "BKU": scale *= 0.030; break;
+        case "CBPBU": scale *= 0.025; break;
+        case "Presidency": scale *= 0.015; break;
+        case "Visva-Bharati": scale *= 0.018; break;
+        case "Aliah": scale *= 0.012; break;
+        case "RBU": scale *= 0.018; break;
+        default: scale *= 0.035; break;
+      }
+    }
+    return scale;
+  }, [globalFilters]);
 
   const summary = useMemo(() => {
     return {
@@ -1001,7 +1070,7 @@ export default function ScholarshipDashboard({
       }));
   }, [multiplier, districtSearch]);
 
-  const beneficiaryRate = ((summary.beneficiaries / summary.applicants) * 100).toFixed(1);
+  const beneficiaryRate = ((summary.beneficiaries / summary.applicants) * 100).toFixed(0);
   const avgBenefitPerStudent = Math.round((summary.disbursedCr * 10000000) / (summary.beneficiaries || 1));
 
   return (
@@ -1135,7 +1204,7 @@ export default function ScholarshipDashboard({
                   title: "Total Scholarship Funds Disbursed Outlay",
                   subtitle: "Direct Benefit Transfer to Student Accounts & Colleges",
                   items: [
-                    { label: "Total Disbursed", value: `₹ ${summary.disbursedCr.toLocaleString("en-IN", { minimumFractionDigits: 2 })} Cr`, highlight: true },
+                    { label: "Total Disbursed", value: `₹ ${summary.disbursedCr.toLocaleString("en-IN", { maximumFractionDigits: 0 })} Cr`, highlight: true },
                     { label: "Average Benefit / Student", value: `₹ ${avgBenefitPerStudent.toLocaleString("en-IN")}` },
                     { label: "Bank Route", value: "Aadhaar Payment Bridge System" },
                   ],
@@ -1164,7 +1233,7 @@ export default function ScholarshipDashboard({
               </div>
               
               <h3 className="text-3xl lg:text-4xl font-black text-indigo-950 tracking-tight mt-1">
-                ₹ {summary.disbursedCr.toLocaleString("en-IN", { minimumFractionDigits: 2 })} <span className="text-lg font-bold text-slate-500">Cr</span>
+                ₹ {summary.disbursedCr.toLocaleString("en-IN", { maximumFractionDigits: 0 })} <span className="text-lg font-bold text-slate-500">Cr</span>
               </h3>
             </div>
 
@@ -1245,7 +1314,7 @@ export default function ScholarshipDashboard({
             {/* Connected Dumbbell Range Rows for each Gender */}
             <div className="space-y-3 mt-1">
               {genderData.map((g) => {
-                const sanctionRate = ((g.beneficiaries / g.applicants) * 100).toFixed(1);
+                const sanctionRate = ((g.beneficiaries / g.applicants) * 100).toFixed(0);
                 const isFemale = g.name.includes("Female");
                 const isMale = g.name.includes("Male");
                 const colorTheme = isFemale
@@ -1364,7 +1433,7 @@ export default function ScholarshipDashboard({
             {/* 2-Column Grid of Category Cards with Mini SVG Circular Progress Meters */}
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mt-1">
               {categoryData.map((cat) => {
-                const convRate = ((cat.beneficiaries / cat.applicants) * 100).toFixed(1);
+                const convRate = ((cat.beneficiaries / cat.applicants) * 100).toFixed(0);
                 const strokeColor =
                   cat.code === "OBC" ? "#2563eb" :
                   cat.code === "EBC" ? "#0d9488" :
@@ -1538,7 +1607,7 @@ export default function ScholarshipDashboard({
 
             <div className="space-y-3 mt-2">
               {departmentData.map((dep) => {
-                const effRate = ((dep.beneficiaries / dep.applicants) * 100).toFixed(1);
+                const effRate = ((dep.beneficiaries / dep.applicants) * 100).toFixed(0);
                 return (
                   <div
                     key={dep.rank}

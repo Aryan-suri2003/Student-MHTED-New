@@ -37,7 +37,7 @@ export const TrendSparkline: React.FC<TrendSparklineProps> = ({ title, data, col
   const domain = [minVal * 0.8, maxVal * 1.2];
 
   return (
-    <div className="p-4 flex flex-col h-full relative overflow-hidden group min-h-[140px]">
+    <div className="p-5 flex flex-col h-full relative overflow-hidden group min-h-[140px] bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
       <div className="flex justify-between items-start mb-6 relative z-10">
         <div>
           <h3 className="text-[13px] font-semibold text-slate-800 tracking-tight leading-none mb-1.5">{title}</h3>

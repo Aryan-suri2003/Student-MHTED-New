@@ -1,6 +1,6 @@
 "use client";
 import React from 'react';
-import { X, Download, ExternalLink, CheckCircle, Search, Filter } from 'lucide-react';
+import { X, ExternalLink, CheckCircle, Search, Filter } from 'lucide-react';
 import { SAMPLE_COLLEGES, UNIVERSITY_OUTPUT_DATA } from '@/data/university/mockData';
 
 interface DrilldownModalProps {
@@ -176,20 +176,8 @@ export const DrilldownModal: React.FC<DrilldownModalProps> = ({
         </div>
 
         {/* Footer Actions */}
-        <div className="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-between">
-          <span className="text-[11px] text-slate-400">
-            Export available in standard CSV / Audit formats
-          </span>
+        <div className="px-6 py-3.5 border-t border-slate-200 bg-slate-50 flex items-center justify-end">
           <div className="flex items-center gap-2">
-            <button
-              onClick={() => {
-                alert('Downloading institutional dataset CSV...');
-              }}
-              className="px-3.5 py-1.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-xs font-semibold text-slate-700 flex items-center gap-1.5 shadow-2xs cursor-pointer"
-            >
-              <Download className="w-3.5 h-3.5" />
-              <span>Export CSV</span>
-            </button>
             <button
               onClick={onClose}
               className="px-4 py-1.5 rounded-lg bg-[#0c2340] hover:bg-[#173354] text-white text-xs font-semibold shadow-xs cursor-pointer"

@@ -210,13 +210,14 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
 
   // Map MoUs data for ConcentricProgressCard
   const mousData = DASHBOARD_METRICS.mousAffiliation as GroupedMetricData;
-  const mousItems = mousData.parts.map((p, idx) => {
+  const mousItems = mousData.parts.map((p) => {
     let icon = Globe;
     let color = '#3b82f6';
-    if (p.label.includes('Industries')) {
+    const label = p.label || '';
+    if (label.includes('Industries')) {
       icon = Building;
       color = '#3b82f6'; // Blue
-    } else if (p.label.includes('International')) {
+    } else if (label.includes('International')) {
       icon = Globe;
       color = '#ef4444'; // Red
     } else {
@@ -224,7 +225,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
       color = '#10b981'; // Green
     }
     return {
-      label: p.label || '',
+      label: label,
       value: p.value,
       deltaPercent: (p as any).deltaPercent || 0,
       icon,
@@ -239,7 +240,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
       <div className="xl:col-span-7 2xl:col-span-8 flex flex-col space-y-6">
 
         {/* Top Banner: Colleges & Polytechnics Equation */}
-        <div className="p-6">
+        <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm relative overflow-hidden">
           <div className="flex flex-col sm:flex-row items-center justify-center gap-6 sm:gap-12 md:gap-16 text-center">
             {/* Total */}
             <div>
@@ -283,10 +284,6 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
           </div>
         </div>
 
-        {/* Disclaimer */}
-        <div className="text-right text-[10px] text-slate-400 font-medium tracking-wide">
-          DATA REFRESHED: 14-AUG-2026
-        </div>
 
         {/* INFRASTRUCTURE SECTION */}
         <div>
@@ -321,7 +318,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
           {/* Small Square Cards Group */}
           <div className="flex flex-wrap gap-3 shrink-0 items-stretch">
             {/* Card 4: Meeting Rooms */}
-            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0">
+            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
               <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center mb-2">
                 <Users className="w-4 h-4 text-emerald-600" />
               </div>
@@ -332,7 +329,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
             </div>
 
             {/* Card 5: Staff Rooms */}
-            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0">
+            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
               <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center mb-2">
                 <Building className="w-4 h-4 text-blue-600" />
               </div>
@@ -343,7 +340,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
             </div>
 
             {/* Card 6: Transport Facilities */}
-            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0">
+            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
               <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center mb-2">
                 <Bus className="w-4 h-4 text-amber-600" />
               </div>
@@ -354,7 +351,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
             </div>
 
             {/* Card 7: Placement Cell */}
-            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0">
+            <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
               <div className="w-8 h-8 rounded-full bg-violet-50 flex items-center justify-center mb-2">
                 <Briefcase className="w-4 h-4 text-violet-600" />
               </div>
@@ -376,14 +373,14 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
               subtitle="Track your partnership growth"
               total={mousData.total}
               totalLabel="Total MoUs"
-              totalDelta={mousData.deltaPercent || 0}
+              totalDelta={(mousData as any).deltaPercent || 0}
               items={mousItems}
             />
           </div>
 
           {/* RIGHT COLUMN: NAAC Accreditation Distribution */}
           <div className="flex flex-col">
-            <div className="p-5 flex-1 flex flex-col">
+            <div className="p-5 flex-1 flex flex-col bg-white rounded-2xl border border-slate-200/90 shadow-sm">
               <div className="mb-4 text-center lg:text-left border-b border-slate-100 pb-3">
                 <h2 className="text-xl font-bold text-slate-900 mb-1">
                   NAAC Accreditation
@@ -436,7 +433,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
             <DistrictChoroplethMap filters={filters} onFilterChange={onFilterChange} />
           </div>
 
-          <div className="w-full flex flex-col gap-3 p-2">
+          <div className="w-full flex flex-col gap-3 p-5 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
             <h3 className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mb-1 border-b border-slate-100 pb-2">
               Top NIRF Ranked (State)
             </h3>

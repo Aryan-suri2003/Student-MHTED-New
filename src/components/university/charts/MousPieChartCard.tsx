@@ -29,7 +29,7 @@ export const MousPieChartCard: React.FC<MousPieChartCardProps> = ({
   items
 }) => {
   return (
-    <div className="p-5 flex flex-col h-full w-full">
+    <div className="p-5 flex flex-col h-full w-full bg-white rounded-2xl border border-slate-200/90 shadow-sm">
       {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div>

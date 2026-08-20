@@ -21,7 +21,7 @@ export const ComparisonBar: React.FC<ComparisonBarProps> = ({ title, left, right
   const rightPct = total > 0 ? (right.value / total) * 100 : 50;
 
   return (
-    <div className="p-4 flex flex-col h-full">
+    <div className="p-5 flex flex-col h-full bg-white rounded-2xl border border-slate-200/90 shadow-sm">
       <h3 className="text-[13px] font-semibold text-slate-800 tracking-tight leading-none mb-6">{title}</h3>
 
       <div className="flex-1 flex flex-col justify-center gap-6">

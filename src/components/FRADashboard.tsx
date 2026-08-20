@@ -1,11 +1,37 @@
 "use client";
 
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useMemo } from "react";
 import { FRAContext } from "@/context/FRAContext";
 import { PieChart3DModal, Slice } from "./PieChart3DModal";
 import { Maximize2 } from "lucide-react";
+import { GlobalFilterState } from "@/components/Filters";
 
-export default function FRADashboard() {
+function applyScale<T>(data: T, scale: number): T {
+  if (scale === 1.0) return data;
+  if (Array.isArray(data)) return data.map(item => applyScale(item, scale)) as any;
+  if (data !== null && typeof data === "object") {
+    const scaled = {} as any;
+    for (const key in data) {
+      if (typeof (data as any)[key] === "number") {
+        if (key.match(/pct|percentage|rate|ratio/i)) {
+           scaled[key] = (data as any)[key];
+        } else {
+           scaled[key] = Math.round((data as any)[key] * scale);
+        }
+      } else {
+        scaled[key] = applyScale((data as any)[key], scale);
+      }
+    }
+    return scaled;
+  }
+  return data;
+};
+
+interface FRADashboardProps {
+  globalFilters?: GlobalFilterState;
+}
+
+export default function FRADashboard({ globalFilters }: FRADashboardProps) {
   const [hoveredSegment, setHoveredSegment] = useState<{
     course: string;
     type: "Minimum Fee" | "Average Fee" | "Maximum Fee";
@@ -34,8 +60,62 @@ export default function FRADashboard() {
 
   const clearFocus = () => setFocusedCourse(null);
 
+  const globalScaleMultiplier = useMemo(() => {
+    let scale = 1.0;
+    
+    if (globalFilters?.academicYear) {
+      if (globalFilters.academicYear === "2024-25") scale *= 0.88;
+      else if (globalFilters.academicYear === "2023-24") scale *= 0.76;
+      else if (globalFilters.academicYear === "2022-23") scale *= 0.65;
+    }
+    
+    if (globalFilters?.district && globalFilters.district !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.district.length; i++) {
+        hash = globalFilters.district.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.05 + (Math.abs(hash) % 100) / 1000); 
+    }
+    
+    if (globalFilters?.universityType && globalFilters.universityType !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.universityType.length; i++) {
+        hash = globalFilters.universityType.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.1 + (Math.abs(hash) % 50) / 100);
+    }
+    
+    if (globalFilters?.college && globalFilters.college !== "All") {
+      scale *= 0.05;
+    }
+    
+    if (globalFilters?.university && globalFilters.university !== "All") {
+      switch (globalFilters.university) {
+        case "CU": scale *= 0.280; break;
+        case "MAKAUT": scale *= 0.220; break;
+        case "BU": scale *= 0.140; break;
+        case "KU": scale *= 0.080; break;
+        case "VU": scale *= 0.075; break;
+        case "WBSU": scale *= 0.065; break;
+        case "NBU": scale *= 0.050; break;
+        case "JU": scale *= 0.035; break;
+        case "UGB": scale *= 0.025; break;
+        case "KNU": scale *= 0.020; break;
+        case "SKBU": scale *= 0.015; break;
+        case "BKU": scale *= 0.012; break;
+        case "CBPBU": scale *= 0.010; break;
+        case "Presidency": scale *= 0.008; break;
+        case "Visva-Bharati": scale *= 0.010; break;
+        case "Aliah": scale *= 0.006; break;
+        case "RBU": scale *= 0.008; break;
+        default: scale *= 0.035; break;
+      }
+    }
+    return scale;
+  }, [globalFilters]);
+
   // Year on Year Average Fee Data
-  const yoyData = [
+  const yoyData = useMemo(() => applyScale([
     {
       program: "Master of Pharmacy",
       years: [
@@ -180,7 +260,7 @@ export default function FRADashboard() {
         { year: "2025-26", value: 85000 },
       ],
     },
-  ];
+  ], globalScaleMultiplier), [globalScaleMultiplier]);
 
   const yoyBarColors = [" #6366f1", "#0891b2", "#be123c"];
 const yoyGradients = [
@@ -191,7 +271,7 @@ const yoyGradients = [
   const yoyMaxValue = 120000;
 
   // Stacked Chart Data - all courses
-  const feeRangeData = [
+  const feeRangeData = useMemo(() => applyScale([
     { course: "Doctor of Pharmacy (Pharm D)", min: 67567, avg: 87570, max: 158261 },
     { course: "Bachelor of Design", min: 59090, avg: 99110, max: 139130 },
     { course: "Bachelor of Hotel Management and Catering Technology", min: 50576, avg: 89894, max: 165217 },
@@ -210,14 +290,14 @@ const yoyGradients = [
     { course: "Master of Computer Application", min: 0, avg: 81514, max: 203478 },
     { course: "Bachelor of Engineering/Bachelor of Technology", min: 0, avg: 89423, max: 198696 },
     { course: "Bachelor of Hotel Management", min: 45000, avg: 85000, max: 165000 },
-  ];
+  ], globalScaleMultiplier), [globalScaleMultiplier]);
 
   const formatCurrency = (num: number) => {
     return "₹ " + num.toLocaleString("en-IN");
   };
 
-  // Stacked Chart Math - max sum across all courses
-  const globalMaxStack = Math.max(...feeRangeData.map((d) => d.min + d.avg + d.max));
+  // Stacked Chart Math - static max sum across all courses to allow bars to shrink visually
+  const globalMaxStack = 350000;
 
   return (
     <div className="flex flex-col gap-8 w-full animate-fadeIn pb-8">
@@ -621,7 +701,7 @@ const yoyGradients = [
           </h3>
 
           {(() => {
-            const donutData = [
+            const donutData = applyScale([
               { label: "Bachelor of Pharmacy", value: 424, pct: "22%", color: "#0c4a8a" },
               { label: "Master of Business Administration", value: 312, pct: "16%", color: "#0284c7" },
               { label: "Bachelor of Engineering/Bachelor of Technology", value: 305, pct: "16%", color: "#1d4ed8" },
@@ -640,7 +720,7 @@ const yoyGradients = [
               { label: "Bachelor of Laws (5 Years)", value: 15, pct: "1%", color: "#ec4899" },
               { label: "Master of Hotel Management and Catering Technology", value: 12, pct: "1%", color: "#059669" },
               { label: "Dual Degree in Master of Computer Application", value: 8, pct: "0%", color: "#94a3b8" },
-            ];
+            ], globalScaleMultiplier);
             const total = donutData.reduce((s, d) => s + d.value, 0);
             const size = 240;
             const cx = size / 2;
@@ -777,7 +857,7 @@ const yoyGradients = [
           </h3>
 
           {(() => {
-            const hBarData = [
+            const hBarData = applyScale([
               { program: "Bachelor of Pharmacy", short: "B.Pharm", years: [{ year: "2023-24", value: 376 }, { year: "2024-25", value: 381 }, { year: "2025-26", value: 424 }] },
               { program: "Master of Business Administration", short: "MBA/MMS", years: [{ year: "2023-24", value: 306 }, { year: "2024-25", value: 299 }, { year: "2025-26", value: 312 }] },
               { program: "Bachelor of Engineering/Bachelor of Technology", short: "BE/BTech", years: [{ year: "2023-24", value: 303 }, { year: "2024-25", value: 298 }, { year: "2025-26", value: 305 }] },
@@ -796,7 +876,7 @@ const yoyGradients = [
               { program: "Bachelor of Laws (5 Years)", short: "LLB 5Y", years: [{ year: "2023-24", value: 11 }, { year: "2024-25", value: 13 }, { year: "2025-26", value: 15 }] },
               { program: "Master of Hotel Management and Catering Technology", short: "MHMCT", years: [{ year: "2023-24", value: 8 }, { year: "2024-25", value: 10 }, { year: "2025-26", value: 12 }] },
               { program: "Dual Degree in Master of Computer Application", short: "Dual MCA", years: [{ year: "2023-24", value: 5 }, { year: "2024-25", value: 6 }, { year: "2025-26", value: 8 }] },
-            ];
+            ], globalScaleMultiplier);
             const hBarColors = ["#22c55e", "#3b82f6", "#ec4899"];
             
             const hBarMax = 450;
@@ -882,7 +962,7 @@ const yoyGradients = [
         </div>
 
         {(() => {
-          const feeDiffData = [
+          const feeDiffData = applyScale([
             { course: "Master of Pharmacy", short: "M.Pharm", value: 217391 },
             { course: "Master of Architecture", short: "M.Arch", value: 201481 },
             { course: "Bachelor of Engineering/Bachelor of Technology", short: "BE/BTech", value: 198696 },
@@ -901,7 +981,7 @@ const yoyGradients = [
             { course: "Master of Business Administration-Part Time", short: "MBA-PT", value: 23651 },
             { course: "Master of Hotel Management and Catering Technology", short: "MHMCT", value: 0 },
             { course: "Dual Degree in Master of Computer Application", short: "Dual MCA", value: 0 },
-          ];
+          ], globalScaleMultiplier);
           const maxVal = 400000;
           const isAnySelected = selectedFeeDiff !== null;
           
@@ -1027,7 +1107,7 @@ const yoyGradients = [
               </tr>
             </thead>
             <tbody>
-              {[
+              {applyScale([
                 { district: "Paschim Bardhaman", institute: "DR. B.C. ROY COLLEGE OF PHARMACY AND AHS, DURGAPUR", program: "Bachelor of Pharmacy", fee2425: 69500, fee2526: 76500, diff: 7000 },
                 { district: "Kolkata", institute: "INSTITUTE OF ENGINEERING AND MANAGEMENT (IEM)", program: "Bachelor of Engineering/Bachelor of Technology", fee2425: 70000, fee2526: 77000, diff: 7000 },
                 { district: "Darjeeling", institute: "SILIGURI INSTITUTE OF TECHNOLOGY", program: "Bachelor of Hotel Management and Catering Technology", fee2425: 70000, fee2526: 77000, diff: 7000 },
@@ -1046,7 +1126,7 @@ const yoyGradients = [
                 { district: "Kolkata", institute: "DEPARTMENT OF LAW, UNIVERSITY OF CALCUTTA", program: "Bachelor of Laws (3 Years)", fee2425: 50000, fee2526: 54585, diff: 4585 },
                 { district: "Kolkata", institute: "WEST BENGAL NATIONAL UNIVERSITY OF JURIDICAL SCIENCES", program: "Bachelor of Laws (5 Years)", fee2425: 75000, fee2526: 82174, diff: 7174 },
                 { district: "Kolkata", institute: "SUBHAS BOSE INSTITUTE OF HOTEL MANAGEMENT", program: "Bachelor of Hotel Management", fee2425: 78000, fee2526: 85000, diff: 7000 },
-              ].map((row, idx) => (
+              ], globalScaleMultiplier).map((row: any, idx: number) => (
                 <tr
                   key={idx}
                   className={`border-b border-blue-50 transition-colors duration-150 hover:bg-blue-50/60 ${idx % 2 === 0 ? "bg-white" : "bg-slate-50/40"}`}

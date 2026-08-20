@@ -501,46 +501,58 @@ export default function CAPDashboard({
 
   // Multiplier from Global Filter
   const multiplier = useMemo(() => {
-    if (!globalFilters?.university || globalFilters.university === "All") return 1;
-    switch (globalFilters.university) {
-      case "CU":
-        return 0.280;
-      case "MAKAUT":
-        return 0.220;
-      case "BU":
-        return 0.140;
-      case "KU":
-        return 0.080;
-      case "VU":
-        return 0.075;
-      case "WBSU":
-        return 0.065;
-      case "NBU":
-        return 0.050;
-      case "JU":
-        return 0.035;
-      case "UGB":
-        return 0.025;
-      case "KNU":
-        return 0.020;
-      case "SKBU":
-        return 0.015;
-      case "BKU":
-        return 0.012;
-      case "CBPBU":
-        return 0.010;
-      case "Presidency":
-        return 0.008;
-      case "Visva-Bharati":
-        return 0.010;
-      case "Aliah":
-        return 0.006;
-      case "RBU":
-        return 0.008;
-      default:
-        return 0.035;
+    let scale = 1.0;
+    
+    if (globalFilters?.academicYear) {
+      if (globalFilters.academicYear === "2024-25") scale *= 0.88;
+      else if (globalFilters.academicYear === "2023-24") scale *= 0.76;
+      else if (globalFilters.academicYear === "2022-23") scale *= 0.65;
     }
-  }, [globalFilters?.university]);
+    
+    if (globalFilters?.district && globalFilters.district !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.district.length; i++) {
+        hash = globalFilters.district.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.05 + (Math.abs(hash) % 100) / 1000); 
+    }
+    
+    if (globalFilters?.universityType && globalFilters.universityType !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.universityType.length; i++) {
+        hash = globalFilters.universityType.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.1 + (Math.abs(hash) % 50) / 100);
+    }
+    
+    if (globalFilters?.college && globalFilters.college !== "All") {
+      scale *= 0.05;
+    }
+
+    if (globalFilters?.university && globalFilters.university !== "All") {
+      switch (globalFilters.university) {
+        case "CU": scale *= 0.280; break;
+        case "MAKAUT": scale *= 0.220; break;
+        case "BU": scale *= 0.140; break;
+        case "KU": scale *= 0.080; break;
+        case "VU": scale *= 0.075; break;
+        case "WBSU": scale *= 0.065; break;
+        case "NBU": scale *= 0.050; break;
+        case "JU": scale *= 0.035; break;
+        case "UGB": scale *= 0.025; break;
+        case "KNU": scale *= 0.020; break;
+        case "SKBU": scale *= 0.015; break;
+        case "BKU": scale *= 0.012; break;
+        case "CBPBU": scale *= 0.010; break;
+        case "Presidency": scale *= 0.008; break;
+        case "Visva-Bharati": scale *= 0.010; break;
+        case "Aliah": scale *= 0.006; break;
+        case "RBU": scale *= 0.008; break;
+        default: scale *= 0.035; break;
+      }
+    }
+    return scale;
+  }, [globalFilters]);
 
   // Discipline Multiplier
   const disciplineMultiplier = useMemo(() => {

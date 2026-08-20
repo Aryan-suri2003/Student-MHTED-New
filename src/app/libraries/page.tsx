@@ -1,7 +1,18 @@
-import LibraryDashboardClient from '@/components/LibraryDashboardClient';
+"use client";
+
+import dynamic from 'next/dynamic';
 import { YearProvider } from '@/contexts/YearContext';
 import Sidebar from '@/components/layout/Sidebar';
 import Header from '@/components/layout/Header';
+
+const LibraryDashboardClient = dynamic(() => import('@/components/LibraryDashboardClient'), {
+  ssr: false,
+  loading: () => (
+    <div className="flex items-center justify-center min-h-[400px]">
+      <div className="w-8 h-8 border-4 border-blue-600 border-t-transparent rounded-full animate-spin"></div>
+    </div>
+  ),
+});
 
 export default function LibrariesPage() {
   return (

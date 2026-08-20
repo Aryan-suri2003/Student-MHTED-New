@@ -96,7 +96,7 @@ export const DistrictChoroplethMap: React.FC<DistrictChoroplethMapProps> = ({ fi
   const mapCenter: [number, number] = [87.8, 24];
 
   return (
-    <div className="p-4 relative flex flex-col h-full">
+    <div className="p-5 relative flex flex-col h-full bg-white rounded-2xl border border-slate-200/90 shadow-sm">
       
       <div className="flex items-center justify-between mb-4">
         <div>

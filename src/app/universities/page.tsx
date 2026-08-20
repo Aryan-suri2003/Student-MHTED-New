@@ -88,13 +88,12 @@ export default function UniversitiesPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#f4f7fe] text-slate-800 font-sans flex flex-col antialiased">
-
+    <div className="min-h-[calc(100vh-4rem)] bg-[#f4f7fe] text-slate-800 font-sans flex flex-col antialiased p-4 sm:p-6 lg:p-8">
 
       {/* Main Body with Left Sidebar & Content Canvas */}
-      <div className="flex-1 flex max-w-[1920px] w-full mx-auto relative">
+      <div className="flex-1 flex max-w-[1920px] w-full mx-auto relative h-full">
         {/* Right Main Content Canvas */}
-        <main className="flex-1 flex flex-col min-w-0 bg-white overflow-x-hidden">
+        <div className="flex-1 flex flex-col min-w-0 bg-white overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
           {/* Dynamic Top Filter Bar for Affiliation, Campus, Research views */}
           {(activeTab === 'affiliation' ||
             activeTab === 'campus' ||
@@ -133,7 +132,7 @@ export default function UniversitiesPage() {
               />
             )}
           </div>
-        </main>
+        </div>
       </div>
 
       {/* Drill-down Detail Modal */}

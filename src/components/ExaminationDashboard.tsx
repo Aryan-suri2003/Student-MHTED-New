@@ -21,6 +21,28 @@ import { GlobalFilterState } from "@/components/Filters";
 import ChartTooltip, { ChartTooltipData } from "@/components/ChartTooltip";
 import { PieChart3DModal, Slice } from "./PieChart3DModal";
 
+// ─── Utility to scale mock data based on filters ─────────────────────────────────
+function applyScale<T>(data: T, scale: number): T {
+  if (scale === 1.0) return data;
+  if (Array.isArray(data)) return data.map(item => applyScale(item, scale)) as any;
+  if (data !== null && typeof data === "object") {
+    const scaled = {} as any;
+    for (const key in data) {
+      if (typeof (data as any)[key] === "number") {
+        if (key.match(/pct|percentage|rate|ratio/i)) {
+           scaled[key] = (data as any)[key];
+        } else {
+           scaled[key] = Math.round((data as any)[key] * scale);
+        }
+      } else {
+        scaled[key] = applyScale((data as any)[key], scale);
+      }
+    }
+    return scaled;
+  }
+  return data;
+};
+
 // ─── Interactive Doughnut Chart Component ──────────────────────────────────────
 interface DoughnutChartProps {
   slices: Slice[];
@@ -561,6 +583,38 @@ export default function ExaminationDashboard({
   const [expandedPieData, setExpandedPieData] = useState<{ title: string; slices: Slice[] } | null>(null);
   const [tooltip, setTooltip] = useState<{ data: ChartTooltipData; pos: { x: number; y: number } } | null>(null);
 
+  const globalScaleMultiplier = useMemo(() => {
+    let scale = 1.0;
+    
+    if (globalFilters?.academicYear) {
+      if (globalFilters.academicYear === "2024-25") scale *= 0.88;
+      else if (globalFilters.academicYear === "2023-24") scale *= 0.76;
+      else if (globalFilters.academicYear === "2022-23") scale *= 0.65;
+    }
+    
+    if (globalFilters?.district && globalFilters.district !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.district.length; i++) {
+        hash = globalFilters.district.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.05 + (Math.abs(hash) % 100) / 1000); 
+    }
+    
+    if (globalFilters?.universityType && globalFilters.universityType !== "All") {
+      let hash = 0;
+      for (let i = 0; i < globalFilters.universityType.length; i++) {
+        hash = globalFilters.universityType.charCodeAt(i) + ((hash << 5) - hash);
+      }
+      scale *= (0.1 + (Math.abs(hash) % 50) / 100);
+    }
+    
+    if (globalFilters?.college && globalFilters.college !== "All") {
+      scale *= 0.05;
+    }
+    
+    return scale;
+  }, [globalFilters]);
+
   // Local section filter states
   const [programType, setProgramType] = useState("All");
   const [season, setSeason] = useState("Winter");
@@ -574,7 +628,7 @@ export default function ExaminationDashboard({
 
   // Filtered University Exams List based on Program Type
   const filteredUniversityExamsList = useMemo(() => {
-    const multiplier =
+    const programMultiplier =
       programType === "UG"
         ? 0.62
         : programType === "PG"
@@ -585,12 +639,14 @@ export default function ExaminationDashboard({
               ? 0.03
               : 1;
 
+    const multiplier = programMultiplier * globalScaleMultiplier;
+
     return UNIVERSITY_EXAMS_LIST.map((u) => ({
       name: u.name,
       papers: Math.round(u.papers * multiplier),
       students: Math.round(u.students * multiplier),
     }));
-  }, [programType]);
+  }, [programType, globalScaleMultiplier]);
 
   // Decomposition tree state
   const [selectedSeason, setSelectedSeason] = useState("Winter");
@@ -620,11 +676,12 @@ export default function ExaminationDashboard({
 
   // Current active data record
   const currentData: UniversityRecord = useMemo(() => {
+    let data = TOTAL_AGGREGATE;
     if (effectiveUniCode && UNIVERSITIES_DATA[effectiveUniCode]) {
-      return UNIVERSITIES_DATA[effectiveUniCode];
+      data = UNIVERSITIES_DATA[effectiveUniCode];
     }
-    return TOTAL_AGGREGATE;
-  }, [effectiveUniCode]);
+    return applyScale(data, globalScaleMultiplier);
+  }, [effectiveUniCode, globalScaleMultiplier]);
 
   // Click handler for bar chart cross-filtering (toggle on/off)
   const handleBarClick = (uniName: string) => {

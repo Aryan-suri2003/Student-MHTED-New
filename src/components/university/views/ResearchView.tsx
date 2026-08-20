@@ -77,7 +77,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
         {/* LEFT COLUMN: KPI Cards */}
         <div className="lg:col-span-3 flex flex-col gap-4">
           {/* Card 1: Journal Papers */}
-          <div className="p-5 relative overflow-hidden transition flex flex-col justify-between">
+          <div className="p-5 relative overflow-hidden flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
                 <FileText className="w-5 h-5" />
@@ -95,7 +95,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
           </div>
 
           {/* Card 2: Conference Papers */}
-          <div className="p-5 relative overflow-hidden transition flex flex-col justify-between">
+          <div className="p-5 relative overflow-hidden flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
                 <MessageSquare className="w-5 h-5" />
@@ -113,7 +113,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
           </div>
 
           {/* Card 3: Research Grants */}
-          <div className="p-5 relative overflow-hidden transition flex flex-col justify-between">
+          <div className="p-5 relative overflow-hidden flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
             <div className="flex items-center gap-4 mb-4">
               <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
                 <CircleDollarSign className="w-5 h-5" />
@@ -130,14 +130,11 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
             </div>
           </div>
 
-          {/* Disclaimer */}
-          <div className="text-left text-[10px] text-slate-400 font-medium tracking-wide mt-2">
-            DATA REFRESHED: 14 AUG 2026
-          </div>
+
         </div>
 
         {/* RIGHT COLUMN: Key Research Areas Table */}
-        <div className="lg:col-span-9 p-6">
+        <div className="lg:col-span-9 p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
         <div className="px-5 py-4 border-b border-slate-100 flex items-center justify-between">
           <h2 className="text-sm font-semibold text-slate-800">
             Key Research Areas
@@ -256,15 +253,16 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-4 items-start border-t border-slate-100 mt-4 pt-4">
         
         {/* Left: Research Output by Universities Chart */}
-        <div className="p-6">
+        <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-sm font-semibold text-slate-800 w-full">
               Research Output by Universities
             </h2>
           </div>
 
-          <div className="h-[460px] w-full">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="overflow-x-auto w-full">
+            <div className="h-[460px] min-w-[500px] w-full">
+              <ResponsiveContainer width="100%" height="100%">
               <BarChart
                 data={UNIVERSITY_OUTPUT_DATA}
                 margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
@@ -299,18 +297,18 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                             {u?.fullName || label}
                           </p>
                           <div className="space-y-1.5 text-[11px] font-medium">
-                            <p className="flex justify-between gap-4 text-slate-600">
-                              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#4fd1c5' }}></div>Research Grants</span>
+                            <div className="flex justify-between gap-4 text-slate-600">
+                              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#4fd1c5' }}></span>Research Grants</span>
                               <span className="font-bold text-slate-900">{payload.find(p => p.dataKey === 'researchGrants')?.value}</span>
-                            </p>
-                            <p className="flex justify-between gap-4 text-slate-600">
-                              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#f87171' }}></div>Conference Papers</span>
+                            </div>
+                            <div className="flex justify-between gap-4 text-slate-600">
+                              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#f87171' }}></span>Conference Papers</span>
                               <span className="font-bold text-slate-900">{payload.find(p => p.dataKey === 'conferencePapers')?.value}</span>
-                            </p>
-                            <p className="flex justify-between gap-4 text-slate-600">
-                              <span className="flex items-center gap-1.5"><div className="w-2 h-2 rounded-full" style={{ backgroundColor: '#fbbf24' }}></div>Published Papers</span>
+                            </div>
+                            <div className="flex justify-between gap-4 text-slate-600">
+                              <span className="flex items-center gap-1.5"><span className="w-2 h-2 rounded-full inline-block" style={{ backgroundColor: '#fbbf24' }}></span>Published Papers</span>
                               <span className="font-bold text-slate-900">{payload.find(p => p.dataKey === 'publishedPapers')?.value}</span>
-                            </p>
+                            </div>
                           </div>
                         </div>
                       );
@@ -337,11 +335,12 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                 <Bar dataKey="researchGrants" stackId="a" fill="#4fd1c5" radius={[0, 4, 4, 0]} name="researchGrants" />
               </BarChart>
             </ResponsiveContainer>
+            </div>
           </div>
         </div>
 
         {/* Right: Grants Received from Grantees */}
-        <div className="p-6">
+        <div className="p-6 bg-white rounded-2xl border border-slate-200/90 shadow-sm">
           <h2 className="text-sm font-semibold text-slate-800 mb-6">
             Grants Received from Grantees (in ₹)
           </h2>
@@ -358,7 +357,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                     className="flex items-center gap-4 text-[12px] group hover:bg-slate-50 p-1.5 rounded-md transition-colors"
                   >
                     {/* Grantee Name */}
-                    <div className="w-40 lg:w-48 font-medium text-slate-700 truncate group-hover:text-indigo-700" title={grantee.name}>
+                    <div className="w-24 sm:w-40 lg:w-48 font-medium text-slate-700 truncate group-hover:text-indigo-700" title={grantee.name}>
                       {grantee.name}
                     </div>
 
