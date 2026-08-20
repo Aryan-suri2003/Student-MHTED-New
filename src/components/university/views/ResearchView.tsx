@@ -86,11 +86,8 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                 Journal Papers
               </p>
             </div>
-            <div className="flex justify-between items-end">
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">
-                {(DASHBOARD_METRICS.journalPapers as MetricData).value}
-              </div>
-              <DeltaIndicator deltaPercent={(DASHBOARD_METRICS.journalPapers as MetricData).deltaPercent} />
+            <div className="text-2xl font-bold text-slate-900 tracking-tight mt-2">
+              {(DASHBOARD_METRICS.journalPapers as MetricData).value}
             </div>
           </div>
 
@@ -104,11 +101,8 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                 Conference Papers
               </p>
             </div>
-            <div className="flex justify-between items-end">
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">
-                {(DASHBOARD_METRICS.conferencePapers as MetricData).value}
-              </div>
-              <DeltaIndicator deltaPercent={(DASHBOARD_METRICS.conferencePapers as MetricData).deltaPercent} />
+            <div className="text-2xl font-bold text-slate-900 tracking-tight mt-2">
+              {(DASHBOARD_METRICS.conferencePapers as MetricData).value}
             </div>
           </div>
 
@@ -122,11 +116,8 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                 Research Grants
               </p>
             </div>
-            <div className="flex justify-between items-end">
-              <div className="text-2xl font-bold text-slate-900 tracking-tight">
-                {(DASHBOARD_METRICS.researchGrants as MetricData).value}
-              </div>
-              <DeltaIndicator deltaPercent={(DASHBOARD_METRICS.researchGrants as MetricData).deltaPercent} />
+            <div className="text-2xl font-bold text-slate-900 tracking-tight mt-2">
+              {(DASHBOARD_METRICS.researchGrants as MetricData).value}
             </div>
           </div>
 

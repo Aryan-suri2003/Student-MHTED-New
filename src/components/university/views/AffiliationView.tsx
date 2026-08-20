@@ -13,8 +13,11 @@ import {
   GraduationCap
 } from 'lucide-react';
 import {
-  ResponsiveContainer,
-  Sector
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip as RechartsTooltip,
+  ResponsiveContainer
 } from 'recharts';
 import { NAAC_COLLEGE_DISTRIBUTION, DASHBOARD_METRICS } from '@/data/university/mockData';
 import { GroupedMetricData, MetricData } from '@/types/university';
@@ -26,174 +29,19 @@ import { DeltaIndicator } from '../charts/DeltaIndicator';
 import { DistrictChoroplethMap } from '../charts/DistrictChoroplethMap';
 import { FilterState } from '@/types/university';
 
-const PIE_COLORS = [
-  { top: '#4f46e5', side: '#312e81' }, // Indigo A++
-  { top: '#8b5cf6', side: '#4c1d95' }, // Violet A+
-  { top: '#06b6d4', side: '#164e63' }, // Cyan A
-  { top: '#10b981', side: '#064e3b' }, // Emerald B++
-  { top: '#f59e0b', side: '#78350f' }, // Amber B+
-  { top: '#f43f5e', side: '#881337' }, // Rose B
-  { top: '#64748b', side: '#0f172a' }, // Slate C
+// Distinct, easily-differentiable colors for NAAC grades
+const NAAC_COLORS = [
+  '#6366f1', // A++ – indigo
+  '#8b5cf6', // A+  – violet
+  '#06b6d4', // A   – cyan
+  '#10b981', // B++ – emerald
+  '#f59e0b', // B+  – amber
+  '#f43f5e', // B   – rose
+  '#64748b', // C++ – slate
+  '#a16207', // C+  – yellow-brown
 ];
 
-const Premium3DPieChart = ({ data, activeIndex, setActiveIndex }: any) => {
-  const [tooltip, setTooltip] = useState({ visible: false, x: 0, y: 0, data: null as any });
-
-  const total = data.reduce((sum: number, item: any) => sum + item.count, 0);
-
-  let currentAngle = 90;
-
-  const slices = data.map((item: any, index: number) => {
-    const angle = (item.count / total) * 360;
-    const startAngle = currentAngle;
-    const endAngle = currentAngle - angle;
-    currentAngle = endAngle;
-
-    const midAngle = (startAngle + endAngle) / 2;
-
-    return {
-      ...item,
-      startAngle,
-      endAngle,
-      midAngle,
-      index,
-      color: PIE_COLORS[index % PIE_COLORS.length]
-    };
-  });
-
-  const sortedSlices = [...slices].sort((a, b) => {
-    const RADIAN = Math.PI / 180;
-    const yA = Math.sin(-a.midAngle * RADIAN);
-    const yB = Math.sin(-b.midAngle * RADIAN);
-    return yA - yB;
-  });
-
-  const handleMouseMove = (e: any, slice: any) => {
-    setTooltip({
-      visible: true,
-      x: e.clientX,
-      y: e.clientY,
-      data: slice
-    });
-    setActiveIndex(slice.index);
-  };
-
-  const handleMouseLeave = () => {
-    setTooltip({ visible: false, x: 0, y: 0, data: null });
-    setActiveIndex(null);
-  };
-
-  return (
-    <div className="w-full h-full relative flex items-center justify-center">
-      <svg width="100%" height="100%" viewBox="-250 -250 500 500" style={{ overflow: 'visible' }}>
-        <defs>
-          <filter id="pie-shadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="25" stdDeviation="15" floodOpacity="0.15" floodColor="#000" />
-          </filter>
-          <linearGradient id="gloss" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="0%" stopColor="white" stopOpacity={0.25} />
-            <stop offset="100%" stopColor="white" stopOpacity={0} />
-          </linearGradient>
-        </defs>
-
-        <g filter="url(#pie-shadow)">
-          <g transform="scale(1, 0.65)">
-            {sortedSlices.map((slice) => {
-              const isHovered = activeIndex === slice.index;
-
-              const explodeBase = 12;
-              const explodeHover = isHovered ? 28 : explodeBase;
-
-              const RADIAN = Math.PI / 180;
-              const ex = Math.cos(-slice.midAngle * RADIAN) * explodeBase;
-              const ey = Math.sin(-slice.midAngle * RADIAN) * explodeBase;
-
-              const hoverTx = isHovered ? Math.cos(-slice.midAngle * RADIAN) * (explodeHover - explodeBase) : 0;
-              const hoverTy = isHovered ? Math.sin(-slice.midAngle * RADIAN) * (explodeHover - explodeBase) : 0;
-
-              const depth = 40;
-              const yCompensation = 1 / 0.65;
-
-              const layers = [];
-              for (let i = depth; i > 0; i -= 1) {
-                layers.push(
-                  <Sector
-                    key={`side-${slice.index}-${i}`}
-                    cx={ex}
-                    cy={ey + (i * yCompensation)}
-                    innerRadius={0}
-                    outerRadius={155}
-                    startAngle={slice.startAngle}
-                    endAngle={slice.endAngle}
-                    fill={slice.color.side}
-                    stroke={slice.color.side}
-                    strokeWidth={1}
-                  />
-                );
-              }
-
-              layers.push(
-                <Sector
-                  key={`top-${slice.index}`}
-                  cx={ex}
-                  cy={ey}
-                  innerRadius={0}
-                  outerRadius={155}
-                  startAngle={slice.startAngle}
-                  endAngle={slice.endAngle}
-                  fill={slice.color.top}
-                />
-              );
-
-              layers.push(
-                <Sector
-                  key={`gloss-${slice.index}`}
-                  cx={ex}
-                  cy={ey}
-                  innerRadius={0}
-                  outerRadius={155}
-                  startAngle={slice.startAngle}
-                  endAngle={slice.endAngle}
-                  fill="url(#gloss)"
-                  pointerEvents="none"
-                />
-              );
-
-              return (
-                <g
-                  key={`slice-group-${slice.index}`}
-                  onMouseMove={(e) => handleMouseMove(e, slice)}
-                  onMouseLeave={handleMouseLeave}
-                  className="cursor-pointer transition-transform duration-300 ease-out"
-                  style={{ transform: `translate(${hoverTx}px, ${hoverTy}px)` }}
-                >
-                  {layers}
-                </g>
-              );
-            })}
-          </g>
-        </g>
-      </svg>
-
-      {tooltip.visible && tooltip.data && (
-        <div
-          className="fixed pointer-events-none z-50 bg-white border border-slate-200 shadow-xl rounded-xl px-5 py-4 transform -translate-x-1/2 -translate-y-[130%]"
-          style={{ left: tooltip.x, top: tooltip.y }}
-        >
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-3 h-3 rounded-full" style={{ backgroundColor: tooltip.data.color.top }} />
-            <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">
-              Grade {tooltip.data.grade}
-            </span>
-          </div>
-          <div className="text-2xl font-extrabold text-slate-900">
-            {tooltip.data.count.toLocaleString()} <span className="text-sm font-semibold text-slate-500">Colleges</span>
-          </div>
-        </div>
-      )}
-    </div>
-  );
-};
+const Premium3DPieChart = null; // removed — using flat donut chart
 
 interface AffiliationViewProps {
   filters: FilterState;
@@ -206,8 +54,6 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
   onOpenDrilldown,
   onFilterChange
 }) => {
-  const [activeNaacIndex, setActiveNaacIndex] = useState<number | null>(null);
-
   // Map MoUs data for ConcentricProgressCard
   const mousData = DASHBOARD_METRICS.mousAffiliation as GroupedMetricData;
   const mousItems = mousData.parts.map((p) => {
@@ -248,7 +94,7 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
                 8,064
               </p>
               <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mt-2">
-                Colleges & Polytechnics
+                Colleges & Polytechnic
               </p>
             </div>
 
@@ -272,13 +118,13 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
               +
             </div>
 
-            {/* Polytechnics */}
+            {/* Polytechnic */}
             <div>
               <p className="text-4xl font-bold text-indigo-600 tracking-tight">
                 687
               </p>
               <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-widest mt-2">
-                Polytechnics
+                Polytechnic
               </p>
             </div>
           </div>
@@ -300,7 +146,6 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
               <TrendCard
                 title="New Colleges Added"
                 value={22}
-                deltaPercent={45}
                 icon={Building}
               />
             </div>
@@ -381,46 +226,81 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
           {/* RIGHT COLUMN: NAAC Accreditation Distribution */}
           <div className="flex flex-col">
             <div className="p-5 flex-1 flex flex-col bg-white rounded-2xl border border-slate-200/90 shadow-sm">
-              <div className="mb-4 text-center lg:text-left border-b border-slate-100 pb-3">
-                <h2 className="text-xl font-bold text-slate-900 mb-1">
-                  NAAC Accreditation
-                </h2>
-                <p className="text-[13px] text-slate-500 font-medium">Breakdown by NAAC grade.</p>
+              {/* Header */}
+              <div className="flex justify-between items-start mb-4">
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 tracking-tight">NAAC Accreditation</h3>
+                  <p className="text-[11px] text-slate-400 font-medium mt-0.5">Breakdown by grade</p>
+                </div>
               </div>
 
-              <div className="flex flex-col items-center justify-between gap-6 w-full flex-1">
-                <div className="w-full h-[250px] shrink-0">
-                  <Premium3DPieChart
-                    data={NAAC_COLLEGE_DISTRIBUTION}
-                    activeIndex={activeNaacIndex}
-                    setActiveIndex={setActiveNaacIndex}
-                  />
-                </div>
+              {/* 3-column layout: left legend | donut | right legend */}
+              <div className="flex items-center gap-2 w-full">
 
-                <div className="w-full flex flex-wrap gap-2 justify-center z-10 relative">
-                  {NAAC_COLLEGE_DISTRIBUTION.map((item, i) => {
-                    const isHovered = activeNaacIndex === i;
-                    return (
-                      <div
-                        key={item.grade}
-                        className={`flex items-center justify-between gap-2 transition-all duration-300 cursor-pointer bg-slate-50 px-3 py-1.5 rounded-lg border border-slate-100 ${isHovered ? 'scale-105 transform' : ''}`}
-                        onMouseEnter={() => setActiveNaacIndex(i)}
-                        onMouseLeave={() => setActiveNaacIndex(null)}
-                      >
-                        <div className="flex items-center gap-1.5">
-                          <div className="w-2.5 h-2.5 rounded-sm shadow-sm" style={{ backgroundColor: PIE_COLORS[i % PIE_COLORS.length].top }} />
-                          <span className={`text-[11px] font-semibold uppercase transition-colors ${isHovered ? 'text-slate-900' : 'text-slate-600'}`}>
-                            {item.grade}
-                          </span>
-                        </div>
-                        <span className="text-xs font-bold" style={{ color: PIE_COLORS[i % PIE_COLORS.length].top }}>
-                          {item.count.toLocaleString()}
-                        </span>
+                {/* Left legend: first 4 grades */}
+                <div className="flex flex-col gap-2.5 flex-1 min-w-0">
+                  {NAAC_COLLEGE_DISTRIBUTION.slice(0, 4).map((item, i) => (
+                    <div key={item.grade} className="flex flex-col">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: NAAC_COLORS[i] }} />
+                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Grade {item.grade}</span>
                       </div>
-                    );
-                  })}
+                      <span className="text-[13px] font-bold text-slate-900 pl-3.5">{item.count.toLocaleString()}</span>
+                    </div>
+                  ))}
                 </div>
+
+                {/* Centre donut */}
+                <div className="relative flex-shrink-0 w-[160px] h-[160px]">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={NAAC_COLLEGE_DISTRIBUTION}
+                        cx="50%"
+                        cy="50%"
+                        innerRadius={48}
+                        outerRadius={68}
+                        paddingAngle={2}
+                        dataKey="count"
+                        nameKey="grade"
+                        stroke="none"
+                        cornerRadius={4}
+                      >
+                        {NAAC_COLLEGE_DISTRIBUTION.map((_, i) => (
+                          <Cell key={`naac-${i}`} fill={NAAC_COLORS[i % NAAC_COLORS.length]} />
+                        ))}
+                      </Pie>
+                      <RechartsTooltip
+                        cursor={{ fill: 'transparent' }}
+                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.08)', fontSize: '12px', fontWeight: 600, padding: '8px 12px' }}
+                        formatter={(val: any, _: any, props: any) => [`${Number(val).toLocaleString()} colleges`, `Grade ${props.payload.grade}`]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                  {/* Centre label */}
+                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+                    <span className="text-base font-bold text-slate-900 leading-none">
+                      {NAAC_COLLEGE_DISTRIBUTION.reduce((s, d) => s + d.count, 0).toLocaleString()}
+                    </span>
+                    <span className="text-[9px] text-slate-500 font-medium mt-0.5 text-center leading-tight">Total<br/>Colleges</span>
+                  </div>
+                </div>
+
+                {/* Right legend: last 4 grades */}
+                <div className="flex flex-col gap-2.5 flex-1 min-w-0 items-end text-right">
+                  {NAAC_COLLEGE_DISTRIBUTION.slice(4).map((item, i) => (
+                    <div key={item.grade} className="flex flex-col items-end">
+                      <div className="flex items-center gap-1.5 mb-0.5">
+                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Grade {item.grade}</span>
+                        <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: NAAC_COLORS[i + 4] }} />
+                      </div>
+                      <span className="text-[13px] font-bold text-slate-900 pr-3.5">{item.count.toLocaleString()}</span>
+                    </div>
+                  ))}
+                </div>
+
               </div>
+
             </div>
           </div>
         </div>

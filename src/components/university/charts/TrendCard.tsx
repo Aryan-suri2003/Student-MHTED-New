@@ -5,7 +5,7 @@ import { LucideIcon, TrendingUp } from 'lucide-react';
 interface TrendCardProps {
   title: string;
   value: string | number;
-  deltaPercent: number;
+  deltaPercent?: number;
   icon: LucideIcon;
 }
 
@@ -38,10 +38,12 @@ export const TrendCard: React.FC<TrendCardProps> = ({ title, value, deltaPercent
         <div className="text-[44px] font-extrabold text-slate-800 tracking-tight leading-none">
           {value}
         </div>
-        <div className="flex items-center gap-1 bg-emerald-50/80 px-2.5 py-1 rounded-md text-emerald-600 font-bold text-[13px] mb-1">
-          <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" />
-          {deltaPercent}%
-        </div>
+        {deltaPercent !== undefined && (
+          <div className="flex items-center gap-1 bg-emerald-50/80 px-2.5 py-1 rounded-md text-emerald-600 font-bold text-[13px] mb-1">
+            <TrendingUp className="w-3.5 h-3.5 stroke-[2.5]" />
+            {deltaPercent}%
+          </div>
+        )}
       </div>
     </div>
   );

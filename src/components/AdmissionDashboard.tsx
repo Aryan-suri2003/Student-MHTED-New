@@ -693,7 +693,7 @@ export default function AdmissionDashboard({
           </div>
         </div>
 
-        {/* Card 3: Colleges & Polytechnics */}
+        {/* Card 3: Colleges & Polytechnic */}
         <div className="bg-[#f0fdf4] hover:bg-[#dff7e7] rounded-3xl border border-emerald-100/50 hover:border-emerald-250 shadow-soft p-6 flex flex-col justify-between min-h-[310px] hover:shadow-md transition-all duration-300 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-24 h-24 bg-emerald-50/50 rounded-full -mr-8 -mt-8 pointer-events-none" />
 

@@ -127,11 +127,6 @@ export const ConcentricProgressCard: React.FC<ConcentricProgressCardProps> = ({
                 <span className="text-sm font-bold text-slate-900">
                   {item.value.toLocaleString()}
                 </span>
-                <div className={`flex items-center justify-center min-w-[60px] px-2 py-1 rounded text-[11px] font-bold ${
-                  isPositive ? 'bg-emerald-100/80 text-emerald-700' : 'bg-rose-100/80 text-rose-700'
-                }`}>
-                  {isPositive ? '+' : ''}{item.deltaPercent}%
-                </div>
               </div>
             </div>
           );

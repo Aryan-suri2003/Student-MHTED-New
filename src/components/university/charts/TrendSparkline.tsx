@@ -46,9 +46,7 @@ export const TrendSparkline: React.FC<TrendSparklineProps> = ({ title, data, col
           </div>
         </div>
         
-        <div className={`px-2 py-1 rounded text-[11px] font-semibold ${badgeColor}`}>
-          {isPositive ? '+' : ''}{deltaPercent.toFixed(1)}% since {firstPoint.year}
-        </div>
+
       </div>
 
       <div className="w-full absolute bottom-0 left-0 right-0 h-[65%]">

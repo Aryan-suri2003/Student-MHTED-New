@@ -91,8 +91,7 @@ export const WaffleChart: React.FC<WaffleChartProps> = ({ title, total, parts, t
         <div>
           <h3 className="text-[13px] font-semibold text-slate-800 tracking-tight leading-none mb-1.5">{title}</h3>
           <div className="flex items-center gap-2">
-            <span className="text-2xl font-bold text-slate-900 tracking-tight leading-none">{total.toLocaleString()}</span>
-            <DeltaIndicator deltaPercent={totalDeltaPercent} />
+          <span className="text-2xl font-bold text-slate-900 tracking-tight leading-none">{total.toLocaleString()}</span>
           </div>
         </div>
       </div>
