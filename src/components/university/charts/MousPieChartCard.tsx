@@ -90,11 +90,6 @@ export const MousPieChartCard: React.FC<MousPieChartCardProps> = ({
                   <span className="text-[13px] font-bold text-slate-900">
                     {item.value.toLocaleString()}
                   </span>
-                  <div className={`flex items-center justify-center min-w-[50px] px-1.5 py-0.5 rounded text-[10px] font-bold ${
-                    isPositive ? 'bg-emerald-100/80 text-emerald-700' : 'bg-rose-100/80 text-rose-700'
-                  }`}>
-                    {isPositive ? '+' : ''}{item.deltaPercent}%
-                  </div>
                 </div>
               </div>
             );

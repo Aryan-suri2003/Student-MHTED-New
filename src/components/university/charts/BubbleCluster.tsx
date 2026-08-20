@@ -28,7 +28,6 @@ export const BubbleCluster: React.FC<BubbleClusterProps> = ({ title, total, tota
           <h3 className="text-[13px] font-semibold text-slate-800 tracking-tight leading-none mb-1.5">{title}</h3>
           <div className="flex items-center gap-2">
             <span className="text-2xl font-bold text-slate-900 tracking-tight leading-none">{total.toLocaleString()}</span>
-            <DeltaIndicator deltaPercent={totalDeltaPercent} />
           </div>
         </div>
       </div>
@@ -65,11 +64,6 @@ export const BubbleCluster: React.FC<BubbleClusterProps> = ({ title, total, tota
               </div>
               <div className="flex items-center gap-2">
                 <span className="font-bold text-slate-900">{item.value.toLocaleString()}</span>
-                {item.deltaPercent !== undefined && item.deltaPercent !== null && (
-                  <div className="w-12 flex justify-end">
-                    <DeltaIndicator deltaPercent={item.deltaPercent} />
-                  </div>
-                )}
               </div>
             </div>
           ))}

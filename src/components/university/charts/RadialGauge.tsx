@@ -1,7 +1,7 @@
 "use client";
 import React from 'react';
 import { CHART_COLORS } from './WaffleChart';
-import { DeltaIndicator } from './DeltaIndicator';
+
 
 interface RadialGaugeProps {
   title: string;
@@ -20,9 +20,7 @@ export const RadialGauge: React.FC<RadialGaugeProps> = ({ title, value, total, d
     <div className="p-4 flex flex-col h-full items-center justify-between gap-4">
       <div className="w-full flex justify-between items-start">
         <h3 className="text-[13px] font-semibold text-slate-800 tracking-tight leading-none text-left">{title}</h3>
-        {deltaPercent !== undefined && deltaPercent !== null && (
-          <DeltaIndicator deltaPercent={deltaPercent} />
-        )}
+
       </div>
 
       <div className="relative w-24 h-24 flex items-center justify-center mt-2">
