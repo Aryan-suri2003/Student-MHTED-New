@@ -62,7 +62,7 @@ export default function KpiRail() {
       border: "border-[#8B5CF6]"
     },
     { 
-      label: "Colleges & Polytech", 
+      label: "Colleges", 
       value: 2408, 
       icon: BookOpen, 
       color: "text-[#10B981]", 

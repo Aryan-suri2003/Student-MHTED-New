@@ -224,9 +224,13 @@ export default function Sidebar() {
               alt="West Bengal Government Logo" 
               className="w-14 h-16 object-contain shrink-0 drop-shadow-lg" 
             />
-            <div className="flex flex-col leading-tight">
-              <span className="font-bold text-white text-[16px] tracking-tight">West Bengal</span>
-              <span className="font-semibold text-white/80 text-[13px] tracking-wider uppercase">Portal</span>
+            <div className="flex flex-col justify-center text-left">
+              <span className="font-bold text-white text-[15px] leading-[1.1] tracking-tight mb-1">
+                West Bengal<br />Higher Education
+              </span>
+              <span className="font-bold text-white/70 text-[11px] tracking-[0.15em] uppercase">
+                Dashboard
+              </span>
             </div>
           </div>
         ) : (
