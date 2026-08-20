@@ -35,7 +35,7 @@ function HeaderContent() {
     <header className="h-20 bg-[#F7F9FC] flex items-center justify-between px-8 sticky top-0 z-10 border-b border-slate-200/80 shrink-0">
       <div className="flex flex-col">
         <h2 className="text-xl font-bold text-[#172033] tracking-tight">{pageTitle}</h2>
-        <p className="text-[13px] font-medium text-[#667085]">West Bengal Higher Education Intelligence</p>
+        <p className="text-[13px] font-medium text-[#667085]">Department of Higher Education</p>
       </div>
 
       <div className="flex items-center gap-2 text-slate-400">

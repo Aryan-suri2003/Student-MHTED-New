@@ -77,10 +77,18 @@ export default function HeroMap() {
           
           <motion.h1 
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
-            className="text-[32px] font-bold text-[#172033] tracking-tight leading-tight mb-4"
+            className="text-[32px] font-bold text-[#172033] tracking-tight leading-tight mb-1"
           >
-            Higher and Technical Education, West Bengal 
+            Department of Higher Education
           </motion.h1>
+          <motion.h2 
+            initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15 }}
+            className="text-[22px] font-semibold text-[#667085] tracking-tight leading-tight mb-4"
+          >
+            Government of West Bengal
+          </motion.h2>
+          
+
           
           <motion.p 
             initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
