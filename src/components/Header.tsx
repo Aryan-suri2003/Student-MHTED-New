@@ -85,7 +85,7 @@ export const Header: React.FC<HeaderProps> = ({
             </div>
             <div className="min-w-0">
               <h1 className="text-base sm:text-lg font-bold tracking-tight text-white leading-snug">
-                {language === 'bn' ? 'উচ্চশিক্ষা ও গণশিক্ষা প্রসার দপ্তর' : 'Department of Higher Education'}
+                Department of higher education | Government of west bengal
               </h1>
               <p className="text-xs text-blue-200/90 font-medium flex items-center gap-1.5 mt-0.5 flex-wrap">
                 <span>{language === 'bn' ? 'পশ্চিমবঙ্গ সরকার' : 'Government of West Bengal'}</span>
@@ -165,7 +165,7 @@ export const Header: React.FC<HeaderProps> = ({
             <Landmark size={13} className="text-[#2563EB]" />
             <span>Govt. of West Bengal</span>
             <ChevronRight size={12} className="text-slate-300" />
-            <span>Higher Education Department</span>
+            <span>Department of higher education | Government of west bengal</span>
             <ChevronRight size={12} className="text-slate-300" />
             <span className="text-[#2563EB] font-extrabold">{legacyTitle.title}</span>
           </div>

@@ -2,40 +2,16 @@
 
 import React from "react";
 import { Search, Bell, User } from "lucide-react";
-import { useYear } from "@/contexts/YearContext";
-import { usePathname, useSearchParams } from "next/navigation";
-
-const routeTitles: Record<string, string> = {
-  "/": "Overview",
-  "/students": "Students",
-  "/universities": "Universities",
-  "/libraries": "Public Libraries",
-};
-
-const studentTabTitles: Record<string, string> = {
-  admission: "Students — Admission",
-  examination: "Students — Examination & Result",
-  scholarship: "Students — Scholarship",
-  fra: "Students — Fee Regulating Authority (FRA)",
-  cap: "Students — Centralized Admission Process (CAP)",
-};
 
 function HeaderContent() {
-  const { academicYear, setAcademicYear } = useYear();
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
-  const tab = searchParams?.get("tab");
-
-  let pageTitle = routeTitles[pathname] || "Dashboard";
-  if (pathname === "/students" && tab && studentTabTitles[tab]) {
-    pageTitle = studentTabTitles[tab];
-  }
-
   return (
-    <header className="h-20 bg-[#F7F9FC] flex items-center justify-between px-8 sticky top-0 z-10 border-b border-slate-200/80 shrink-0">
-      <div className="flex flex-col">
-        <h2 className="text-xl font-bold text-[#172033] tracking-tight">{pageTitle}</h2>
-        <p className="text-[13px] font-medium text-[#667085]">Department of Higher Education</p>
+    <header className="h-20 bg-white flex items-center justify-between px-8 sticky top-0 z-10 border-b border-blue-100 shrink-0">
+      <div className="flex items-center gap-3">
+        <h2 className="flex flex-wrap items-center gap-x-2 text-base sm:text-lg font-extrabold tracking-[-0.01em]">
+          <span className="text-[#0B5CAD]">Department of Higher Education</span>
+          <span className="text-blue-200" aria-hidden="true">|</span>
+          <span className="text-sm font-medium tracking-normal text-[#475467] sm:text-base">Govt of West Bengal</span>
+        </h2>
       </div>
 
       <div className="flex items-center gap-2 text-slate-400">

@@ -17,6 +17,7 @@ import {
 } from 'lucide-react';
 import { FilterState, GroupedMetricData, MetricData } from '@/types/university';
 import { DASHBOARD_METRICS } from '@/data/university/mockData';
+import { westBengalDistricts } from '@/data/mockData';
 
 interface University {
   name: string;
@@ -94,6 +95,10 @@ const UNIVERSITY_DATA: Record<string, { color: string; bg: string; border: strin
     color: 'text-emerald-600', bg: 'bg-emerald-50', border: 'border-emerald-200', icon: BookOpen,
     universities: DEEMED,
   },
+  central: {
+    color: 'text-cyan-600', bg: 'bg-cyan-50', border: 'border-cyan-200', icon: Landmark,
+    universities: CENTRAL,
+  },
   stateBoard: {
     color: 'text-amber-600', bg: 'bg-amber-50', border: 'border-amber-200', icon: User,
     universities: STATE_BOARD,
@@ -113,6 +118,17 @@ export const CampusView: React.FC<CampusViewProps> = ({
 }) => {
   const [selectedCategory, setSelectedCategory] = useState<CategoryKey | null>(null);
 
+  const infrastructureMetrics = [
+    { label: 'Colleges & Centers', metric: DASHBOARD_METRICS.collegesCenters as MetricData, icon: Building, accent: 'indigo', featured: true },
+    { label: 'Sub-Centers', metric: DASHBOARD_METRICS.subCenters as MetricData, icon: Landmark, accent: 'amber' },
+    { label: 'Incubation Centers', metric: DASHBOARD_METRICS.incubationCenters as MetricData, icon: Lightbulb, accent: 'emerald' },
+    { label: 'Playgrounds', metric: DASHBOARD_METRICS.playgrounds as MetricData, icon: Dumbbell, accent: 'rose' },
+    { label: 'Central Libraries', metric: DASHBOARD_METRICS.centralLibraries as MetricData, icon: BookOpen, accent: 'cyan' },
+    { label: 'Research Centers', metric: DASHBOARD_METRICS.researchCenters as MetricData, icon: FlaskConical, accent: 'violet' },
+    { label: 'Placement Cells', metric: DASHBOARD_METRICS.placementCells as MetricData, icon: Briefcase, accent: 'teal' },
+  ];
+  const largestMetric = Math.max(...infrastructureMetrics.map(({ metric }) => metric.value));
+
   const containerVariants = {
     hidden: { opacity: 0 },
     show: {
@@ -130,14 +146,52 @@ export const CampusView: React.FC<CampusViewProps> = ({
     setSelectedCategory(prev => (prev === key ? null : key));
   };
 
-  const selected = selectedCategory ? UNIVERSITY_DATA[selectedCategory] : null;
+  const matchesFilters = (university: University) => {
+    const query = filters.searchQuery.trim().toLowerCase();
+    const universityType = filters.universityType.trim().toLowerCase();
+    const selectedDistrict = filters.district.trim().toLowerCase();
+    const districtName = westBengalDistricts.find((district) => district.id.toLowerCase() === selectedDistrict)?.name.toLowerCase() || selectedDistrict;
+    const normalize = (value: string) => value.toLowerCase().replace(/[^a-z0-9]/g, '');
+    const location = normalize(university.location);
+    const normalizedDistrict = normalize(districtName);
+    const districtAliases: Record<string, string[]> = {
+      north24parganas: ['north24parganas', 'n24parganas'],
+      south24parganas: ['south24parganas', 's24parganas'],
+      purbabardhaman: ['purbabardhaman', 'bardhaman'],
+      paschimbardhaman: ['paschimbardhaman', 'bardhaman', 'asansol'],
+      paschimmedinipur: ['paschimmedinipur', 'midnapore'],
+      purbamedinipur: ['purbamedinipur', 'midnapore'],
+    };
+    const districtMatches = districtAliases[normalizedDistrict] || [normalizedDistrict];
+    const normalizedType = university.type?.toLowerCase() || '';
+    const isAllType = universityType === '' || universityType === 'all' || universityType === 'alltypes&streams';
+    const isAllDistrict = selectedDistrict === '' || selectedDistrict === 'all' || selectedDistrict === 'alldistricts';
+
+    if (!isAllType) {
+      const typeMatches = universityType === 'deemed to be' ? normalizedType === 'deemed' : normalizedType === universityType;
+      if (!typeMatches) return false;
+    }
+    if (!isAllDistrict && normalizedDistrict && !districtMatches.some((alias) => location.includes(alias))) return false;
+    if (query && !university.name.toLowerCase().includes(query) && !location.includes(query)) return false;
+    return true;
+  };
+
+  const filteredUniversityData: typeof UNIVERSITY_DATA = Object.fromEntries(
+    Object.entries(UNIVERSITY_DATA).map(([key, category]) => [
+      key,
+      { ...category, universities: category.universities.filter(matchesFilters) }
+    ])
+  ) as typeof UNIVERSITY_DATA;
+
+  const selected = selectedCategory ? filteredUniversityData[selectedCategory] : null;
 
   const cards: { key: CategoryKey; count: number; label: string; sublabel: string }[] = [
-    { key: 'all',          count: 36, label: 'Total',        sublabel: 'Universities' },
-    { key: 'statePublic',  count: 21, label: 'State Public', sublabel: 'Universities' },
-    { key: 'statePrivate', count: 9,  label: 'State Private',sublabel: 'Universities' },
-    { key: 'deemed',       count: 4,  label: 'Deemed to be', sublabel: 'Universities' },
-    { key: 'stateBoard',   count: 1,  label: 'State',        sublabel: 'Board' },
+    { key: 'all',          count: filteredUniversityData.all.universities.length, label: 'Total',        sublabel: 'Universities' },
+    { key: 'statePublic',  count: filteredUniversityData.statePublic.universities.length, label: 'State Public', sublabel: 'Universities' },
+    { key: 'statePrivate', count: filteredUniversityData.statePrivate.universities.length, label: 'State Private',sublabel: 'Universities' },
+    { key: 'deemed',       count: filteredUniversityData.deemed.universities.length, label: 'Deemed to be', sublabel: 'Universities' },
+    { key: 'central',      count: filteredUniversityData.central.universities.length, label: 'Central',      sublabel: 'Universities' },
+    { key: 'stateBoard',   count: filteredUniversityData.stateBoard.universities.length, label: 'State',        sublabel: 'Board' },
   ];
 
   return (
@@ -147,10 +201,10 @@ export const CampusView: React.FC<CampusViewProps> = ({
         variants={containerVariants}
         initial="hidden"
         animate="show"
-        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4"
+        className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-4"
       >
         {cards.map(({ key, count, label, sublabel }) => {
-          const cat = UNIVERSITY_DATA[key];
+          const cat = filteredUniversityData[key];
           const Icon = cat.icon;
           const isActive = selectedCategory === key;
           return (
@@ -281,101 +335,41 @@ export const CampusView: React.FC<CampusViewProps> = ({
 
         {/* Left Side: Infrastructure */}
         <div className="xl:col-span-7 flex flex-col bg-white rounded-2xl border border-slate-200/90 shadow-sm p-5">
-          <h3 className="text-sm font-semibold text-slate-800 mb-4 flex items-center gap-2">
-            <Building className="w-4 h-4 text-indigo-600" />
-            Campus Infrastructure
-          </h3>
+          <div className="flex items-start justify-between gap-4 mb-5">
+            <div>
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-8 h-8 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <Building className="w-4 h-4 text-indigo-600" />
+                </div>
+                <h3 className="text-sm font-semibold text-slate-800">Campus Infrastructure</h3>
+              </div>
+              <p className="text-[11px] text-slate-500">A snapshot of the facilities supporting higher education across West Bengal.</p>
+            </div>
+            <div className="text-right shrink-0">
+              <p className="text-2xl font-bold tracking-tight text-slate-900">{infrastructureMetrics.reduce((total, { metric }) => total + metric.value, 0).toLocaleString()}</p>
+              <p className="text-[10px] font-semibold uppercase tracking-wider text-slate-400">Facilities tracked</p>
+            </div>
+          </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 flex-1 items-stretch">
-            {/* Card 3: Colleges and Centers */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-indigo-50 flex items-center justify-center">
-                  <Building className="w-3 h-3 text-indigo-600" />
+            {infrastructureMetrics.map(({ label, metric, icon: Icon, accent, featured }) => (
+              <div key={label} className={`group relative overflow-hidden rounded-xl border p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-sm ${featured ? 'border-indigo-200 bg-indigo-50/45 sm:col-span-2' : 'border-slate-200 bg-slate-50/45 hover:border-slate-300 hover:bg-white'}`}>
+                <div className="flex items-start justify-between gap-3">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className={`w-8 h-8 rounded-lg bg-${accent}-50 flex items-center justify-center shrink-0`}>
+                      <Icon className={`w-4 h-4 text-${accent}-600`} />
+                    </div>
+                    <span className="text-[11px] font-semibold text-slate-600 leading-tight">{label}</span>
+                  </div>
+                  <span className="text-lg font-bold text-slate-900">{metric.value.toLocaleString()}</span>
                 </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Colleges<br />& Centers
-                </span>
-              </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.collegesCenters as MetricData).value}</p>
-            </div>
-
-            {/* Card 4: Sub-Centers */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-amber-50 flex items-center justify-center">
-                  <Landmark className="w-3 h-3 text-amber-600" />
+                <div className="mt-3 flex items-center gap-2">
+                  <div className="h-1.5 flex-1 rounded-full bg-white/80 overflow-hidden">
+                    <div className={`h-full rounded-full bg-${accent}-500 transition-all`} style={{ width: `${Math.max(8, (metric.value / largestMetric) * 100)}%` }} />
+                  </div>
                 </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Sub-Centers
-                </span>
+                <p className="mt-1 text-[10px] text-slate-400">{metric.previousYearValue != null ? `vs ${metric.previousYearValue.toLocaleString()} last year` : 'Current reporting year'}</p>
               </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.subCenters as MetricData).value}</p>
-            </div>
-
-            {/* Card 5: Incubation Centers */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-emerald-50 flex items-center justify-center">
-                  <Lightbulb className="w-3 h-3 text-emerald-600" />
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Incubation<br />Centers
-                </span>
-              </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.incubationCenters as MetricData).value}</p>
-            </div>
-
-            {/* Card 6: Playgrounds */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-rose-50 flex items-center justify-center">
-                  <Dumbbell className="w-3 h-3 text-rose-600" />
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Playgrounds
-                </span>
-              </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.playgrounds as MetricData).value}</p>
-            </div>
-
-            {/* Card 7: Libraries */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-cyan-50 flex items-center justify-center">
-                  <BookOpen className="w-3 h-3 text-cyan-600" />
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Central<br />Libraries
-                </span>
-              </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.centralLibraries as MetricData).value}</p>
-            </div>
-
-            {/* Card 8: Research Centers */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-violet-50 flex items-center justify-center">
-                  <FlaskConical className="w-3 h-3 text-violet-600" />
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Research<br />Centers
-                </span>
-              </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.researchCenters as MetricData).value}</p>
-            </div>
-
-            {/* Card 9: Placement Cells */}
-            <div className="p-3 flex flex-col justify-between hover:bg-slate-50 rounded-xl transition-colors">
-              <div className="flex items-center gap-2 mb-3">
-                <div className="w-6 h-6 rounded-md bg-teal-50 flex items-center justify-center">
-                  <Briefcase className="w-3 h-3 text-teal-600" />
-                </div>
-                <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider leading-tight">
-                  Placement<br />Cells
-                </span>
-              </div>
-              <p className="text-xl font-bold text-slate-900">{(DASHBOARD_METRICS.placementCells as MetricData).value}</p>
-            </div>
+            ))}
           </div>
         </div>
 

@@ -1,13 +1,12 @@
 "use client";
 import React from 'react';
-import { LucideIcon, ChevronDown } from 'lucide-react';
+import { ChevronDown } from 'lucide-react';
 import { PieChart, Pie, Cell, Tooltip as RechartsTooltip, ResponsiveContainer } from 'recharts';
 
 export interface ProgressItem {
   label: string;
   value: number;
   deltaPercent: number;
-  icon: LucideIcon;
   color: string;
 }
 
@@ -81,9 +80,7 @@ export const MousPieChartCard: React.FC<MousPieChartCardProps> = ({
             return (
               <div key={idx} className="flex items-center justify-between group">
                 <div className="flex items-center gap-2">
-                  <div className="w-7 h-7 rounded-lg bg-slate-50 flex items-center justify-center text-slate-600 group-hover:bg-slate-100 transition-colors">
-                    <item.icon className="w-3.5 h-3.5" />
-                  </div>
+                  <span className="w-2.5 h-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
                   <span className="text-[12px] font-semibold text-slate-700">{item.label}</span>
                 </div>
                 <div className="flex items-center gap-3">

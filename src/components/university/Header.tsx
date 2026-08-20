@@ -46,16 +46,12 @@ export const Header: React.FC<HeaderProps> = ({
       <div className="max-w-[1920px] mx-auto px-4 lg:px-6 h-14 flex items-center justify-between gap-4">
         {/* Left: Department Emblem & Title */}
         <div className="flex items-center gap-3 shrink-0">
-          <div className="w-8 h-8 rounded bg-indigo-600 text-white flex items-center justify-center font-bold text-xs tracking-wider shadow-sm">
-            WB
-          </div>
           <div>
-            <h1 className="text-sm font-semibold tracking-tight text-slate-900 leading-tight">
-              Higher Education Department
+            <h1 className="flex flex-wrap items-center gap-x-1.5 text-sm font-semibold tracking-tight leading-tight">
+              <span className="text-[#0B5CAD]">Department of Higher Education</span>
+              <span className="text-blue-200" aria-hidden="true">|</span>
+              <span className="font-normal text-slate-600">Govt of West Bengal</span>
             </h1>
-            <p className="text-[10px] font-medium text-slate-500 hidden sm:block uppercase tracking-wider">
-              Institutional Analytics
-            </p>
           </div>
         </div>
 

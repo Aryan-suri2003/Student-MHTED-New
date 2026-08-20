@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import {
   RotateCcw,
-  Search,
   Printer,
   Filter,
   X,
@@ -29,8 +28,6 @@ interface FilterBarProps {
   setSelectedGrade: (grade: GradeFilter) => void;
   selectedBuilding: BuildingFilter;
   setSelectedBuilding: (b: BuildingFilter) => void;
-  searchQuery: string;
-  setSearchQuery: (query: string) => void;
   onReset: () => void;
   disclaimerDate: string;
   language: Language;
@@ -49,8 +46,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   setSelectedGrade,
   selectedBuilding,
   setSelectedBuilding,
-  searchQuery,
-  setSearchQuery,
   onReset,
   disclaimerDate,
   language,
@@ -109,7 +104,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
     selectedDivision !== 'all' ||
     selectedGrade !== null ||
     selectedBuilding !== null ||
-    searchQuery.trim().length > 0 ||
     (selectedYear !== '2025-2026' && selectedYear !== '2024-2025');
 
   return (
@@ -164,41 +158,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
               className="w-full sm:w-48 lg:w-52 xl:w-56 shrink-0"
               minWidth="w-72 sm:w-80"
             />
-
-            {/* 4. Modern Smart Search Input - placed beside District on desktop/fullscreen */}
-            <div className="h-11 w-full sm:w-44 lg:w-48 xl:w-52 shrink-0 relative flex items-center justify-between bg-gradient-to-b from-slate-50 to-slate-100/90 hover:to-slate-100 focus-within:bg-white px-3 py-1.5 rounded-xl border border-slate-200/90 focus-within:border-blue-500 focus-within:ring-2 focus-within:ring-blue-100 shadow-xs transition-all group">
-              <div className="flex items-center min-w-0 flex-1 pr-1">
-                <div className="w-6 h-6 rounded-lg bg-slate-200/80 text-slate-600 group-focus-within:bg-blue-100 group-focus-within:text-blue-700 flex items-center justify-center mr-2 shrink-0 transition-colors">
-                  <Search className="w-3.5 h-3.5" />
-                </div>
-                <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 leading-none">
-                    {language === 'bn' ? 'অনুসন্ধান' : 'Quick Search'}
-                  </span>
-                  <input
-                    type="text"
-                    id="search-input"
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    placeholder={language === 'bn' ? 'জেলা খুঁজুন...' : 'Type district...'}
-                    className="text-xs font-semibold text-slate-900 bg-transparent outline-hidden w-full placeholder:text-slate-400 mt-0.5"
-                  />
-                </div>
-              </div>
-              {searchQuery ? (
-                <button
-                  onClick={() => setSearchQuery('')}
-                  className="w-4 h-4 rounded-full bg-slate-200 hover:bg-slate-300 text-slate-600 flex items-center justify-center text-[10px] shrink-0 cursor-pointer transition-colors"
-                  title="Clear search"
-                >
-                  ✕
-                </button>
-              ) : (
-                <span className="hidden sm:inline-block text-[9px] font-bold text-slate-400 bg-slate-200/70 px-1 py-0.2 rounded border border-slate-300/60 shrink-0 pointer-events-none font-mono">
-                  /
-                </span>
-              )}
-            </div>
 
             {/* Reset Filters Button */}
             <AnimatePresence>
@@ -359,23 +318,6 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                 </motion.span>
               )}
 
-              {searchQuery && (
-                <motion.span
-                  initial={{ scale: 0.8, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-xl bg-purple-50 text-purple-900 border border-purple-200 font-bold text-[11px] shadow-2xs"
-                >
-                  <Search className="w-3 h-3 text-purple-600" />
-                  Search: "{searchQuery}"
-                  <button
-                    onClick={() => setSearchQuery('')}
-                    className="hover:text-red-600 cursor-pointer p-0.5 rounded-full hover:bg-purple-100 transition-colors"
-                  >
-                    <X className="w-3 h-3" />
-                  </button>
-                </motion.span>
-              )}
             </motion.div>
           )}
         </AnimatePresence>

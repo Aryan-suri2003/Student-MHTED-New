@@ -1,6 +1,6 @@
 "use client";
 import React, { useMemo } from 'react';
-import { Search, MapPin, Building2 } from 'lucide-react';
+import { Search, MapPin, Building2, RotateCcw } from 'lucide-react';
 import { motion } from 'motion/react';
 import { ActiveTab, FilterState } from '@/types/university';
 import { MinimalistCalendarYearPicker } from '@/components/MinimalistCalendarYearPicker';
@@ -27,6 +27,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
   onSelectTab,
   filters,
   onFilterChange,
+  onResetFilters,
 }) => {
 
   const districtOptions: DropdownOption[] = useMemo(() => {
@@ -96,7 +97,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                   <Search className="w-3.5 h-3.5" />
                 </div>
                 <div className="flex flex-col min-w-0 flex-1">
-                  <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 leading-none">
+                  <span className="text-[11px] font-bold uppercase tracking-wider text-slate-600 leading-none">
                     Quick Search
                   </span>
                   <input
@@ -104,7 +105,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
                     value={filters.searchQuery}
                     onChange={(e) => onFilterChange('searchQuery', e.target.value)}
                     placeholder="Search..."
-                    className="text-xs font-semibold text-slate-900 bg-transparent outline-hidden w-full placeholder:text-slate-400 mt-0.5"
+                    className="text-sm font-semibold text-slate-900 bg-transparent outline-hidden w-full placeholder:text-slate-400 mt-0.5"
                   />
                 </div>
               </div>
@@ -121,7 +122,15 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 
           {/* Right Action Tools */}
           <div className="flex items-center justify-between sm:justify-end gap-2 shrink-0 flex-wrap xl:ml-auto">
-            <div className="flex items-center gap-1.5 text-[11px] font-medium text-slate-500 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs shrink-0 ml-2">
+            <button
+              type="button"
+              onClick={onResetFilters}
+              className="h-9 inline-flex items-center gap-1.5 px-3 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-600 hover:border-indigo-200 hover:bg-indigo-50 hover:text-indigo-700 transition-colors"
+            >
+              <RotateCcw className="w-3.5 h-3.5" />
+              Reset filters
+            </button>
+            <div className="flex items-center gap-1.5 text-xs font-medium text-slate-600 bg-slate-50 px-2.5 py-1.5 rounded-xl border border-slate-200/80 shadow-2xs shrink-0 ml-2">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
               <span>
                 Updated: <strong className="text-slate-800">{getLiveUpdatedDate()}</strong>
@@ -135,19 +144,19 @@ export const FilterBar: React.FC<FilterBarProps> = ({
           <div className="flex flex-wrap items-center gap-2 sm:gap-4 p-1.5">
             <button
               onClick={() => onSelectTab('affiliation')}
-              className={`py-1.5 text-[12px] font-semibold transition-all cursor-pointer ${activeTab === 'affiliation' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`py-1.5 text-[13px] font-semibold transition-all cursor-pointer ${activeTab === 'affiliation' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600 hover:text-slate-900'}`}
             >
               Affiliation - College
             </button>
             <button
               onClick={() => onSelectTab('campus')}
-              className={`py-1.5 text-[12px] font-semibold transition-all cursor-pointer ${activeTab === 'campus' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`py-1.5 text-[13px] font-semibold transition-all cursor-pointer ${activeTab === 'campus' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600 hover:text-slate-900'}`}
             >
               University Campus
             </button>
             <button
               onClick={() => onSelectTab('research')}
-              className={`py-1.5 text-[12px] font-semibold transition-all cursor-pointer ${activeTab === 'research' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-500 hover:text-slate-800'}`}
+              className={`py-1.5 text-[13px] font-semibold transition-all cursor-pointer ${activeTab === 'research' ? 'text-indigo-600 border-b-2 border-indigo-600' : 'text-slate-600 hover:text-slate-900'}`}
             >
               Research
             </button>

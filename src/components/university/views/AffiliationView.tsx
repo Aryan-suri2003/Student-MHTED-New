@@ -13,11 +13,14 @@ import {
   GraduationCap
 } from 'lucide-react';
 import {
-  PieChart,
-  Pie,
+  BarChart,
+  Bar,
   Cell,
+  LabelList,
+  ResponsiveContainer,
   Tooltip as RechartsTooltip,
-  ResponsiveContainer
+  XAxis,
+  YAxis
 } from 'recharts';
 import { NAAC_COLLEGE_DISTRIBUTION, DASHBOARD_METRICS } from '@/data/university/mockData';
 import { GroupedMetricData, MetricData } from '@/types/university';
@@ -54,6 +57,8 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
   onOpenDrilldown,
   onFilterChange
 }) => {
+  const [selectedNaacGrade, setSelectedNaacGrade] = useState<string | null>(null);
+
   // Map MoUs data for ConcentricProgressCard
   const mousData = DASHBOARD_METRICS.mousAffiliation as GroupedMetricData;
   const mousItems = mousData.parts.map((p) => {
@@ -74,7 +79,6 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
       label: label,
       value: p.value,
       deltaPercent: (p as any).deltaPercent || 0,
-      icon,
       color
     };
   });
@@ -164,8 +168,8 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
           <div className="flex flex-wrap gap-3 shrink-0 items-stretch">
             {/* Card 4: Meeting Rooms */}
             <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
-              <div className="w-8 h-8 rounded-full bg-emerald-50 flex items-center justify-center mb-2">
-                <Users className="w-4 h-4 text-emerald-600" />
+              <div className="w-10 h-10 rounded-full bg-emerald-50 flex items-center justify-center mb-2">
+                <Users className="w-6 h-6 text-emerald-600" />
               </div>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-tight mb-1">
                 Meeting<br />Rooms
@@ -175,8 +179,8 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
 
             {/* Card 5: Staff Rooms */}
             <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
-              <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center mb-2">
-                <Building className="w-4 h-4 text-blue-600" />
+              <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center mb-2">
+                <Building className="w-6 h-6 text-blue-600" />
               </div>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-tight mb-1">
                 Staff<br />Rooms
@@ -186,8 +190,8 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
 
             {/* Card 6: Transport Facilities */}
             <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
-              <div className="w-8 h-8 rounded-full bg-amber-50 flex items-center justify-center mb-2">
-                <Bus className="w-4 h-4 text-amber-600" />
+              <div className="w-10 h-10 rounded-full bg-amber-50 flex items-center justify-center mb-2">
+                <Bus className="w-6 h-6 text-amber-600" />
               </div>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-tight mb-1">
                 Transport<br />Facilities
@@ -197,8 +201,8 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
 
             {/* Card 7: Placement Cell */}
             <div className="w-full sm:flex-1 sm:min-w-[120px] p-4 flex flex-col items-center justify-center text-center shrink-0 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow cursor-default">
-              <div className="w-8 h-8 rounded-full bg-violet-50 flex items-center justify-center mb-2">
-                <Briefcase className="w-4 h-4 text-violet-600" />
+              <div className="w-10 h-10 rounded-full bg-violet-50 flex items-center justify-center mb-2">
+                <Briefcase className="w-6 h-6 text-violet-600" />
               </div>
               <span className="text-[10px] font-bold text-slate-500 uppercase tracking-wider leading-tight mb-1">
                 Placement<br />Cells
@@ -234,71 +238,52 @@ export const AffiliationView: React.FC<AffiliationViewProps> = ({
                 </div>
               </div>
 
-              {/* 3-column layout: left legend | donut | right legend */}
-              <div className="flex items-center gap-2 w-full">
-
-                {/* Left legend: first 4 grades */}
-                <div className="flex flex-col gap-2.5 flex-1 min-w-0">
-                  {NAAC_COLLEGE_DISTRIBUTION.slice(0, 4).map((item, i) => (
-                    <div key={item.grade} className="flex flex-col">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: NAAC_COLORS[i] }} />
-                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Grade {item.grade}</span>
-                      </div>
-                      <span className="text-[13px] font-bold text-slate-900 pl-3.5">{item.count.toLocaleString()}</span>
-                    </div>
-                  ))}
-                </div>
-
-                {/* Centre donut */}
-                <div className="relative flex-shrink-0 w-[160px] h-[160px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <PieChart>
-                      <Pie
-                        data={NAAC_COLLEGE_DISTRIBUTION}
-                        cx="50%"
-                        cy="50%"
-                        innerRadius={48}
-                        outerRadius={68}
-                        paddingAngle={2}
-                        dataKey="count"
-                        nameKey="grade"
-                        stroke="none"
-                        cornerRadius={4}
-                      >
-                        {NAAC_COLLEGE_DISTRIBUTION.map((_, i) => (
-                          <Cell key={`naac-${i}`} fill={NAAC_COLORS[i % NAAC_COLORS.length]} />
-                        ))}
-                      </Pie>
-                      <RechartsTooltip
-                        cursor={{ fill: 'transparent' }}
-                        contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.08)', fontSize: '12px', fontWeight: 600, padding: '8px 12px' }}
-                        formatter={(val: any, _: any, props: any) => [`${Number(val).toLocaleString()} colleges`, `Grade ${props.payload.grade}`]}
-                      />
-                    </PieChart>
-                  </ResponsiveContainer>
-                  {/* Centre label */}
-                  <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-                    <span className="text-base font-bold text-slate-900 leading-none">
-                      {NAAC_COLLEGE_DISTRIBUTION.reduce((s, d) => s + d.count, 0).toLocaleString()}
-                    </span>
-                    <span className="text-[9px] text-slate-500 font-medium mt-0.5 text-center leading-tight">Total<br/>Colleges</span>
-                  </div>
-                </div>
-
-                {/* Right legend: last 4 grades */}
-                <div className="flex flex-col gap-2.5 flex-1 min-w-0 items-end text-right">
-                  {NAAC_COLLEGE_DISTRIBUTION.slice(4).map((item, i) => (
-                    <div key={item.grade} className="flex flex-col items-end">
-                      <div className="flex items-center gap-1.5 mb-0.5">
-                        <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wide">Grade {item.grade}</span>
-                        <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ backgroundColor: NAAC_COLORS[i + 4] }} />
-                      </div>
-                      <span className="text-[13px] font-bold text-slate-900 pr-3.5">{item.count.toLocaleString()}</span>
-                    </div>
-                  ))}
-                </div>
-
+              <div className="h-[260px] w-full mt-1">
+                <ResponsiveContainer width="100%" height="100%">
+                  <BarChart
+                    data={NAAC_COLLEGE_DISTRIBUTION}
+                    layout="vertical"
+                    margin={{ top: 4, right: 42, left: 2, bottom: 4 }}
+                    barCategoryGap="18%"
+                  >
+                    <XAxis type="number" hide />
+                    <YAxis
+                      type="category"
+                      dataKey="grade"
+                      axisLine={false}
+                      tickLine={false}
+                      width={42}
+                      tick={{ fill: '#475569', fontSize: 11, fontWeight: 700 }}
+                      tickFormatter={(grade) => `Grade ${grade}`}
+                    />
+                    <RechartsTooltip
+                      cursor={{ fill: '#f8fafc' }}
+                      contentStyle={{ borderRadius: '12px', border: 'none', boxShadow: '0 4px 15px rgba(0,0,0,0.08)', fontSize: '12px', fontWeight: 600, padding: '8px 12px' }}
+                      formatter={(value: any) => [`${Number(value).toLocaleString()} colleges`, 'Accredited']}
+                    />
+                    <Bar
+                      dataKey="count"
+                      radius={[0, 5, 5, 0]}
+                      barSize={17}
+                      cursor="pointer"
+                      onClick={(entry: any) => {
+                        const grade = entry?.payload?.grade ?? entry?.grade;
+                        if (grade) {
+                          setSelectedNaacGrade((current) => current === grade ? null : grade);
+                        }
+                      }}
+                    >
+                      {NAAC_COLLEGE_DISTRIBUTION.map((item, index) => (
+                        <Cell
+                          key={`naac-bar-${item.grade}`}
+                          fill={NAAC_COLORS[index % NAAC_COLORS.length]}
+                          opacity={selectedNaacGrade && selectedNaacGrade !== item.grade ? 0.2 : 1}
+                        />
+                      ))}
+                      <LabelList dataKey="count" position="right" formatter={(value: any) => Number(value).toLocaleString()} fill="#334155" fontSize={10} fontWeight={700} />
+                    </Bar>
+                  </BarChart>
+                </ResponsiveContainer>
               </div>
 
             </div>

@@ -9,7 +9,7 @@ import { DrilldownModal } from '@/components/university/modals/DrilldownModal';
 import { ReportModal } from '@/components/university/modals/ReportModal';
 import { SupportModal } from '@/components/university/modals/SupportModal';
 import { ActiveTab, NavCategory, FilterState } from '@/types/university';
-import { Menu, X } from 'lucide-react';
+import { Building2 } from 'lucide-react';
 import '@/components/university/index.css';
 
 const initialFilters: FilterState = {
@@ -88,12 +88,12 @@ export default function UniversitiesPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] bg-[#f4f7fe] text-slate-800 font-sans flex flex-col antialiased p-4 sm:p-6 lg:p-8">
+    <div className="min-h-[calc(100vh-4rem)] bg-white text-slate-800 font-sans text-[15px] flex flex-col antialiased">
 
       {/* Main Body with Left Sidebar & Content Canvas */}
       <div className="flex-1 flex max-w-[1920px] w-full mx-auto relative h-full">
         {/* Right Main Content Canvas */}
-        <div className="flex-1 flex flex-col min-w-0 bg-white overflow-hidden rounded-2xl border border-slate-200 shadow-sm">
+        <div className="flex-1 flex flex-col min-w-0 bg-white overflow-hidden">
           {/* Dynamic Top Filter Bar for Affiliation, Campus, Research views */}
           {(activeTab === 'affiliation' ||
             activeTab === 'campus' ||
@@ -109,6 +109,15 @@ export default function UniversitiesPage() {
 
           {/* View Container */}
           <div className="p-4 sm:p-6 lg:p-8 flex-1">
+            <div className="flex items-center gap-3 mb-6">
+              <span className="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-indigo-600 to-blue-600 text-white shadow-md">
+                <Building2 className="h-5 w-5" />
+              </span>
+              <div>
+                <p className="text-xs font-bold uppercase tracking-[0.18em] text-indigo-700/80">West Bengal</p>
+                <h2 className="text-3xl font-black tracking-tight text-slate-900">Universities</h2>
+              </div>
+            </div>
 
             {activeTab === 'research' && (
               <ResearchView

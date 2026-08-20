@@ -34,7 +34,6 @@ import {
   DASHBOARD_METRICS
 } from '@/data/university/mockData';
 import { FilterState, MetricData } from '@/types/university';
-import { DeltaIndicator } from '../charts/DeltaIndicator';
 import { StackedBarSummary, ProportionalBar } from '../charts/ProportionalStackedBar';
 import { TrendSparkline } from '../charts/TrendSparkline';
 
@@ -65,63 +64,76 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
     return true;
   });
 
+  const filteredUniversityOutput = UNIVERSITY_OUTPUT_DATA.filter((university) => {
+    const query = filters.searchQuery.trim().toLowerCase();
+    const district = filters.district.trim().toLowerCase();
+    const type = filters.universityType;
+    const outputType = type === 'State Public' || type === 'Central' ? 'Public' : type === 'State Private' ? 'Private' : type === 'Deemed to be' ? 'Deemed' : type === 'State Board' ? 'Board' : 'All';
+
+    if (outputType !== 'All' && university.type !== outputType) return false;
+    if (district !== 'all' && district && !university.district.toLowerCase().includes(district)) return false;
+    if (query && !university.fullName.toLowerCase().includes(query) && !university.code.toLowerCase().includes(query) && !university.district.toLowerCase().includes(query)) return false;
+    return true;
+  });
+
   // Calculate totals
   const totalConf = filteredThemes.reduce((acc, t) => acc + t.conferencePapers, 0);
   const totalGrants = filteredThemes.reduce((acc, t) => acc + t.researchGrants, 0);
   const totalPublished = filteredThemes.reduce((acc, t) => acc + t.publishedPapers, 0);
+  const researchMetrics = [
+    {
+      label: 'Journal Papers',
+      metric: DASHBOARD_METRICS.journalPapers as MetricData,
+      icon: FileText,
+      iconClass: 'bg-indigo-50 text-indigo-600',
+      barClass: 'bg-indigo-500',
+      helper: 'Peer-reviewed publications'
+    },
+    {
+      label: 'Conference Papers',
+      metric: DASHBOARD_METRICS.conferencePapers as MetricData,
+      icon: MessageSquare,
+      iconClass: 'bg-blue-50 text-blue-600',
+      barClass: 'bg-blue-500',
+      helper: 'Presented research works'
+    },
+    {
+      label: 'Research Grants',
+      metric: DASHBOARD_METRICS.researchGrants as MetricData,
+      icon: CircleDollarSign,
+      iconClass: 'bg-emerald-50 text-emerald-600',
+      barClass: 'bg-emerald-500',
+      helper: 'Funded research projects'
+    }
+  ];
+  const largestResearchMetric = Math.max(...researchMetrics.map(({ metric }) => metric.value));
 
   return (
     <div className="space-y-6 pb-12">
       {/* Top Section: KPIs (Left) & Key Research Areas (Right) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* LEFT COLUMN: KPI Cards */}
-        <div className="lg:col-span-3 flex flex-col gap-4">
-          {/* Card 1: Journal Papers */}
-          <div className="p-5 relative overflow-hidden flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center flex-shrink-0">
-                <FileText className="w-5 h-5" />
+        <div className="lg:col-span-3 flex flex-col gap-3">
+          {researchMetrics.map(({ label, metric, icon: Icon, iconClass, barClass, helper }) => (
+            <div key={label} className="group relative overflow-hidden p-4 bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:-translate-y-0.5 hover:shadow-md transition-all">
+              <div className="flex items-start justify-between gap-3">
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${iconClass}`}>
+                  <Icon className="w-5 h-5" />
+                </div>
               </div>
-              <p className="text-[11px] font-semibold text-slate-500 tracking-wider uppercase">
-                Journal Papers
+              <p className="mt-4 text-[10px] font-bold text-slate-500 tracking-widest uppercase">{label}</p>
+              <div className="mt-1 flex items-end justify-between gap-2">
+                <p className="text-3xl font-black tracking-tight text-slate-900">{metric.value.toLocaleString()}</p>
+                <span className="mb-1 text-[10px] font-medium text-slate-400 text-right">{helper}</span>
+              </div>
+              <div className="mt-3 h-1.5 rounded-full bg-slate-100 overflow-hidden">
+                <div className={`h-full rounded-full ${barClass} transition-all`} style={{ width: `${Math.max(10, (metric.value / largestResearchMetric) * 100)}%` }} />
+              </div>
+              <p className="mt-1.5 text-[10px] text-slate-400">
+                {metric.previousYearValue != null ? `vs ${metric.previousYearValue.toLocaleString()} last year` : 'Current reporting year'}
               </p>
             </div>
-            <div className="text-2xl font-bold text-slate-900 tracking-tight mt-2">
-              {(DASHBOARD_METRICS.journalPapers as MetricData).value}
-            </div>
-          </div>
-
-          {/* Card 2: Conference Papers */}
-          <div className="p-5 relative overflow-hidden flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
-                <MessageSquare className="w-5 h-5" />
-              </div>
-              <p className="text-[11px] font-semibold text-slate-500 tracking-wider uppercase">
-                Conference Papers
-              </p>
-            </div>
-            <div className="text-2xl font-bold text-slate-900 tracking-tight mt-2">
-              {(DASHBOARD_METRICS.conferencePapers as MetricData).value}
-            </div>
-          </div>
-
-          {/* Card 3: Research Grants */}
-          <div className="p-5 relative overflow-hidden flex flex-col justify-between bg-white rounded-2xl border border-slate-200/90 shadow-sm hover:shadow-md transition-shadow">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="w-12 h-12 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center flex-shrink-0">
-                <CircleDollarSign className="w-5 h-5" />
-              </div>
-              <p className="text-[11px] font-semibold text-slate-500 tracking-wider uppercase">
-                Research Grants
-              </p>
-            </div>
-            <div className="text-2xl font-bold text-slate-900 tracking-tight mt-2">
-              {(DASHBOARD_METRICS.researchGrants as MetricData).value}
-            </div>
-          </div>
-
-
+          ))}
         </div>
 
         {/* RIGHT COLUMN: Key Research Areas Table */}
@@ -255,7 +267,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
             <div className="h-[460px] min-w-[500px] w-full">
               <ResponsiveContainer width="100%" height="100%">
               <BarChart
-                data={UNIVERSITY_OUTPUT_DATA}
+                data={filteredUniversityOutput}
                 margin={{ top: 10, right: 30, left: 10, bottom: 20 }}
                 barGap={2}
                 barSize={24}
@@ -281,7 +293,7 @@ export const ResearchView: React.FC<ResearchViewProps> = ({
                   cursor={{ fill: '#f1f5f9', opacity: 0.4 }}
                   content={({ active, payload, label }) => {
                     if (active && payload && payload.length) {
-                      const u = UNIVERSITY_OUTPUT_DATA.find((item) => item.code === label);
+                      const u = filteredUniversityOutput.find((item) => item.fullName === label);
                       return (
                         <div className="bg-white rounded-3xl p-5 shadow-[var(--shadow-soft)] z-50">
                           <p className="font-semibold text-slate-900 mb-2 border-b border-slate-100 pb-2">
