@@ -28,6 +28,8 @@ interface FilterBarProps {
   setSelectedGrade: (grade: GradeFilter) => void;
   selectedBuilding: BuildingFilter;
   setSelectedBuilding: (b: BuildingFilter) => void;
+  searchQuery?: string;
+  setSearchQuery?: (query: string) => void;
   onReset: () => void;
   disclaimerDate: string;
   language: Language;

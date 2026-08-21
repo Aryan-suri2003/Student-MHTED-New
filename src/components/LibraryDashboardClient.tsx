@@ -86,7 +86,6 @@ export default function LibraryDashboardClient() {
     setSelectedDistrict('all');
     setSelectedGrade(null);
     setSelectedBuilding(null);
-    setSearchQuery('');
   };
 
   const handleExportCsv = () => {
